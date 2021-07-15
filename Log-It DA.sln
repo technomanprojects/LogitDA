@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log-It", "Log-It\Log-It.csproj", "{E59A82B0-E997-40F0-9CD2-4DE4D7D65596}"
+	ProjectSection(ProjectDependencies) = postProject
+		{81A7ED4F-1FA9-447A-B66F-FE9276858D25} = {81A7ED4F-1FA9-447A-B66F-FE9276858D25}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{1E5469F3-5698-46E5-99D7-B5E1285825CC}"
 EndProject
