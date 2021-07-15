@@ -6,6 +6,6 @@ namespace Technoman.Utilities
 {
     public class Messages
     {
-        public const string ProcessStillRunning = "Logit Chart is already running.  ";
+        public const string ProcessStillRunning = "Logit Chart is already running.";
     }
 }
