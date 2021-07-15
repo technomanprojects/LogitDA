@@ -24,6 +24,8 @@ namespace Technoman.Utilities
         System,
         Modify,
         Information
+
+
     }
 
     public static  class EventClass
