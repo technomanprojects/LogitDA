@@ -85,6 +85,14 @@ namespace Log_It.Pages
                 {
                     string files = fb.SelectedPath;
                     Directory.CreateDirectory(files);
+                    SYSProperty Systproperties = instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1);
+                    String mess = string.Empty;
+                    bool check = false;
+                    if (Systproperties.backuplocation != files + @"\")
+                    {
+                        mess = Systproperties.backuplocation + " to " + files + @"\";
+                        check = true;
+                    }
                     var directoryInfo = new DirectoryInfo(files);
                     var directorySecurity = directoryInfo.GetAccessControl();
                     var currentUserIdentity = WindowsIdentity.GetCurrent();
@@ -100,10 +108,10 @@ namespace Log_It.Pages
                     instance.SystemProperties.backuplocation = files + @"\";
                     label7.Text = instance.SystemProperties.backuplocation;
                     instance.DataLink.SubmitChanges();
-                    SYSProperty Systproperties = instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1);
-                    String mess = string.Empty;
-                    //if(Systproperties.backuplocation)
-                    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Database Backup Location has changed.", instance.UserInstance.Full_Name);
+                    if (check == true)
+                    {
+                        Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Database Backup Location " + mess.ToString() + " has changed.", instance.UserInstance.Full_Name);
+                    }
 
                 }
             }
