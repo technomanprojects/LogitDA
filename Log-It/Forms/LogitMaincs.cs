@@ -384,7 +384,7 @@ namespace Log_It.Forms
                 taskPanel[1] = new Log_It.Pages.TaskPanel.AppTask();
 
                 taskPanel[2] = new Log_It.Pages.TaskPanel.DatabaseTask();
-
+                 
                 Log_It.Pages.TaskPanel.EventTask eventtask = new Log_It.Pages.TaskPanel.EventTask();
                 eventtask.RefreshControl += eventtask_RefreshControl;
                 eventtask.PrintP += eventtask_PrintP;
