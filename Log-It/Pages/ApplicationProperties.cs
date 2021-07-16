@@ -77,6 +77,7 @@ namespace Log_It.Pages
                     checkBoxAlert.Checked = (bool)Sysproperties.Acknowledged;
                     checkBoxWifiAlarm.Checked = (bool)Sysproperties.AlarmEnable;
                     textBoxAlarmInterval.Text = Sysproperties.Alert_Interval.ToString();
+
                     if (checkBoxWifiAlarm.Checked)
                     {
                         textBoxAlarmIP.Text = Sysproperties.Alarm_IP;
@@ -84,6 +85,7 @@ namespace Log_It.Pages
                        
                     }
                     chbEmail.Checked = (bool)Sysproperties.Email;
+
                     if (chbEmail.Checked)
                     {
                         textBoxEmailID.Text = Sysproperties.EmailID;
@@ -92,6 +94,7 @@ namespace Log_It.Pages
                         textBoxEmailSMTP.Text = Sysproperties.EmailSMTP;
                     }
                     chbSMS.Checked = (bool)Sysproperties.SMS;
+
                     if (chbSMS.Checked)
                     {
                         if (Sysproperties.WebLink == true)
@@ -108,14 +111,8 @@ namespace Log_It.Pages
                     {
                         textBoxDepartment.Text = company.Department;
                         textBoxCompany.Text = company.Company_Name;
-
-
                     }
-
-
                     systemset = true;
-
-
                 }
             }
             catch (Exception m)
@@ -148,6 +145,7 @@ namespace Log_It.Pages
                 if (!systemset)
                 {
                     SYSProperty Systproperties = new SYSProperty();
+
 
                     Systproperties.Unit = comboBoxUnit.Text;
                     Systproperties.Signature = checkBoxSignLine.Checked;
@@ -202,8 +200,13 @@ namespace Log_It.Pages
 
                     DAL.Company company = new Company();
                     company.Id = Guid.NewGuid();
+                    
                     company.Company_Name = textBoxCompany.Text;
                     company.Department = textBoxDepartment.Text;
+
+                   
+                    
+
 
                     instance.DataLink.Companies.InsertOnSubmit(company);
 
@@ -215,7 +218,7 @@ namespace Log_It.Pages
                     //    key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\TLSSetting");
                     //    key.SetValue("A1", 1);
                     //}
-
+                    
 
                     Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, " System properties has updated", instance.UserInstance.Full_Name);
                     MessageBox.Show("Data has been saved!");
@@ -224,6 +227,64 @@ namespace Log_It.Pages
                 {
                     SYSProperty Systproperties = instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1);
 
+                    String mess = string.Empty;
+                    if (Systproperties.Unit != comboBoxUnit.Text)
+                    {
+                        mess += ", Tempeature "+Systproperties.Unit + " to " + comboBoxUnit.Text;
+                    }
+                    if (checkBoxSignLine.Checked != (bool)Systproperties.Signature)
+                    {
+                        mess += ", Signature "+(bool)Systproperties.Signature + " to " + checkBoxSignLine.Checked;
+                    }
+                    if (checkBoxSignLogged.Checked != (bool)Systproperties.Automatic_Sign)
+                    {
+                        mess += ", Automatic Sign " + (bool)Systproperties.Automatic_Sign + " to " + checkBoxSignLogged.Checked;
+                    }
+                    if (Systproperties.Port != textBoxCom.Text)
+                    {
+                        mess += ", Port " + Systproperties.Port + " to " + textBoxCom.Text;
+                    }
+                    if (Systproperties.BaudRate != textBoxBaudRate.Text)
+                    {
+                        mess += ", BaudRate " + Systproperties.BaudRate+ " to " + textBoxBaudRate.Text;
+                    }
+                    if (Systproperties.DataBit != textBoxDataBit.Text)
+                    {
+                        mess += ", DataBit " + Systproperties.DataBit + " to " + textBoxDataBit.Text;
+                    }
+                    if (Systproperties.Parity != comboBoxParity.Text)
+                    {
+                        mess += ", Parity " + Systproperties.Parity + " to " + comboBoxParity.Text;
+                    }
+                    if (Systproperties.StopBit != comboBoxStopBit.Text)
+                    {
+                        mess += ", StopBit " + Systproperties.StopBit + " to " + comboBoxStopBit.Text;
+                    }
+                    if (checkBoxRTS.Checked != (bool)Systproperties.RTS)
+                    {
+                        mess += ", RTS " + (bool)Systproperties.RTS + " to " + checkBoxRTS.Checked;
+                    }
+                    if (checkBoxDTS.Checked != (bool)Systproperties.DTS)
+                    {
+                        mess += ", DTS " + (bool)Systproperties.DTS + " to " + checkBoxDTS.Checked;
+                    }
+                    if (Systproperties.Alert_Interval != Convert.ToInt32(textBoxAlarmInterval.Text))
+                    {
+                        mess += ", Alert Interval " + Systproperties.Alert_Interval + " to " + Convert.ToInt32(textBoxAlarmInterval.Text);
+                    }
+                    if(numericUpDown2.Value != Systproperties.Number_Devices)
+                    {
+                        mess += ", No. of Devices " + Systproperties.Number_Devices + " to " + Convert.ToInt32(numericUpDown2.Value);
+                    }
+                    if (checkBoxAlert.Checked != (bool)Systproperties.Acknowledged)
+                    {
+                        mess += ", Acknowledged " + (bool)Systproperties.Acknowledged + " to " + checkBoxAlert.Checked;
+                    }
+                    if (checkBoxWifiAlarm.Checked != (bool)Systproperties.AlarmEnable)
+                    {
+                        mess += ", Wifi Alarm " + (bool)Systproperties.AlarmEnable + " to " + checkBoxWifiAlarm.Checked;
+                    }
+                    //MessageBox.Show(mess.ToString().TrimStart(new Char[] { ',' } ));
                     Systproperties.Unit = comboBoxUnit.Text;
                     Systproperties.Signature = checkBoxSignLine.Checked;
                     Systproperties.Automatic_Sign = checkBoxSignLogged.Checked;
@@ -241,7 +302,14 @@ namespace Log_It.Pages
                     Systproperties.AlarmEnable = checkBoxWifiAlarm.Checked;
                     if (checkBoxWifiAlarm.Checked)
                     {
-
+                        if (Systproperties.Alarm_IP != textBoxAlarmIP.Text)
+                        {
+                            mess += ", Alarm IP " + Systproperties.Alarm_IP + " to " + textBoxAlarmIP.Text;
+                        }
+                        if (Systproperties.Alarm_Port != textBoxAlarmPort.Text)
+                        {
+                            mess += ", Alarm IP " + Systproperties.Alarm_Port + " to " + textBoxAlarmPort.Text;
+                        }
                         Systproperties.Alarm_IP = textBoxAlarmIP.Text;
                         Systproperties.Alarm_Port = textBoxAlarmPort.Text;
                         
@@ -340,12 +408,20 @@ namespace Log_It.Pages
                     DAL.Company company = instance.DataLink.Companies.SingleOrDefault();
                     if (company != null)
                     {
+                        if (company.Department != textBoxDepartment.Text)
+                        {
+                            mess += ", Department " + company.Department + " to " + textBoxDepartment.Text;
+                        }
+                        if (company.Company_Name != textBoxCompany.Text)
+                        {
+                            mess += ", Company Name " + company.Company_Name + " to " + textBoxCompany.Text;
+                        }
                         company.Department = textBoxDepartment.Text;
                         company.Company_Name = textBoxCompany.Text;
                     }
 
                     instance.DataLink.SubmitChanges();
-                    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "System properties has updated", instance.UserInstance.Full_Name);
+                    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "System properties" + mess.ToString().TrimStart(new Char[] { ',' }) + " has updated", instance.UserInstance.Full_Name);
                     MessageBox.Show("Data has been saved!");
                     RefresPageProperties();
                 }

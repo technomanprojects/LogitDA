@@ -11,6 +11,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using Log_It.Forms;
+using DAL;
 
 namespace Log_It.Pages
 {
@@ -98,6 +100,11 @@ namespace Log_It.Pages
                     instance.SystemProperties.backuplocation = files + @"\";
                     label7.Text = instance.SystemProperties.backuplocation;
                     instance.DataLink.SubmitChanges();
+                    SYSProperty Systproperties = instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1);
+                    String mess = string.Empty;
+                    //if(Systproperties.backuplocation)
+                    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Database Backup Location has changed.", instance.UserInstance.Full_Name);
+
                 }
             }
             catch (Exception m)
@@ -107,6 +114,46 @@ namespace Log_It.Pages
             }
 
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OpenFileDialog file = new OpenFileDialog())
+                {
+                    file.Filter = "Backup File (*.bak)|*.bak|All files (*.*)|*.*";
+                    if (file.ShowDialog() == DialogResult.OK)
+                    {
+                        DialogResult result = MessageBox.Show("Do you want to Delete old Database", "Confirmation", MessageBoxButtons.YesNoCancel,MessageBoxIcon.Question);
+                        if (result == DialogResult.Yes)
+                        {
+                            String filePath = file.FileName;
+
+                            String query = "IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'" + Path.GetFileNameWithoutExtension(filePath) + "') DROP DATABASE " + Path.GetFileNameWithoutExtension(filePath) + " RESTORE DATABASE " + Path.GetFileNameWithoutExtension(filePath) + " FROM DISK = '" + filePath + "'";
+                            SqlConnection Conn = new SqlConnection(instance.ConntectionLink);
+                            SqlCommand cmd = new SqlCommand(query, Conn);
+                            if (Conn.State == ConnectionState.Closed)
+                            {
+                                Conn.Open();
+                            }
+
+                            cmd.ExecuteNonQuery();
+                            Conn.Close();
+                            MessageBox.Show("Restore Database Successfully.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Database has Restored Sucessfully.", instance.UserInstance.Full_Name);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Database Restore Process cancel", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

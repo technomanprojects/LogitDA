@@ -487,10 +487,9 @@ namespace Log_It.Forms
 
         void dbMaintenance_CreatedbBackupManually()
         {
-
             CreateBackup();
             MessageBox.Show("Backup has been done");
-            Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Information, "Backup created. ", instance.UserInstance.Full_Name);
+            Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Information, "Backup created manually. ", instance.UserInstance.Full_Name);
         }
 
         private void CreateBackup()
