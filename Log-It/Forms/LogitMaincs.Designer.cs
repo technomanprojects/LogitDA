@@ -144,8 +144,8 @@
             // 
             // sideNav1
             // 
-            this.sideNav1.Controls.Add(this.sideNavPanel1);
             this.sideNav1.Controls.Add(this.sideNavPanel2);
+            this.sideNav1.Controls.Add(this.sideNavPanel1);
             this.sideNav1.Controls.Add(this.sideNavPanel3);
             this.sideNav1.Dock = System.Windows.Forms.DockStyle.Left;
             this.sideNav1.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
@@ -171,6 +171,7 @@
             this.sideNavPanel1.Name = "sideNavPanel1";
             this.sideNavPanel1.Size = new System.Drawing.Size(286, 845);
             this.sideNavPanel1.TabIndex = 2;
+            this.sideNavPanel1.Visible = false;
             // 
             // tableLayoutPanel1
             // 
@@ -240,7 +241,6 @@
             this.sideNavPanel2.Name = "sideNavPanel2";
             this.sideNavPanel2.Size = new System.Drawing.Size(286, 845);
             this.sideNavPanel2.TabIndex = 10;
-            this.sideNavPanel2.Visible = false;
             // 
             // tableLayoutPanel2
             // 
@@ -397,7 +397,6 @@
             // 
             // sideNavItem2
             // 
-            this.sideNavItem2.Checked = true;
             this.sideNavItem2.Image = global::Log_It.Properties.Resources.if_Grid_home_menu_options_squares_table_1887040;
             this.sideNavItem2.Name = "sideNavItem2";
             this.sideNavItem2.Panel = this.sideNavPanel1;
@@ -409,6 +408,7 @@
             // 
             // sideNavItem3
             // 
+            this.sideNavItem3.Checked = true;
             this.sideNavItem3.Name = "sideNavItem3";
             this.sideNavItem3.Panel = this.sideNavPanel2;
             this.sideNavItem3.Symbol = "57532";
