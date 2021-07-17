@@ -66,7 +66,7 @@ namespace Log_It.Forms
                 this.serialPort1 = sp;
                 this.instance = instance;
                 this.userIntance = userIntance;
-                toolStripStatusUser.Text = "Login User: Micor " + userIntance.User_Name;
+                toolStripStatusUser.Text = "Login User: " + userIntance.User_Name;
                 toolStripStatusComPort.Text = "Communication Port: " + sp.PortName;
                 LogIt.Parameters.Output1 += new RealTimesS(Parameters_Output1);
                 LogIt.RealTime += new RealTimesChart(LogIt_RealTime);
