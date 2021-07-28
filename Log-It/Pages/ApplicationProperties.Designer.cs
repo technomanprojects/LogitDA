@@ -109,17 +109,11 @@
             this.label16 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.checkBoxDTS = new System.Windows.Forms.CheckBox();
-            this.checkBoxRTS = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.comboBoxStopBit = new System.Windows.Forms.ComboBox();
-            this.comboBoxParity = new System.Windows.Forms.ComboBox();
             this.textBoxDataBit = new System.Windows.Forms.TextBox();
             this.textBoxBaudRate = new System.Windows.Forms.TextBox();
-            this.textBoxCom = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
+            this.textBoxIPAddress = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -312,7 +306,7 @@
             this.panel16.Controls.Add(this.panel17);
             this.panel16.Controls.Add(this.textBoxAlarmInterval);
             this.panel16.Controls.Add(this.label30);
-            this.panel16.Location = new System.Drawing.Point(11, 499);
+            this.panel16.Location = new System.Drawing.Point(217, 464);
             this.panel16.Name = "panel16";
             this.panel16.Size = new System.Drawing.Size(200, 69);
             this.panel16.TabIndex = 15;
@@ -362,7 +356,7 @@
             this.panel18.Controls.Add(this.panel19);
             this.panel18.Controls.Add(this.textBoxAlarmIP);
             this.panel18.Controls.Add(this.label34);
-            this.panel18.Location = new System.Drawing.Point(217, 464);
+            this.panel18.Location = new System.Drawing.Point(11, 398);
             this.panel18.Name = "panel18";
             this.panel18.Size = new System.Drawing.Size(200, 104);
             this.panel18.TabIndex = 14;
@@ -391,9 +385,9 @@
             this.label32.AutoSize = true;
             this.label32.Location = new System.Drawing.Point(14, 82);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(61, 13);
+            this.label32.Size = new System.Drawing.Size(26, 13);
             this.label32.TabIndex = 7;
-            this.label32.Text = "Baud Rate:";
+            this.label32.Text = "Port";
             // 
             // panel19
             // 
@@ -427,9 +421,9 @@
             this.label34.AutoSize = true;
             this.label34.Location = new System.Drawing.Point(14, 58);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(53, 13);
+            this.label34.Size = new System.Drawing.Size(58, 13);
             this.label34.TabIndex = 3;
-            this.label34.Text = "Com Port:";
+            this.label34.Text = "IP Address";
             // 
             // panel14
             // 
@@ -968,47 +962,17 @@
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.LightYellow;
-            this.panel3.Controls.Add(this.checkBoxDTS);
-            this.panel3.Controls.Add(this.checkBoxRTS);
             this.panel3.Controls.Add(this.panel1);
-            this.panel3.Controls.Add(this.comboBoxStopBit);
-            this.panel3.Controls.Add(this.comboBoxParity);
             this.panel3.Controls.Add(this.textBoxDataBit);
             this.panel3.Controls.Add(this.textBoxBaudRate);
-            this.panel3.Controls.Add(this.textBoxCom);
-            this.panel3.Controls.Add(this.label10);
-            this.panel3.Controls.Add(this.label9);
+            this.panel3.Controls.Add(this.textBoxIPAddress);
             this.panel3.Controls.Add(this.label8);
             this.panel3.Controls.Add(this.label7);
             this.panel3.Controls.Add(this.label6);
             this.panel3.Location = new System.Drawing.Point(11, 283);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(200, 213);
+            this.panel3.Size = new System.Drawing.Size(200, 109);
             this.panel3.TabIndex = 5;
-            // 
-            // checkBoxDTS
-            // 
-            this.checkBoxDTS.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBoxDTS.Checked = true;
-            this.checkBoxDTS.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxDTS.Location = new System.Drawing.Point(11, 186);
-            this.checkBoxDTS.Name = "checkBoxDTS";
-            this.checkBoxDTS.Size = new System.Drawing.Size(170, 24);
-            this.checkBoxDTS.TabIndex = 13;
-            this.checkBoxDTS.Text = "DTS Enable";
-            this.checkBoxDTS.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxRTS
-            // 
-            this.checkBoxRTS.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBoxRTS.Checked = true;
-            this.checkBoxRTS.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxRTS.Location = new System.Drawing.Point(11, 162);
-            this.checkBoxRTS.Name = "checkBoxRTS";
-            this.checkBoxRTS.Size = new System.Drawing.Size(170, 24);
-            this.checkBoxRTS.TabIndex = 12;
-            this.checkBoxRTS.Text = "RTS Enable";
-            this.checkBoxRTS.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
@@ -1025,38 +989,13 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(11, 7);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(108, 13);
+            this.label2.Size = new System.Drawing.Size(122, 13);
             this.label2.TabIndex = 0;
-            this.label2.Text = "Serial Communication";
-            // 
-            // comboBoxStopBit
-            // 
-            this.comboBoxStopBit.FormattingEnabled = true;
-            this.comboBoxStopBit.Items.AddRange(new object[] {
-            "One",
-            "Two"});
-            this.comboBoxStopBit.Location = new System.Drawing.Point(108, 134);
-            this.comboBoxStopBit.Name = "comboBoxStopBit";
-            this.comboBoxStopBit.Size = new System.Drawing.Size(76, 21);
-            this.comboBoxStopBit.TabIndex = 11;
-            this.comboBoxStopBit.Text = "One";
-            // 
-            // comboBoxParity
-            // 
-            this.comboBoxParity.FormattingEnabled = true;
-            this.comboBoxParity.Items.AddRange(new object[] {
-            "None",
-            "Odd",
-            "Even"});
-            this.comboBoxParity.Location = new System.Drawing.Point(108, 110);
-            this.comboBoxParity.Name = "comboBoxParity";
-            this.comboBoxParity.Size = new System.Drawing.Size(76, 21);
-            this.comboBoxParity.TabIndex = 10;
-            this.comboBoxParity.Text = "None";
+            this.label2.Text = "Ethernet Communication";
             // 
             // textBoxDataBit
             // 
-            this.textBoxDataBit.Location = new System.Drawing.Point(108, 86);
+            this.textBoxDataBit.Location = new System.Drawing.Point(108, 81);
             this.textBoxDataBit.Name = "textBoxDataBit";
             this.textBoxDataBit.Size = new System.Drawing.Size(76, 20);
             this.textBoxDataBit.TabIndex = 7;
@@ -1064,66 +1003,47 @@
             // 
             // textBoxBaudRate
             // 
-            this.textBoxBaudRate.Location = new System.Drawing.Point(108, 62);
+            this.textBoxBaudRate.Location = new System.Drawing.Point(108, 57);
             this.textBoxBaudRate.Name = "textBoxBaudRate";
             this.textBoxBaudRate.Size = new System.Drawing.Size(76, 20);
             this.textBoxBaudRate.TabIndex = 6;
             this.textBoxBaudRate.Text = "9600";
             this.textBoxBaudRate.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
-            // textBoxCom
+            // textBoxIPAddress
             // 
-            this.textBoxCom.Location = new System.Drawing.Point(108, 38);
-            this.textBoxCom.Name = "textBoxCom";
-            this.textBoxCom.Size = new System.Drawing.Size(76, 20);
-            this.textBoxCom.TabIndex = 5;
-            this.textBoxCom.Text = "1";
-            this.textBoxCom.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(11, 138);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(52, 13);
-            this.label10.TabIndex = 4;
-            this.label10.Text = "Stop Bits:";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(11, 114);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(36, 13);
-            this.label9.TabIndex = 4;
-            this.label9.Text = "Parity:";
+            this.textBoxIPAddress.Location = new System.Drawing.Point(108, 33);
+            this.textBoxIPAddress.Name = "textBoxIPAddress";
+            this.textBoxIPAddress.Size = new System.Drawing.Size(76, 20);
+            this.textBoxIPAddress.TabIndex = 5;
+            this.textBoxIPAddress.Text = "1";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(11, 90);
+            this.label8.Location = new System.Drawing.Point(11, 85);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(53, 13);
+            this.label8.Size = new System.Drawing.Size(38, 13);
             this.label8.TabIndex = 4;
-            this.label8.Text = "Data Bits:";
+            this.label8.Text = "Port 2:";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(11, 66);
+            this.label7.Location = new System.Drawing.Point(11, 61);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(61, 13);
+            this.label7.Size = new System.Drawing.Size(38, 13);
             this.label7.TabIndex = 4;
-            this.label7.Text = "Baud Rate:";
+            this.label7.Text = "Port 1:";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(11, 42);
+            this.label6.Location = new System.Drawing.Point(11, 37);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(69, 13);
+            this.label6.Size = new System.Drawing.Size(58, 13);
             this.label6.TabIndex = 3;
-            this.label6.Text = "Port Number:";
+            this.label6.Text = "IP Address";
             // 
             // ApplicationProperties
             // 
@@ -1205,17 +1125,11 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.TextBox textBoxDataBit;
         private System.Windows.Forms.TextBox textBoxBaudRate;
-        private System.Windows.Forms.TextBox textBoxCom;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox textBoxIPAddress;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ComboBox comboBoxParity;
-        private System.Windows.Forms.ComboBox comboBoxStopBit;
-        private System.Windows.Forms.CheckBox checkBoxDTS;
-        private System.Windows.Forms.CheckBox checkBoxRTS;
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Label label11;

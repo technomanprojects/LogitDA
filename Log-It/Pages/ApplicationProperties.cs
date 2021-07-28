@@ -49,11 +49,11 @@ namespace Log_It.Pages
                 if (instance.DataLink.SYSProperties.Count() > 0)
                 {
                     SYSProperty Sysproperties = instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1);
-                    textBoxCom.Text = Sysproperties.IP_Address.ToString();
+                    textBoxIPAddress.Text = Sysproperties.IP_Address.ToString();
                     comboBoxUnit.Text = Sysproperties.Unit;
                     checkBoxSignLine.Checked = (bool)Sysproperties.Signature;
                     checkBoxSignLogged.Checked = (bool)Sysproperties.Automatic_Sign;
-                    textBoxCom.Text = Sysproperties.IP_Address.ToString();
+                    textBoxIPAddress.Text = Sysproperties.IP_Address.ToString();
                     textBoxBaudRate.Text = Sysproperties.Port1.ToString();
                     textBoxDataBit.Text = Sysproperties.Port2.ToString();
                     comboBoxParity.Text = Sysproperties.Parity.ToString();
@@ -152,7 +152,7 @@ namespace Log_It.Pages
                     Systproperties.Unit = comboBoxUnit.Text;
                     Systproperties.Signature = checkBoxSignLine.Checked;
                     Systproperties.Automatic_Sign = checkBoxSignLogged.Checked;
-                    Systproperties.IP_Address= textBoxCom.Text;
+                    Systproperties.IP_Address= textBoxIPAddress.Text;
                     Systproperties.Port1= textBoxBaudRate.Text;
                     Systproperties.Port2= textBoxDataBit.Text;
                     Systproperties.Parity = comboBoxParity.Text;
@@ -228,7 +228,7 @@ namespace Log_It.Pages
                     Systproperties.Unit = comboBoxUnit.Text;
                     Systproperties.Signature = checkBoxSignLine.Checked;
                     Systproperties.Automatic_Sign = checkBoxSignLogged.Checked;
-                    Systproperties.IP_Address = textBoxCom.Text;
+                    Systproperties.IP_Address = textBoxIPAddress.Text;
                     Systproperties.Port1 = textBoxBaudRate.Text;
                     Systproperties.Port2 = textBoxDataBit.Text;
                     Systproperties.Parity = comboBoxParity.Text;
