@@ -21,6 +21,7 @@ using System.Security.AccessControl;
 using System.Data.SqlClient;
 using System.Net.Mail;
 using System.Net;
+using System.Net.Sockets;
 
 // Syed Rafiuddin
 namespace Log_It.Forms
@@ -55,6 +56,9 @@ namespace Log_It.Forms
         private string _result = "";
         List<string> SMSUser;
         List<string> EmailUser;
+
+        TcpClient client = null;
+        NetworkStream netStream = null;
         public LogitMaincs(BAL.LogitInstance instance, DAL.User userIntance)
         {
             try
@@ -694,6 +698,7 @@ namespace Log_It.Forms
 
                         index++;
                     }
+                    client = new TcpClient();
                     isRun = true;
                     return true;
                 }
@@ -1120,29 +1125,39 @@ namespace Log_It.Forms
 
         }
 
-        public void GetData(int index)
+        public void GetData(string ipAddress,int index, int slaveID)
         {
             try
             {
-                //if (this.serialPort1.IsOpen)
-                //{
-                //    string str = "#0" + index.ToString() +"\r";
-                //    //string str = "#00\r";
-                //    this.serialPort1.Write(str);
-                //    Thread.Sleep(2500);
-                //}
-                //else
-                //{
-                //    this.serialPort1.Open();
-                //    string str = "#01\r";
-                //    this.serialPort1.Write(str);
+                byte[] byteBuffer = Encoding.ASCII.GetBytes("#0" + slaveID.ToString() + '\r');
+                netStream = client.GetStream();
+                netStream.Write(byteBuffer, 0, byteBuffer.Length);
 
-                //}
+                int totalBytesRcvd = 0; // Total bytes received so far
+                int bytesRcvd = 0;
+
+                while (totalBytesRcvd < byteBuffer.Length)
+                {
+                    if ((bytesRcvd = netStream.Read(byteBuffer, totalBytesRcvd, byteBuffer.Length - totalBytesRcvd)) == 114)
+                    {
+
+                        break;
+                    }
+                    totalBytesRcvd += bytesRcvd;
+                }
+                this.LastValue = Encoding.ASCII.GetString(byteBuffer, 0, totalBytesRcvd);
+
+              
             }
             catch (Exception m)
             {
-                Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error,m.Message,"");
-                
+                Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message, "");
+
+            }
+            finally
+            {
+                netStream.Close();
+                client.Close();
             }
 
           
@@ -1164,11 +1179,7 @@ namespace Log_It.Forms
                     Close();
                     return string.Empty;
                 }
-                //if (!this.serialPort1.IsOpen)
-                //{
-                //    this.serialPort1.Open();
-                //}
-                if (instance.Device_Configes.Count(x => x.Active == true && x.IsRowActive == true) > 0)
+                 if (instance.Device_Configes.Count(x => x.Active == true && x.IsRowActive == true) > 0)
                 {
 
                     dlist = new List<DeviceList>(instance.Device_Configes.Where(x => x.Active == true && x.IsRowActive == true).Count());
@@ -1184,17 +1195,19 @@ namespace Log_It.Forms
                         dlist.Add(d);
                     }
                 }
+                 int[] ports = new int[2] { Convert.ToInt32(instance.SystemProperties.Port1), Convert.ToInt32(instance.SystemProperties.Port2) };
 
 
                 while (isRun)
                 {
 
                     int index = 0;
+                   
 
                     for (int k = 0; k < instance.SystemProperties.Number_Devices; k++)
                     {
 
-                        this.GetData(k);
+                        this.GetData(instance.SystemProperties.IP_Address,ports[k],k);
                         if (cancellationToken.IsCancellationRequested)
                         {
                             Close();
