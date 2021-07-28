@@ -55,7 +55,7 @@ namespace Log_It.Forms
         private string _result = "";
         List<string> SMSUser;
         List<string> EmailUser;
-        public LogitMaincs(BAL.LogitInstance instance, DAL.User userIntance, SerialPort sp)
+        public LogitMaincs(BAL.LogitInstance instance, DAL.User userIntance)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace Log_It.Forms
                 logit_device = new Logit_Device(instance);
                 LogIt.Logging += LogIt_Logging;
                 LogIt.LastRecord += LogIt_LastRecord;
-                this.serialPort1 = sp;
+               
                 this.instance = instance;
                 this.userIntance = userIntance;
                 toolStripStatusUser.Text = "Login User: " + userIntance.User_Name;
@@ -78,7 +78,7 @@ namespace Log_It.Forms
                 if (instance.DataLink.SYSProperties.Single().D_Type == 2)
                 {
 
-                    serialPort1.DataReceived += serialPort1_DataReceived;
+                    
                 }
             }
             catch (Exception m)
@@ -1124,20 +1124,20 @@ namespace Log_It.Forms
         {
             try
             {
-                if (this.serialPort1.IsOpen)
-                {
-                    string str = "#0" + index.ToString() +"\r";
-                    //string str = "#00\r";
-                    this.serialPort1.Write(str);
-                    Thread.Sleep(2500);
-                }
-                else
-                {
-                    this.serialPort1.Open();
-                    string str = "#01\r";
-                    this.serialPort1.Write(str);
+                //if (this.serialPort1.IsOpen)
+                //{
+                //    string str = "#0" + index.ToString() +"\r";
+                //    //string str = "#00\r";
+                //    this.serialPort1.Write(str);
+                //    Thread.Sleep(2500);
+                //}
+                //else
+                //{
+                //    this.serialPort1.Open();
+                //    string str = "#01\r";
+                //    this.serialPort1.Write(str);
 
-                }
+                //}
             }
             catch (Exception m)
             {
@@ -1744,7 +1744,7 @@ namespace Log_It.Forms
                 //this.serialPort1.ReadTimeout = 10000;
                 string str = "";
 
-                str = this.serialPort1.ReadTo("\r");// Read(buffer, 0, 125);
+                //str = this.serialPort1.ReadTo("\r");// Read(buffer, 0, 125);
 
                 //for (int i = 0; i < num; i++)
                 //{
@@ -1760,10 +1760,7 @@ namespace Log_It.Forms
                     this.LastValue = this._result;
                     this._result = "";
                 }
-                if (serialPort1.IsOpen)
-                {
-                    serialPort1.DiscardInBuffer();
-                }
+               
                 
                 //this.serialPort1.DiscardInBuffer();
             }

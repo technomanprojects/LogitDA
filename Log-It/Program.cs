@@ -116,7 +116,7 @@ namespace Log_It
                         switch (roleEnum)
                         {
                             case RoleEnum.Owner:
-                                Application.Run(new LogitMaincs(instance, authe.UserInstance, sp));
+                                Application.Run(new LogitMaincs(instance, authe.UserInstance));
                                 break;
                             case RoleEnum.Administrator:
                             case RoleEnum.Power:
@@ -133,7 +133,7 @@ namespace Log_It
                                         return;
                                     }
                                 }             
-                        Application.Run(new LogitMaincs(instance, authe.UserInstance,sp));
+                        Application.Run(new LogitMaincs(instance, authe.UserInstance));
                                 break;
                             default:
                                 break;
@@ -156,77 +156,6 @@ namespace Log_It
 
             //Application.Run(new Form1());
         }
-
-        //private static System.IO.Ports.SerialPort SetCOMPort(BAL.LogitInstance xml)
-        //{
-        //    try
-        //    {
-        //        DAL.SYSProperty xmlDocument = xml.DataLink.SYSProperties.Single();
-        //        System.IO.Ports.SerialPort spt = new System.IO.Ports.SerialPort();
-        //        spt.PortName = "COM" + (xmlDocument.Port);
-        //        spt.DtrEnable = Convert.ToBoolean(xmlDocument.DTS);
-        //        spt.RtsEnable = Convert.ToBoolean(xmlDocument.RTS);
-        //        spt.BaudRate = Convert.ToInt16(xmlDocument.BaudRate);
-        //        spt.DataBits = Convert.ToInt16(xmlDocument.DataBit);
-
-        //        switch (xmlDocument.Parity)
-        //        {
-        //            case "n":
-        //                spt.Parity = System.IO.Ports.Parity.None;
-        //                break;
-        //            case "N":
-        //                spt.Parity = System.IO.Ports.Parity.None;
-        //                break;
-
-        //            case "o":
-        //                spt.Parity = System.IO.Ports.Parity.Odd;
-        //                break;
-        //            case "O":
-        //                spt.Parity = System.IO.Ports.Parity.Odd;
-        //                break;
-
-        //            case "e":
-        //                spt.Parity = System.IO.Ports.Parity.Even;
-        //                break;
-        //            case "E":
-        //                spt.Parity = System.IO.Ports.Parity.Even;
-        //                break;
-
-        //            default:
-        //                spt.Parity = System.IO.Ports.Parity.None;
-        //                break;
-        //        }
-
-        //        switch (xmlDocument.StopBit)
-        //        {
-        //            case "1":
-        //                spt.StopBits = System.IO.Ports.StopBits.One;
-        //                break;
-        //            case "2":
-        //                spt.StopBits = System.IO.Ports.StopBits.Two;
-        //                break;
-
-        //            default:
-        //                spt.StopBits = System.IO.Ports.StopBits.One;
-
-        //                break;
-        //        }
-        //        return spt;
-        //    }
-        //    catch (Exception m)
-        //    {
-
-        //        var st = new StackTrace();
-        //        var sf = st.GetFrame(0);
-
-        //        var currentMethodName = sf.GetMethod();
-        //        Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-        //        return null;
-        //    }
-
-
-
-        //}
 
         private static DAL.SYSProperty SetCOMPort(BAL.LogitInstance xml)
         {

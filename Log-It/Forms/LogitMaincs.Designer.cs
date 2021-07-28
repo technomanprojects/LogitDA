@@ -45,7 +45,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusComPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.dockContainerItem1 = new DevComponents.DotNetBar.DockContainerItem();
             this.controlContainerItem1 = new DevComponents.DotNetBar.ControlContainerItem();
@@ -88,7 +87,7 @@
             this.toolStripStatusUser,
             this.toolStripStatusLabel1,
             this.toolStripStatusComPort});
-            this.statusStrip.Location = new System.Drawing.Point(0, 720);
+            this.statusStrip.Location = new System.Drawing.Point(0, 449);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(852, 22);
             this.statusStrip.TabIndex = 2;
@@ -123,12 +122,6 @@
             this.toolStripStatusComPort.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusComPort.Text = "toolStripStatusLabel1";
             // 
-            // serialPort1
-            // 
-            this.serialPort1.PortName = "COM4";
-            this.serialPort1.ReadBufferSize = 112;
-            this.serialPort1.ReceivedBytesThreshold = 112;
-            // 
             // dockContainerItem1
             // 
             this.dockContainerItem1.Name = "dockContainerItem1";
@@ -155,7 +148,7 @@
             this.sideNav1.Location = new System.Drawing.Point(0, 0);
             this.sideNav1.Name = "sideNav1";
             this.sideNav1.Padding = new System.Windows.Forms.Padding(1);
-            this.sideNav1.Size = new System.Drawing.Size(293, 720);
+            this.sideNav1.Size = new System.Drawing.Size(293, 449);
             this.sideNav1.TabIndex = 16;
             this.sideNav1.Text = "sideNav1";
             // 
@@ -165,7 +158,7 @@
             this.sideNavPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sideNavPanel2.Location = new System.Drawing.Point(87, 37);
             this.sideNavPanel2.Name = "sideNavPanel2";
-            this.sideNavPanel2.Size = new System.Drawing.Size(201, 682);
+            this.sideNavPanel2.Size = new System.Drawing.Size(201, 411);
             this.sideNavPanel2.TabIndex = 10;
             // 
             // tableLayoutPanel2
@@ -180,15 +173,15 @@
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.86217F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.13783F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(201, 682);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(201, 411);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // panelDeviceTask
             // 
             this.panelDeviceTask.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelDeviceTask.Location = new System.Drawing.Point(3, 458);
+            this.panelDeviceTask.Location = new System.Drawing.Point(3, 277);
             this.panelDeviceTask.Name = "panelDeviceTask";
-            this.panelDeviceTask.Size = new System.Drawing.Size(195, 221);
+            this.panelDeviceTask.Size = new System.Drawing.Size(195, 131);
             this.panelDeviceTask.TabIndex = 2;
             // 
             // panel1
@@ -197,7 +190,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(195, 449);
+            this.panel1.Size = new System.Drawing.Size(195, 268);
             this.panel1.TabIndex = 1;
             // 
             // tableLayoutPanel3
@@ -216,7 +209,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.23256F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 106F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 127F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(195, 449);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(195, 268);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // button1
@@ -224,7 +217,7 @@
             this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
             this.button1.Image = global::Log_It.Properties.Resources.icons8_smartphones_60;
-            this.button1.Location = new System.Drawing.Point(3, 324);
+            this.button1.Location = new System.Drawing.Point(3, 143);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(189, 122);
             this.button1.TabIndex = 4;
@@ -238,7 +231,7 @@
             this.button4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
             this.button4.Image = global::Log_It.Properties.Resources.icons8_edit_property_50;
-            this.button4.Location = new System.Drawing.Point(3, 218);
+            this.button4.Location = new System.Drawing.Point(3, 37);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(189, 100);
             this.button4.TabIndex = 1;
@@ -252,9 +245,9 @@
             this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
             this.button3.Image = global::Log_It.Properties.Resources.icons8_doughnut_chart_50;
-            this.button3.Location = new System.Drawing.Point(3, 110);
+            this.button3.Location = new System.Drawing.Point(3, 20);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(189, 102);
+            this.button3.Size = new System.Drawing.Size(189, 11);
             this.button3.TabIndex = 0;
             this.button3.Text = "Chart";
             this.button3.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -268,7 +261,7 @@
             this.button2.Image = global::Log_It.Properties.Resources.if_03_171510;
             this.button2.Location = new System.Drawing.Point(3, 3);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(189, 101);
+            this.button2.Size = new System.Drawing.Size(189, 11);
             this.button2.TabIndex = 0;
             this.button2.Text = "Display";
             this.button2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -416,14 +409,14 @@
             this.panelControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelControl.Location = new System.Drawing.Point(293, 0);
             this.panelControl.Name = "panelControl";
-            this.panelControl.Size = new System.Drawing.Size(559, 720);
+            this.panelControl.Size = new System.Drawing.Size(559, 449);
             this.panelControl.TabIndex = 19;
             // 
             // LogitMaincs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(852, 742);
+            this.ClientSize = new System.Drawing.Size(852, 471);
             this.Controls.Add(this.panelControl);
             this.Controls.Add(this.sideNav1);
             this.Controls.Add(this.statusStrip);
@@ -454,7 +447,6 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusComPort;
-        private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Timer timer1;
         private DevComponents.DotNetBar.ControlContainerItem controlContainerItem1;
