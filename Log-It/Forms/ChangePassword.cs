@@ -70,8 +70,8 @@ namespace Log_It.Forms
                 }
 
                 instance.UserInstance.Password = BAL.Authentication.GetEc(textBoxnewpassword.Text);
-                instance.DataLink.sp_Update_User(this.instance.UserInstance.Id, instance.UserInstance.User_Name, BAL.Authentication.GetEc(textBoxnewpassword.Text), instance.UserInstance.Role, instance.UserInstance.Full_Name, instance.UserInstance.Full_Name, instance.UserInstance.Authority, instance.UserInstance.Email,
-                    instance.UserInstance.Phone, instance.UserInstance.Department, true, instance.UserInstance.Signature, DateTime.Now.AddDays((int)instance.UserInstance.Password_Expiry), instance.UserInstance.Password_Expiry, user.sms_notification, user.email_notification, instance.UserInstance.Title);
+                //instance.DataLink.sp_Update_User(this.instance.UserInstance.Id, instance.UserInstance.User_Name, BAL.Authentication.GetEc(textBoxnewpassword.Text), instance.UserInstance.Role, instance.UserInstance.Full_Name, instance.UserInstance.Full_Name, instance.UserInstance.Authority, instance.UserInstance.Email,
+                //    instance.UserInstance.Phone, instance.UserInstance.Department, true, instance.UserInstance.Signature, DateTime.Now.AddDays((int)instance.UserInstance.Password_Expiry), instance.UserInstance.Password_Expiry, user.sms_notification, user.email_notification, instance.UserInstance.Title);
                 int i = instance.RefresUsers;
                 Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties ", instance.UserInstance.Full_Name);
                 MessageBox.Show("Your password has been changed");

@@ -67,7 +67,7 @@ namespace Log_It.Forms
                 this.instance = instance;
                 this.userIntance = userIntance;
                 toolStripStatusUser.Text = "Login User: " + userIntance.User_Name;
-                toolStripStatusComPort.Text = "Communication Port: " + sp.PortName;
+                //toolStripStatusComPort.Text = "Communication Port: " + sp.PortName;
                 LogIt.Parameters.Output1 += new RealTimesS(Parameters_Output1);
                 LogIt.RealTime += new RealTimesChart(LogIt_RealTime);
                 LogIt.Parameters.outofLimits += Parameters_outofLimits;
@@ -1150,7 +1150,7 @@ namespace Log_It.Forms
         
         public void Close()
         {
-            this.serialPort1.Close();
+            //this.serialPort1.Close();
         }
 
         List<DeviceList> dlist;
@@ -1164,10 +1164,10 @@ namespace Log_It.Forms
                     Close();
                     return string.Empty;
                 }
-                if (!this.serialPort1.IsOpen)
-                {
-                    this.serialPort1.Open();
-                }
+                //if (!this.serialPort1.IsOpen)
+                //{
+                //    this.serialPort1.Open();
+                //}
                 if (instance.Device_Configes.Count(x => x.Active == true && x.IsRowActive == true) > 0)
                 {
 

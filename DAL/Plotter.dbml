@@ -1,5 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="PlotterDA" Class="PlotterDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=IT-PC2\SQLEXPRESS;Initial Catalog=PlotterDA;Integrated Security=True" SettingsObjectName="DAL.Properties.Settings" SettingsPropertyName="PlotterDAConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=IT-PC2\SQLEXPRESS;Initial Catalog=PlotterDA;User ID=sa" SettingsObjectName="DAL.Properties.Settings" SettingsPropertyName="PlotterDAConnectionString2" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Acknowledge" Member="Acknowledges">
+    <Type Name="Acknowledge">
+      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Device_ID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Event_Type" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Event_DateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Location" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Instrument" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Event" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Ack_Comments" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Ack_User" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Ack_DateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[User]" Member="Users">
+    <Type Name="User">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="User_Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
+      <Column Name="Role" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ModefiedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsRowEnable" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Full_Name" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Authority" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Department_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Phone" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Signature" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Password_expiry_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Password_Expiry" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="email_notification" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="sms_notification" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Department_User" Member="Department" ThisKey="Department_Id" OtherKey="Department_Id" Type="Department" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.Alaram_Log" Member="Alaram_Logs">
     <Type Name="Alaram_Log">
       <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -15,6 +55,15 @@
       <Column Name="Id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Company_Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Department" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Department" Member="Departments">
+    <Type Name="Department">
+      <Column Name="Department_Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Department_Name" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Department_Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Department_User" Member="Users" ThisKey="Department_Id" OtherKey="Department_Id" Type="User" />
+      <Association Name="Department_Device_Config" Member="Device_Configs" ThisKey="Department_Id" OtherKey="Department_Id" Type="Device_Config" />
     </Type>
   </Table>
   <Table Name="dbo.Device_Config" Member="Device_Configs">
@@ -43,6 +92,8 @@
       <Column Name="dateofCalibration" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="Lower" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="higher" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Department_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Department_Device_Config" Member="Department" ThisKey="Department_Id" OtherKey="Department_Id" Type="Department" IsForeignKey="true" />
       <Association Name="Device_Enum_Device_Config" Member="Device_Enum" ThisKey="Device_Type" OtherKey="ID" Type="Device_Enum" IsForeignKey="true" />
     </Type>
   </Table>
@@ -90,6 +141,15 @@
       <Association Name="Group_Group_User" Member="Group" ThisKey="Group_ID" OtherKey="ID" Type="Group" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.[Log]" Member="Logs">
+    <Type Name="Log">
+      <Column Name="DeviceID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Channel_ID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Port_Id" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="[_Data]" Member="_Data" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="date_" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
   <Table Name="dbo.ofsetAuditRecord" Member="ofsetAuditRecords">
     <Type Name="ofsetAuditRecord">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -103,47 +163,6 @@
     <Type Name="Role">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="RoleName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Association Name="Role_User" Member="Users" ThisKey="Id" OtherKey="Role" Type="User" />
-    </Type>
-  </Table>
-  <Table Name="dbo.[User]" Member="Users">
-    <Type Name="User">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="User_Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Password" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
-      <Column Name="Role" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="CreateDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="ModefiedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="IsRowEnable" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Full_Name" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="Authority" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Department" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="Title" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
-      <Column Name="Email" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Phone" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Signature" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Password_expiry_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Password_Expiry" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="email_notification" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="sms_notification" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Association Name="Role_User" Member="Role1" ThisKey="Role" OtherKey="Id" Type="Role" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Acknowledge" Member="Acknowledges">
-    <Type Name="Acknowledge">
-      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="Device_ID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Event_Type" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Event_DateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Location" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Instrument" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Event" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="Ack_Comments" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="Ack_User" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Ack_DateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.SYSProperties" Member="SYSProperties">
@@ -152,9 +171,9 @@
       <Column Name="Unit" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="Signature" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="Automatic_Sign" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Port" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="BaudRate" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="DataBit" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="IP_Address" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Port1" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Port2" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="Parity" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="StopBit" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="RTS" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
@@ -190,15 +209,54 @@
       <Column Name="WebLink" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.[Log]" Member="Logs">
-    <Type Name="Log">
-      <Column Name="DeviceID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
-      <Column Name="Channel_ID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Port_Id" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+  <Table Name="dbo.View_1" Member="View_1s">
+    <Type Name="View_1">
+      <Column Name="DeviceID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Location" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Instrument" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="[_Data]" Member="_Data" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="date_" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="date_" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Function Name="dbo.Create_dbBackup" Method="Create_dbBackup">
+    <Parameter Name="dbName" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="location" Type="System.String" DbType="NVarChar(MAX)" />
+    <ElementType Name="Create_dbBackupResult">
+      <Column Name="ErrorMessage" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.Update_Acknowladge" Method="Update_Acknowladge">
+    <Parameter Name="Ack_User" Parameter="ack_User" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="ID" Parameter="iD" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="Ack_Comments" Parameter="ack_Comments" Type="System.String" DbType="NVarChar(MAX)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.Get_Acknowladge" Method="Get_Acknowladge">
+    <ElementType Name="Get_AcknowladgeResult">
+      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Device_ID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Event_Type" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Event_DateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Location" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Instrument" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Event" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Ack_Comments" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Ack_User" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Ack_DateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.Insert_Acknowladge_TMP" Method="Insert_Acknowladge_TMP">
+    <Parameter Name="ID" Parameter="iD" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="Device_ID" Parameter="device_ID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="Location" Parameter="location" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="Instrument" Parameter="instrument" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="Event_Type" Parameter="event_Type" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="Event_DateTime" Parameter="event_DateTime" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="Event" Parameter="event" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Data" Parameter="data" Type="System.Double" DbType="Float" />
+    <Return Type="System.Int32" />
+  </Function>
   <Function Name="dbo.Insert_User" Method="Insert_User">
     <Parameter Name="User_Name" Parameter="user_Name" Type="System.String" DbType="NVarChar(50)" />
     <Parameter Name="Password" Parameter="password" Type="System.String" DbType="NVarChar(2000)" />
@@ -215,7 +273,6 @@
     <Parameter Name="sms_notification" Type="System.Boolean" DbType="Bit" />
     <Parameter Name="email_notification" Type="System.Boolean" DbType="Bit" />
     <Parameter Name="Title" Parameter="title" Type="System.String" DbType="NVarChar(200)" />
-    <Return Type="System.Int32" />
   </Function>
   <Function Name="dbo.sp_Update_User" Method="sp_Update_User">
     <Parameter Name="id" Type="System.Int32" DbType="Int" />
@@ -235,37 +292,5 @@
     <Parameter Name="sms_notification" Type="System.Boolean" DbType="Bit" />
     <Parameter Name="email_notification" Type="System.Boolean" DbType="Bit" />
     <Parameter Name="Title" Parameter="title" Type="System.String" DbType="NVarChar(200)" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.Get_Acknowladge" Method="Get_Acknowladge">
-    <ElementType Name="Get_AcknowladgeResult">
-      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-      <Column Name="Device_ID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Event_Type" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Event_DateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Location" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Instrument" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Event" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="Ack_Comments" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="Ack_User" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Ack_DateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-    </ElementType>
-  </Function>
-  <Function Name="dbo.Update_Acknowladge" Method="Update_Acknowladge">
-    <Parameter Name="Ack_User" Parameter="ack_User" Type="System.String" DbType="NVarChar(50)" />
-    <Parameter Name="ID" Parameter="iD" Type="System.Guid" DbType="UniqueIdentifier" />
-    <Parameter Name="Ack_Comments" Parameter="ack_Comments" Type="System.String" DbType="NVarChar(MAX)" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.Insert_Acknowladge_TMP" Method="Insert_Acknowladge_TMP">
-    <Parameter Name="ID" Parameter="iD" Type="System.Guid" DbType="UniqueIdentifier" />
-    <Parameter Name="Device_ID" Parameter="device_ID" Type="System.Guid" DbType="UniqueIdentifier" />
-    <Parameter Name="Location" Parameter="location" Type="System.String" DbType="NVarChar(50)" />
-    <Parameter Name="Instrument" Parameter="instrument" Type="System.String" DbType="NVarChar(50)" />
-    <Parameter Name="Event_Type" Parameter="event_Type" Type="System.String" DbType="NVarChar(50)" />
-    <Parameter Name="Event_DateTime" Parameter="event_DateTime" Type="System.DateTime" DbType="DateTime" />
-    <Parameter Name="Event" Parameter="event" Type="System.String" DbType="NVarChar(100)" />
-    <Parameter Name="Data" Parameter="data" Type="System.Double" DbType="Float" />
-    <Return Type="System.Int32" />
   </Function>
 </Database>

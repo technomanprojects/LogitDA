@@ -112,7 +112,7 @@ namespace Log_It
                         Technoman.Utilities.EventClass.connectionstring = instance.DataLink.Connection.ConnectionString;
                         Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Login, "User Login ", authe.UserInstance.Full_Name);
                         DAL.RoleEnum roleEnum = (DAL.RoleEnum)Enum.Parse(typeof(DAL.RoleEnum), instance.UserInstance.Role.ToString());
-                        System.IO.Ports.SerialPort sp = new System.IO.Ports.SerialPort("COM" + instance.SystemProperties.Port.ToString(), Convert.ToInt32(instance.SystemProperties.BaudRate));
+                        
                         switch (roleEnum)
                         {
                             case RoleEnum.Owner:

@@ -41,7 +41,7 @@ namespace Log_It.Forms
                     textBoxUserName.Text = user.User_Name.ToLower();
                     textBoxUserName.Enabled = false;
                     textBoxFullName.Text = user.Full_Name;
-                    textBoxDescription.Text = user.Department;
+                    //textBoxDescription.Text = user.Department;
                     textBoxPassword.Text = BAL.Authentication.GetDec(user.Password);
                     textBoxSignature.Enabled = false;
                     textBoxSignature.Text = user.Signature;
@@ -193,7 +193,7 @@ namespace Log_It.Forms
                         user.Active = true;
                         user.Authority = comboBoxRole.Text;
                         user.CreateDateTime = DateTime.Now;
-                        user.Department = textBoxDescription.Text;
+                        //user.Department = textBoxDescription.Text;
                         user.Full_Name = textBoxFullName.Text;
                         user.IsRowEnable = true;
                         user.Password = BAL.Authentication.GetEc(textBoxPassword.Text);
@@ -289,12 +289,12 @@ namespace Log_It.Forms
                             ischange = true;
                         }
 
-                        if (user.Department != textBoxDescription.Text)
-                        {
-                            Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties of Department: from " + tempuser.Department + " to " + textBoxDescription.Text, instace.UserInstance.Full_Name);
-                            user.Department = textBoxDescription.Text;
-                            ischange = true;
-                        }
+                        //if (user.Department != textBoxDescription.Text)
+                        //{
+                        //    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties of Department: from " + tempuser.Department + " to " + textBoxDescription.Text, instace.UserInstance.Full_Name);
+                        //    user.Department = textBoxDescription.Text;
+                        //    ischange = true;
+                        //}
                         if (user.Signature != textBoxSignature.Text)
                         {
                             Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties of Signature: from " + tempuser.Signature + " to " + textBoxSignature.Text, instace.UserInstance.Full_Name);
@@ -307,8 +307,8 @@ namespace Log_It.Forms
                             user.ModefiedBy = instace.UserInstance.Full_Name;
                             user.ModifiedDateTime = DateTime.Now;
 
-                            instace.DataLink.sp_Update_User(user.Id, user.User_Name, user.Password, (int)comboBoxRole.SelectedIndex + 1, instace.UserInstance.Full_Name, user.Full_Name,
-                                comboBoxRole.Text, user.Email, user.Phone, user.Department, user.Active, user.Signature, user.Password_expiry_date, Convert.ToInt16(textBoxexpires.Text), user.sms_notification, user.email_notification, user.Title);
+                            //instace.DataLink.sp_Update_User(user.Id, user.User_Name, user.Password, (int)comboBoxRole.SelectedIndex + 1, instace.UserInstance.Full_Name, user.Full_Name,
+                            //    comboBoxRole.Text, user.Email, user.Phone, user.Department, user.Active, user.Signature, user.Password_expiry_date, Convert.ToInt16(textBoxexpires.Text), user.sms_notification, user.email_notification, user.Title);
                             int a = instace.RefresUsers;
 
                             //Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "User Modified ", instace.UserInstance.Full_Name);

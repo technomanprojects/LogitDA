@@ -49,13 +49,13 @@ namespace Log_It.Pages
                 if (instance.DataLink.SYSProperties.Count() > 0)
                 {
                     SYSProperty Sysproperties = instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1);
-                    textBoxCom.Text = Sysproperties.Port.ToString();
+                    textBoxCom.Text = Sysproperties.IP_Address.ToString();
                     comboBoxUnit.Text = Sysproperties.Unit;
                     checkBoxSignLine.Checked = (bool)Sysproperties.Signature;
                     checkBoxSignLogged.Checked = (bool)Sysproperties.Automatic_Sign;
-                    textBoxCom.Text = Sysproperties.Port.ToString();
-                    textBoxBaudRate.Text = Sysproperties.BaudRate.ToString();
-                    textBoxDataBit.Text = Sysproperties.DataBit.ToString();
+                    textBoxCom.Text = Sysproperties.IP_Address.ToString();
+                    textBoxBaudRate.Text = Sysproperties.Port1.ToString();
+                    textBoxDataBit.Text = Sysproperties.Port2.ToString();
                     comboBoxParity.Text = Sysproperties.Parity.ToString();
                     comboBoxStopBit.Text = Sysproperties.StopBit.ToString();
                     checkBoxRTS.Checked = (bool)Sysproperties.RTS;
@@ -152,9 +152,9 @@ namespace Log_It.Pages
                     Systproperties.Unit = comboBoxUnit.Text;
                     Systproperties.Signature = checkBoxSignLine.Checked;
                     Systproperties.Automatic_Sign = checkBoxSignLogged.Checked;
-                    Systproperties.Port = textBoxCom.Text;
-                    Systproperties.BaudRate = textBoxBaudRate.Text;
-                    Systproperties.DataBit = textBoxDataBit.Text;
+                    Systproperties.IP_Address= textBoxCom.Text;
+                    Systproperties.Port1= textBoxBaudRate.Text;
+                    Systproperties.Port2= textBoxDataBit.Text;
                     Systproperties.Parity = comboBoxParity.Text;
                     Systproperties.StopBit = comboBoxStopBit.Text;
                     Systproperties.RTS = checkBoxRTS.Checked;
@@ -185,7 +185,7 @@ namespace Log_It.Pages
                     {
                         Systproperties.EmailID = string.Empty;
                         Systproperties.EmailPassword = string.Empty;
-                        Systproperties.Port = null;
+                        Systproperties.EmailPort = null;
                         Systproperties.EmailSMTP = string.Empty;
                     }
 
@@ -228,9 +228,9 @@ namespace Log_It.Pages
                     Systproperties.Unit = comboBoxUnit.Text;
                     Systproperties.Signature = checkBoxSignLine.Checked;
                     Systproperties.Automatic_Sign = checkBoxSignLogged.Checked;
-                    Systproperties.Port = textBoxCom.Text;
-                    Systproperties.BaudRate = textBoxBaudRate.Text;
-                    Systproperties.DataBit = textBoxDataBit.Text;
+                    Systproperties.IP_Address = textBoxCom.Text;
+                    Systproperties.Port1 = textBoxBaudRate.Text;
+                    Systproperties.Port2 = textBoxDataBit.Text;
                     Systproperties.Parity = comboBoxParity.Text;
                     Systproperties.StopBit = comboBoxStopBit.Text;
                     Systproperties.RTS = checkBoxRTS.Checked;
