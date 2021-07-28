@@ -56,10 +56,7 @@ namespace Log_It.Pages
                     textBoxIPAddress.Text = Sysproperties.IP_Address.ToString();
                     textBoxBaudRate.Text = Sysproperties.Port1.ToString();
                     textBoxDataBit.Text = Sysproperties.Port2.ToString();
-                    comboBoxParity.Text = Sysproperties.Parity.ToString();
-                    comboBoxStopBit.Text = Sysproperties.StopBit.ToString();
-                    checkBoxRTS.Checked = (bool)Sysproperties.RTS;
-                    checkBoxDTS.Checked = (bool)Sysproperties.DTS;
+                 
                     if (Sysproperties.D_Type == 1)
                     {
                         d_Type = D_Type.Aosong;
@@ -106,7 +103,7 @@ namespace Log_It.Pages
                     DAL.Company company = instance.DataLink.Companies.SingleOrDefault();
                     if (company != null)
                     {
-                        textBoxDepartment.Text = company.Department;
+                     
                         textBoxCompany.Text = company.Company_Name;
 
 
@@ -155,10 +152,7 @@ namespace Log_It.Pages
                     Systproperties.IP_Address= textBoxIPAddress.Text;
                     Systproperties.Port1= textBoxBaudRate.Text;
                     Systproperties.Port2= textBoxDataBit.Text;
-                    Systproperties.Parity = comboBoxParity.Text;
-                    Systproperties.StopBit = comboBoxStopBit.Text;
-                    Systproperties.RTS = checkBoxRTS.Checked;
-                    Systproperties.DTS = checkBoxDTS.Checked;
+                    
 
                     Systproperties.Acknowledged = checkBoxAlert.Checked;
                     Systproperties.Alert_Interval = Convert.ToInt32(textBoxAlarmInterval.Text); 
@@ -203,8 +197,7 @@ namespace Log_It.Pages
                     DAL.Company company = new Company();
                     company.Id = Guid.NewGuid();
                     company.Company_Name = textBoxCompany.Text;
-                    company.Department = textBoxDepartment.Text;
-
+                  
                     instance.DataLink.Companies.InsertOnSubmit(company);
 
                     instance.DataLink.SubmitChanges();
@@ -231,11 +224,7 @@ namespace Log_It.Pages
                     Systproperties.IP_Address = textBoxIPAddress.Text;
                     Systproperties.Port1 = textBoxBaudRate.Text;
                     Systproperties.Port2 = textBoxDataBit.Text;
-                    Systproperties.Parity = comboBoxParity.Text;
-                    Systproperties.StopBit = comboBoxStopBit.Text;
-                    Systproperties.RTS = checkBoxRTS.Checked;
-                    Systproperties.DTS = checkBoxDTS.Checked;
-
+                  
                     Systproperties.Power_Acknowledged = false;
                     Systproperties.Alert_Interval = Convert.ToInt32(textBoxAlarmInterval.Text);
                     Systproperties.Power_SMS = false;
@@ -356,7 +345,6 @@ namespace Log_It.Pages
                     DAL.Company company = instance.DataLink.Companies.SingleOrDefault();
                     if (company != null)
                     {
-                        company.Department = textBoxDepartment.Text;
                         company.Company_Name = textBoxCompany.Text;
                     }
 

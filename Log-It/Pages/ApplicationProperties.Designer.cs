@@ -103,9 +103,7 @@
             this.panel9 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
             this.label11 = new System.Windows.Forms.Label();
-            this.textBoxDepartment = new System.Windows.Forms.TextBox();
             this.textBoxCompany = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -171,7 +169,7 @@
             this.panel7.Controls.Add(this.checkBoxSignLogged);
             this.panel7.Controls.Add(this.checkBoxSignLine);
             this.panel7.Controls.Add(this.panel6);
-            this.panel7.Location = new System.Drawing.Point(11, 177);
+            this.panel7.Location = new System.Drawing.Point(11, 150);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(200, 100);
             this.panel7.TabIndex = 3;
@@ -221,9 +219,9 @@
             this.panel4.Controls.Add(this.comboBoxUnit);
             this.panel4.Controls.Add(this.label4);
             this.panel4.Controls.Add(this.panel5);
-            this.panel4.Location = new System.Drawing.Point(217, 177);
+            this.panel4.Location = new System.Drawing.Point(217, 150);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(200, 99);
+            this.panel4.Size = new System.Drawing.Size(200, 62);
             this.panel4.TabIndex = 1;
             // 
             // comboBoxUnit
@@ -233,7 +231,7 @@
             "Celsius",
             "Fahrenheit ",
             "Kelvin"});
-            this.comboBoxUnit.Location = new System.Drawing.Point(93, 40);
+            this.comboBoxUnit.Location = new System.Drawing.Point(93, 35);
             this.comboBoxUnit.Name = "comboBoxUnit";
             this.comboBoxUnit.Size = new System.Drawing.Size(91, 21);
             this.comboBoxUnit.TabIndex = 2;
@@ -242,7 +240,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(11, 43);
+            this.label4.Location = new System.Drawing.Point(11, 38);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(70, 13);
             this.label4.TabIndex = 1;
@@ -306,9 +304,9 @@
             this.panel16.Controls.Add(this.panel17);
             this.panel16.Controls.Add(this.textBoxAlarmInterval);
             this.panel16.Controls.Add(this.label30);
-            this.panel16.Location = new System.Drawing.Point(217, 464);
+            this.panel16.Location = new System.Drawing.Point(217, 406);
             this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(200, 69);
+            this.panel16.Size = new System.Drawing.Size(200, 81);
             this.panel16.TabIndex = 15;
             // 
             // panel17
@@ -332,7 +330,7 @@
             // 
             // textBoxAlarmInterval
             // 
-            this.textBoxAlarmInterval.Location = new System.Drawing.Point(78, 35);
+            this.textBoxAlarmInterval.Location = new System.Drawing.Point(78, 39);
             this.textBoxAlarmInterval.Name = "textBoxAlarmInterval";
             this.textBoxAlarmInterval.Size = new System.Drawing.Size(106, 20);
             this.textBoxAlarmInterval.TabIndex = 0;
@@ -341,7 +339,7 @@
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(11, 38);
+            this.label30.Location = new System.Drawing.Point(11, 42);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(47, 13);
             this.label30.TabIndex = 3;
@@ -356,15 +354,15 @@
             this.panel18.Controls.Add(this.panel19);
             this.panel18.Controls.Add(this.textBoxAlarmIP);
             this.panel18.Controls.Add(this.label34);
-            this.panel18.Location = new System.Drawing.Point(11, 398);
+            this.panel18.Location = new System.Drawing.Point(11, 371);
             this.panel18.Name = "panel18";
-            this.panel18.Size = new System.Drawing.Size(200, 104);
+            this.panel18.Size = new System.Drawing.Size(200, 116);
             this.panel18.TabIndex = 14;
             // 
             // checkBoxWifiAlarm
             // 
             this.checkBoxWifiAlarm.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBoxWifiAlarm.Location = new System.Drawing.Point(14, 28);
+            this.checkBoxWifiAlarm.Location = new System.Drawing.Point(14, 30);
             this.checkBoxWifiAlarm.Name = "checkBoxWifiAlarm";
             this.checkBoxWifiAlarm.Size = new System.Drawing.Size(79, 25);
             this.checkBoxWifiAlarm.TabIndex = 0;
@@ -375,7 +373,7 @@
             // textBoxAlarmPort
             // 
             this.textBoxAlarmPort.Enabled = false;
-            this.textBoxAlarmPort.Location = new System.Drawing.Point(78, 79);
+            this.textBoxAlarmPort.Location = new System.Drawing.Point(78, 81);
             this.textBoxAlarmPort.Name = "textBoxAlarmPort";
             this.textBoxAlarmPort.Size = new System.Drawing.Size(106, 20);
             this.textBoxAlarmPort.TabIndex = 2;
@@ -383,7 +381,7 @@
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(14, 82);
+            this.label32.Location = new System.Drawing.Point(14, 84);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(26, 13);
             this.label32.TabIndex = 7;
@@ -404,14 +402,14 @@
             this.label33.AutoSize = true;
             this.label33.Location = new System.Drawing.Point(11, 7);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(33, 13);
+            this.label33.Size = new System.Drawing.Size(76, 13);
             this.label33.TabIndex = 0;
-            this.label33.Text = "Alarm";
+            this.label33.Text = "Ethernet Alarm";
             // 
             // textBoxAlarmIP
             // 
             this.textBoxAlarmIP.Enabled = false;
-            this.textBoxAlarmIP.Location = new System.Drawing.Point(78, 55);
+            this.textBoxAlarmIP.Location = new System.Drawing.Point(78, 57);
             this.textBoxAlarmIP.Name = "textBoxAlarmIP";
             this.textBoxAlarmIP.Size = new System.Drawing.Size(106, 20);
             this.textBoxAlarmIP.TabIndex = 1;
@@ -419,7 +417,7 @@
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(14, 58);
+            this.label34.Location = new System.Drawing.Point(14, 60);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(58, 13);
             this.label34.TabIndex = 3;
@@ -430,7 +428,7 @@
             this.panel14.BackColor = System.Drawing.Color.LightYellow;
             this.panel14.Controls.Add(this.checkBoxAlert);
             this.panel14.Controls.Add(this.panel15);
-            this.panel14.Location = new System.Drawing.Point(217, 397);
+            this.panel14.Location = new System.Drawing.Point(217, 333);
             this.panel14.Name = "panel14";
             this.panel14.Size = new System.Drawing.Size(200, 61);
             this.panel14.TabIndex = 13;
@@ -474,7 +472,7 @@
             this.panel12.Controls.Add(this.panel13);
             this.panel12.Location = new System.Drawing.Point(433, 72);
             this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(336, 424);
+            this.panel12.Size = new System.Drawing.Size(336, 415);
             this.panel12.TabIndex = 10;
             // 
             // groupBoxSMS
@@ -491,7 +489,7 @@
             this.groupBoxSMS.Controls.Add(this.label24);
             this.groupBoxSMS.Controls.Add(this.label25);
             this.groupBoxSMS.Enabled = false;
-            this.groupBoxSMS.Location = new System.Drawing.Point(14, 234);
+            this.groupBoxSMS.Location = new System.Drawing.Point(14, 231);
             this.groupBoxSMS.Name = "groupBoxSMS";
             this.groupBoxSMS.Size = new System.Drawing.Size(311, 178);
             this.groupBoxSMS.TabIndex = 10;
@@ -706,7 +704,7 @@
             // chbSMS
             // 
             this.chbSMS.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chbSMS.Location = new System.Drawing.Point(14, 207);
+            this.chbSMS.Location = new System.Drawing.Point(14, 204);
             this.chbSMS.Name = "chbSMS";
             this.chbSMS.Size = new System.Drawing.Size(104, 25);
             this.chbSMS.TabIndex = 2;
@@ -761,7 +759,7 @@
             this.panel10.Controls.Add(this.groupBox2);
             this.panel10.Controls.Add(this.groupBox1);
             this.panel10.Controls.Add(this.panel11);
-            this.panel10.Location = new System.Drawing.Point(217, 282);
+            this.panel10.Location = new System.Drawing.Point(217, 218);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(200, 110);
             this.panel10.TabIndex = 9;
@@ -889,13 +887,11 @@
             // 
             this.panel9.BackColor = System.Drawing.Color.LightYellow;
             this.panel9.Controls.Add(this.panel8);
-            this.panel9.Controls.Add(this.textBoxDepartment);
             this.panel9.Controls.Add(this.textBoxCompany);
-            this.panel9.Controls.Add(this.label15);
             this.panel9.Controls.Add(this.label16);
             this.panel9.Location = new System.Drawing.Point(11, 72);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(406, 99);
+            this.panel9.Size = new System.Drawing.Size(406, 68);
             this.panel9.TabIndex = 7;
             // 
             // panel8
@@ -917,28 +913,12 @@
             this.label11.TabIndex = 0;
             this.label11.Text = "Company Information";
             // 
-            // textBoxDepartment
-            // 
-            this.textBoxDepartment.Location = new System.Drawing.Point(108, 62);
-            this.textBoxDepartment.Name = "textBoxDepartment";
-            this.textBoxDepartment.Size = new System.Drawing.Size(282, 20);
-            this.textBoxDepartment.TabIndex = 6;
-            // 
             // textBoxCompany
             // 
             this.textBoxCompany.Location = new System.Drawing.Point(108, 38);
             this.textBoxCompany.Name = "textBoxCompany";
             this.textBoxCompany.Size = new System.Drawing.Size(282, 20);
             this.textBoxCompany.TabIndex = 5;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(11, 66);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(65, 13);
-            this.label15.TabIndex = 4;
-            this.label15.Text = "Department:";
             // 
             // label16
             // 
@@ -951,7 +931,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(433, 546);
+            this.button1.Location = new System.Drawing.Point(675, 493);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 23);
             this.button1.TabIndex = 7;
@@ -969,7 +949,7 @@
             this.panel3.Controls.Add(this.label8);
             this.panel3.Controls.Add(this.label7);
             this.panel3.Controls.Add(this.label6);
-            this.panel3.Location = new System.Drawing.Point(11, 283);
+            this.panel3.Location = new System.Drawing.Point(11, 256);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(200, 109);
             this.panel3.TabIndex = 5;
@@ -1133,9 +1113,7 @@
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBoxDepartment;
         private System.Windows.Forms.TextBox textBoxCompany;
-        private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Panel panel10;
         private System.Windows.Forms.Panel panel11;
