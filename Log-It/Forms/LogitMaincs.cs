@@ -77,6 +77,7 @@ namespace Log_It.Forms
                 LogIt.Parameters.outofLimits += Parameters_outofLimits;
                 LogIt.Parameters.InsertAckTMP += Parameters_InsertAckTMP;
                 LogIt.Parameters.BarAlaram += Parameters_BarAlaram;
+                LogIt.SendAlarmCondition += LogIt_SendAlarmCondition;
                 Control.CheckForIllegalCrossThreadCalls = false;
 
                 if (instance.DataLink.SYSProperties.Single().D_Type == 2)
@@ -96,6 +97,11 @@ namespace Log_It.Forms
                 //MessageBox.Show(m.Message);
             }
 
+        }
+
+        void LogIt_SendAlarmCondition(object sender, EventArgs e)
+        {
+            
         }
 
         void Parameters_BarAlaram(uint Index, double values, bool isactive)
@@ -1130,12 +1136,26 @@ namespace Log_It.Forms
             try
             {
                 byte[] byteBuffer = Encoding.ASCII.GetBytes("#0" + slaveID.ToString() + '\r');
+                while (!client.Connected)
+                {
+                    try
+                    {
+                        client.Connect(ipAddress, index);    
+                    }
+                    catch (Exception m)
+                    {
+                        toolStripStatusComPort.Text = "Network disconnect.";
+                        continue;
+                    }
+                    
+                }
+                
                 netStream = client.GetStream();
                 netStream.Write(byteBuffer, 0, byteBuffer.Length);
 
                 int totalBytesRcvd = 0; // Total bytes received so far
                 int bytesRcvd = 0;
-
+                Thread.Sleep(2000);
                 while (totalBytesRcvd < byteBuffer.Length)
                 {
                     if ((bytesRcvd = netStream.Read(byteBuffer, totalBytesRcvd, byteBuffer.Length - totalBytesRcvd)) == 114)
@@ -1165,7 +1185,11 @@ namespace Log_It.Forms
         
         public void Close()
         {
-            //this.serialPort1.Close();
+            if (client.Connected)
+            {
+                netStream.Close();
+                client.Close();
+            }
         }
 
         List<DeviceList> dlist;

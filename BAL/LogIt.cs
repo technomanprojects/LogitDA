@@ -292,34 +292,30 @@ namespace BAL
                         result = result | p.OutofLimit;
                         if (p.OutofLimit)
                         {
-                            //    //AlarmList.Add(logitObject.Location+" "+p.Limite + " " + p.ParameterValue);
-                            //    //MessageBox.Show("Value Exceed " + p.ParameterValue + " Limit " + p.Limite + "  Location " + logitObject.Location);
-                            //    ////Clsmgt dm = new Clsmgt();
-                            //    ////dm.SetData("INSERT INTO RECODE1 (CHANNELID, DT, TEMP, RH, RECORDSTATUS, COMMENT) " + 
-                            //    ////           "VALUES('" + chid + "','" + dt + "', " + temp + ", " + rh + ", " + rstatus + ", '"  + comment + "')";	
-
+                            SendAlarmSMS(sender, e); 
+                         
                         }
                     }
                     
                 }
             }
-            if (result)
-            {
-                //Beep(1000, 2000);
+            //if (result)
+            //{
+            //    //Beep(1000, 2000);
 
-                AlarmDuration = DateTime.Now.Subtract(AlarmStartTiming);                    // This is only for Roche               
-                    if ((AlarmDuration.TotalMinutes >= Time) && (SendAlarmCondition != null))   // This is only for Roche
-                {
-                    sender = AlarmList;
-                    SendAlarmCondition(sender, e);                                          // This is general.
+            //    AlarmDuration = DateTime.Now.Subtract(AlarmStartTiming);                    // This is only for Roche               
+            //        if ((AlarmDuration.TotalMinutes >= Time) && (SendAlarmCondition != null))   // This is only for Roche
+            //    {
+            //        sender = AlarmList;
+            //        SendAlarmCondition(sender, e);                                          // This is general.
                   
-                }
-            }
-            else
-            {
-                AlarmStartTiming = DateTime.Now;
-              //  SendAlarmSMS(sender, e);                                                       // This is general.
-            }
+            //    }
+            //}
+            //else
+            //{
+            //    AlarmStartTiming = DateTime.Now;
+            //  //  SendAlarmSMS(sender, e);                                                       // This is general.
+            //}
         }
           
 
