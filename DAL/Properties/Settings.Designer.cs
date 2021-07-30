@@ -74,5 +74,26 @@ namespace DAL.Properties {
                 return ((string)(this["PlotterDAConnectionString1"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=IT-PC2\\SQLEXPRESS;Initial Catalog=PlotterDA;User ID=sa")]
+        public string PlotterDAConnectionString2 {
+            get {
+                return ((string)(this["PlotterDAConnectionString2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=IT-PC2\\SQLEXPRESS;Initial Catalog=PlotterDA;User ID=sa;Password=micro" +
+            "soft")]
+        public string PlotterDAConnectionString3 {
+            get {
+                return ((string)(this["PlotterDAConnectionString3"]));
+            }
+        }
     }
 }

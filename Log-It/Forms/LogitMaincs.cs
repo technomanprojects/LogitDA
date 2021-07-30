@@ -704,7 +704,7 @@ namespace Log_It.Forms
 
                         index++;
                     }
-                    client = new TcpClient();
+                   
                     isRun = true;
                     return true;
                 }
@@ -1136,10 +1136,15 @@ namespace Log_It.Forms
             try
             {
                 byte[] byteBuffer = Encoding.ASCII.GetBytes("#0" + slaveID.ToString() + '\r');
+                if (client == null)
+                {
+                      client = new TcpClient();
+                }
                 while (!client.Connected)
                 {
                     try
                     {
+                      
                         client.Connect(ipAddress, index);    
                     }
                     catch (Exception m)
@@ -1156,13 +1161,16 @@ namespace Log_It.Forms
                 int totalBytesRcvd = 0; // Total bytes received so far
                 int bytesRcvd = 0;
                 Thread.Sleep(2000);
+                //netStream.ReadTimeout = 5000;
+                byteBuffer = new byte[114];
                 while (totalBytesRcvd < byteBuffer.Length)
                 {
-                    if ((bytesRcvd = netStream.Read(byteBuffer, totalBytesRcvd, byteBuffer.Length - totalBytesRcvd)) == 114)
-                    {
+                    bytesRcvd = netStream.Read(byteBuffer, totalBytesRcvd, byteBuffer.Length - totalBytesRcvd);
+                    //if () == 114)
+                    //{
 
-                        break;
-                    }
+                    //    break;
+                    //}
                     totalBytesRcvd += bytesRcvd;
                 }
                 this.LastValue = Encoding.ASCII.GetString(byteBuffer, 0, totalBytesRcvd);
@@ -1178,6 +1186,7 @@ namespace Log_It.Forms
             {
                 netStream.Close();
                 client.Close();
+                client = null;
             }
 
           
@@ -1216,6 +1225,7 @@ namespace Log_It.Forms
                         d.Port = Convert.ToInt32(item.Port_No);
                         d.higher = (int)item.higher;
                         d.Lower = (int)item.Lower;
+                        d.E_Port = item.E_Port;
                         dlist.Add(d);
                     }
                 }
@@ -1227,11 +1237,11 @@ namespace Log_It.Forms
 
                     int index = 0;
                    
-
+                    
                     for (int k = 0; k < instance.SystemProperties.Number_Devices; k++)
                     {
-
-                        this.GetData(instance.SystemProperties.IP_Address,ports[k],k);
+                        
+                        this.GetData(instance.SystemProperties.IP_Address,ports[k],0);
                         if (cancellationToken.IsCancellationRequested)
                         {
                             Close();
@@ -1277,7 +1287,7 @@ namespace Log_It.Forms
                                         {
 
 
-                                            DeviceList dl = dlist.SingleOrDefault(b => b.Port == i && b.Channel == k);
+                                            DeviceList dl = dlist.SingleOrDefault(b => b.E_Port == ports[k].ToString() && b.Channel == 0 && b.Port == i);
                                             if (dl != null)
                                             {
                                                 decimal Pvhigh = Convert.ToDecimal(dl.higher);
@@ -1289,7 +1299,7 @@ namespace Log_It.Forms
                                                 pvt = pvt / ivt;
                                                 //decimal dt = r.Next(10, 20);
                                                 decimal resutl = Convert.ToDecimal(split[i + 1]);
-                                                double ofset = 0.06;
+                                                double ofset = 0.003;
                                                 resutl = resutl - Convert.ToDecimal(ofset);
                                                 decimal d = resutl - 4;
                                                 decimal pv = (pvt * d) + Pvlow;
@@ -1871,4 +1881,6 @@ public class DeviceList
     { get; set; }
     public int Lower
     { get; set; }
+
+    public string E_Port { get; set; }
 }

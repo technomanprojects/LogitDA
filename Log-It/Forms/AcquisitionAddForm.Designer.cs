@@ -33,7 +33,6 @@
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.label1lastRecord = new System.Windows.Forms.Label();
             this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.checkBoxAlaram = new System.Windows.Forms.CheckBox();
             this.groupBoxTemp = new System.Windows.Forms.GroupBox();
@@ -61,6 +60,9 @@
             this.label14 = new System.Windows.Forms.Label();
             this.textBoxdeviceLL = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBoxE_Port = new System.Windows.Forms.TextBox();
+            this.comboBoxPort = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBoxTemp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericInterval)).BeginInit();
@@ -69,7 +71,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(360, 390);
+            this.button1.Location = new System.Drawing.Point(360, 408);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -79,7 +81,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(279, 390);
+            this.button2.Location = new System.Drawing.Point(279, 408);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
@@ -89,8 +91,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.label1lastRecord);
             this.groupBox1.Controls.Add(this.comboBoxType);
             this.groupBox1.Controls.Add(this.checkBoxAlaram);
             this.groupBox1.Controls.Add(this.groupBoxTemp);
@@ -103,11 +105,13 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.textBoxPortID);
             this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.textBoxE_Port);
+            this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.textBoxChannelID);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(438, 372);
+            this.groupBox1.Size = new System.Drawing.Size(438, 397);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Detail";
@@ -115,39 +119,29 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(12, 56);
+            this.label11.Location = new System.Drawing.Point(12, 71);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(71, 13);
             this.label11.TabIndex = 21;
             this.label11.Text = "Device Type:";
             // 
-            // label1lastRecord
-            // 
-            this.label1lastRecord.AutoSize = true;
-            this.label1lastRecord.Location = new System.Drawing.Point(6, 251);
-            this.label1lastRecord.Name = "label1lastRecord";
-            this.label1lastRecord.Size = new System.Drawing.Size(41, 13);
-            this.label1lastRecord.TabIndex = 35;
-            this.label1lastRecord.Text = "label16";
-            this.label1lastRecord.Visible = false;
-            // 
             // comboBoxType
             // 
+            this.comboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxType.FormattingEnabled = true;
             this.comboBoxType.Items.AddRange(new object[] {
             "Temp",
             "Rh",
             "Pressure"});
-            this.comboBoxType.Location = new System.Drawing.Point(99, 53);
+            this.comboBoxType.Location = new System.Drawing.Point(99, 68);
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(324, 21);
             this.comboBoxType.TabIndex = 1;
-            this.comboBoxType.Text = "Temp";
             // 
             // checkBoxAlaram
             // 
             this.checkBoxAlaram.AutoSize = true;
-            this.checkBoxAlaram.Location = new System.Drawing.Point(339, 166);
+            this.checkBoxAlaram.Location = new System.Drawing.Point(339, 181);
             this.checkBoxAlaram.Name = "checkBoxAlaram";
             this.checkBoxAlaram.Size = new System.Drawing.Size(58, 17);
             this.checkBoxAlaram.TabIndex = 6;
@@ -164,7 +158,7 @@
             this.groupBoxTemp.Controls.Add(this.label8);
             this.groupBoxTemp.Controls.Add(this.textBoxTLL);
             this.groupBoxTemp.Controls.Add(this.label7);
-            this.groupBoxTemp.Location = new System.Drawing.Point(74, 199);
+            this.groupBoxTemp.Location = new System.Drawing.Point(74, 214);
             this.groupBoxTemp.Name = "groupBoxTemp";
             this.groupBoxTemp.Size = new System.Drawing.Size(349, 85);
             this.groupBoxTemp.TabIndex = 31;
@@ -246,7 +240,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(222, 166);
+            this.label6.Location = new System.Drawing.Point(222, 181);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(39, 13);
             this.label6.TabIndex = 30;
@@ -254,7 +248,7 @@
             // 
             // numericInterval
             // 
-            this.numericInterval.Location = new System.Drawing.Point(99, 164);
+            this.numericInterval.Location = new System.Drawing.Point(99, 179);
             this.numericInterval.Maximum = new decimal(new int[] {
             60,
             0,
@@ -267,7 +261,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 166);
+            this.label5.Location = new System.Drawing.Point(12, 181);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 13);
             this.label5.TabIndex = 28;
@@ -275,7 +269,7 @@
             // 
             // textBoxInstrument
             // 
-            this.textBoxInstrument.Location = new System.Drawing.Point(99, 135);
+            this.textBoxInstrument.Location = new System.Drawing.Point(99, 150);
             this.textBoxInstrument.Name = "textBoxInstrument";
             this.textBoxInstrument.Size = new System.Drawing.Size(324, 20);
             this.textBoxInstrument.TabIndex = 4;
@@ -283,7 +277,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 138);
+            this.label4.Location = new System.Drawing.Point(12, 153);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 13);
             this.label4.TabIndex = 26;
@@ -291,7 +285,7 @@
             // 
             // textBoxLocation
             // 
-            this.textBoxLocation.Location = new System.Drawing.Point(99, 108);
+            this.textBoxLocation.Location = new System.Drawing.Point(99, 123);
             this.textBoxLocation.Name = "textBoxLocation";
             this.textBoxLocation.Size = new System.Drawing.Size(324, 20);
             this.textBoxLocation.TabIndex = 3;
@@ -299,7 +293,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 111);
+            this.label3.Location = new System.Drawing.Point(12, 126);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(51, 13);
             this.label3.TabIndex = 24;
@@ -307,7 +301,7 @@
             // 
             // textBoxPortID
             // 
-            this.textBoxPortID.Location = new System.Drawing.Point(99, 81);
+            this.textBoxPortID.Location = new System.Drawing.Point(99, 96);
             this.textBoxPortID.Name = "textBoxPortID";
             this.textBoxPortID.Size = new System.Drawing.Size(324, 20);
             this.textBoxPortID.TabIndex = 2;
@@ -316,7 +310,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 84);
+            this.label2.Location = new System.Drawing.Point(12, 99);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(43, 13);
             this.label2.TabIndex = 22;
@@ -324,7 +318,7 @@
             // 
             // textBoxChannelID
             // 
-            this.textBoxChannelID.Location = new System.Drawing.Point(99, 27);
+            this.textBoxChannelID.Location = new System.Drawing.Point(99, 42);
             this.textBoxChannelID.Name = "textBoxChannelID";
             this.textBoxChannelID.Size = new System.Drawing.Size(324, 20);
             this.textBoxChannelID.TabIndex = 0;
@@ -334,7 +328,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 30);
+            this.label1.Location = new System.Drawing.Point(12, 45);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(63, 13);
             this.label1.TabIndex = 20;
@@ -346,7 +340,7 @@
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.textBoxdeviceLL);
             this.groupBox2.Controls.Add(this.label15);
-            this.groupBox2.Location = new System.Drawing.Point(86, 315);
+            this.groupBox2.Location = new System.Drawing.Point(74, 316);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(349, 61);
             this.groupBox2.TabIndex = 32;
@@ -387,12 +381,56 @@
             this.label15.TabIndex = 15;
             this.label15.Text = "Lower";
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(12, 19);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(72, 13);
+            this.label12.TabIndex = 20;
+            this.label12.Text = "Network Port:";
+            // 
+            // textBoxE_Port
+            // 
+            this.textBoxE_Port.Location = new System.Drawing.Point(99, 16);
+            this.textBoxE_Port.Name = "textBoxE_Port";
+            this.textBoxE_Port.Size = new System.Drawing.Size(324, 20);
+            this.textBoxE_Port.TabIndex = 0;
+            this.textBoxE_Port.Text = "9999";
+            this.textBoxE_Port.TextChanged += new System.EventHandler(this.textBoxTLL_TextChanged);
+            // 
+            // comboBoxPort
+            // 
+            this.comboBoxPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxPort.FormattingEnabled = true;
+            this.comboBoxPort.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15"});
+            this.comboBoxPort.Location = new System.Drawing.Point(71, 437);
+            this.comboBoxPort.Name = "comboBoxPort";
+            this.comboBoxPort.Size = new System.Drawing.Size(324, 21);
+            this.comboBoxPort.TabIndex = 3;
+            // 
             // AcquisitionAddForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(468, 417);
-            this.Controls.Add(this.groupBox2);
+            this.ClientSize = new System.Drawing.Size(468, 472);
+            this.Controls.Add(this.comboBoxPort);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -420,7 +458,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label1lastRecord;
         public System.Windows.Forms.ComboBox comboBoxType;
         public System.Windows.Forms.CheckBox checkBoxAlaram;
         private System.Windows.Forms.GroupBox groupBoxTemp;
@@ -448,5 +485,8 @@
         private System.Windows.Forms.Label label14;
         public System.Windows.Forms.TextBox textBoxdeviceLL;
         private System.Windows.Forms.Label label15;
+        public System.Windows.Forms.TextBox textBoxE_Port;
+        private System.Windows.Forms.Label label12;
+        public System.Windows.Forms.ComboBox comboBoxPort;
     }
 }

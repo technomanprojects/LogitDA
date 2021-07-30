@@ -25,12 +25,14 @@ namespace Log_It.Forms
 
             InitializeComponent();
             this.Id = Id;
-
+            comboBoxType.SelectedIndex = 0;
             DAL.Device_Config config = Instance.Device_Configes.SingleOrDefault(x => x.ID == Id && x.Active == true && x.IsRowActive == true);
 
             if (config != null)
             {
                 //checkBoxAlaram.Checked = (bool)config.Alaram;
+
+                textBoxE_Port.Text = config.E_Port;
                 textBoxPortID.Text = config.Channel_id;
                 textBoxChannelID.Text = config.Channel_id.ToString();
                 textBoxInstrument.Text = config.Instrument;
@@ -55,6 +57,11 @@ namespace Log_It.Forms
                 if (textBoxChannelID.Text == string.Empty)
                 {
                     MessageBox.Show("Please Enter Device ID");
+                    return false;
+                }
+                if (textBoxE_Port.Text == string.Empty)
+                {
+                    MessageBox.Show("Please Enter Network Port");
                     return false;
                 }
                 if (textBoxPortID.Text == string.Empty)
@@ -107,7 +114,7 @@ namespace Log_It.Forms
                     DAL.Device_Config config = new DAL.Device_Config();
                     config.ID = Guid.NewGuid();
                     config.Active = true;
-                   
+                    config.E_Port = textBoxE_Port.Text;
                     config.Channel_id = textBoxPortID.Text;
                     config.Port_No = Convert.ToInt32( textBoxPortID.Text);
                     config.CreateDateTime = DateTime.Now;
@@ -145,6 +152,7 @@ namespace Log_It.Forms
                     config.Active = true;
                     
                     config.Channel_id = textBoxPortID.Text;
+                    config.E_Port = textBoxE_Port.Text;
                     config.CreateDateTime = DateTime.Now;
                     config.CreatedBy = Instance.UserInstance.Full_Name;
                     config.Channel_id = textBoxChannelID.Text;
