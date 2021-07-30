@@ -33,7 +33,7 @@ namespace Log_It.Forms
                 //checkBoxAlaram.Checked = (bool)config.Alaram;
 
                 textBoxE_Port.Text = config.E_Port;
-                textBoxPortID.Text = config.Channel_id;
+                comboBoxPort.Text = config.Channel_id;
                 textBoxChannelID.Text = config.Channel_id.ToString();
                 textBoxInstrument.Text = config.Instrument;
                 numericInterval.Value = Convert.ToDecimal(config.Interval);
@@ -64,7 +64,7 @@ namespace Log_It.Forms
                     MessageBox.Show("Please Enter Network Port");
                     return false;
                 }
-                if (textBoxPortID.Text == string.Empty)
+                if (comboBoxPort.Text == string.Empty)
                 {
                     MessageBox.Show("Please Enter port number");
                     return false;
@@ -115,8 +115,8 @@ namespace Log_It.Forms
                     config.ID = Guid.NewGuid();
                     config.Active = true;
                     config.E_Port = textBoxE_Port.Text;
-                    config.Channel_id = textBoxPortID.Text;
-                    config.Port_No = Convert.ToInt32( textBoxPortID.Text);
+                    config.Channel_id = comboBoxPort.Text;
+                    config.Port_No = Convert.ToInt32( comboBoxPort.Text);
                     config.CreateDateTime = DateTime.Now;
                     config.CreatedBy = Instance.UserInstance.Full_Name;
                     config.Channel_id = textBoxChannelID.Text;
@@ -151,7 +151,7 @@ namespace Log_It.Forms
                     DAL.Device_Config config = Instance.Device_Configes.SingleOrDefault(x => x.ID == Id);
                     config.Active = true;
                     
-                    config.Channel_id = textBoxPortID.Text;
+                    config.Channel_id = comboBoxPort.Text;
                     config.E_Port = textBoxE_Port.Text;
                     config.CreateDateTime = DateTime.Now;
                     config.CreatedBy = Instance.UserInstance.Full_Name;

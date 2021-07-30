@@ -51,7 +51,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxLocation = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBoxPortID = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxChannelID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -91,6 +90,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.comboBoxPort);
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.comboBoxType);
@@ -103,7 +103,6 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.textBoxLocation);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.textBoxPortID);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.textBoxE_Port);
             this.groupBox1.Controls.Add(this.label12);
@@ -299,14 +298,6 @@
             this.label3.TabIndex = 24;
             this.label3.Text = "Location:";
             // 
-            // textBoxPortID
-            // 
-            this.textBoxPortID.Location = new System.Drawing.Point(99, 96);
-            this.textBoxPortID.Name = "textBoxPortID";
-            this.textBoxPortID.Size = new System.Drawing.Size(324, 20);
-            this.textBoxPortID.TabIndex = 2;
-            this.textBoxPortID.TextChanged += new System.EventHandler(this.textBoxTLL_TextChanged);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -420,7 +411,7 @@
             "13",
             "14",
             "15"});
-            this.comboBoxPort.Location = new System.Drawing.Point(71, 437);
+            this.comboBoxPort.Location = new System.Drawing.Point(99, 95);
             this.comboBoxPort.Name = "comboBoxPort";
             this.comboBoxPort.Size = new System.Drawing.Size(324, 21);
             this.comboBoxPort.TabIndex = 3;
@@ -430,7 +421,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(468, 472);
-            this.Controls.Add(this.comboBoxPort);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -476,7 +466,6 @@
         private System.Windows.Forms.Label label4;
         public System.Windows.Forms.TextBox textBoxLocation;
         private System.Windows.Forms.Label label3;
-        public System.Windows.Forms.TextBox textBoxPortID;
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.TextBox textBoxChannelID;
         private System.Windows.Forms.Label label1;
