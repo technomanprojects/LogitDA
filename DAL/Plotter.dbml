@@ -57,40 +57,6 @@
       <Association Name="Department_Device_Config" Member="Device_Configs" ThisKey="Department_Id" OtherKey="Department_Id" Type="Device_Config" />
     </Type>
   </Table>
-  <Table Name="dbo.Device_Config" Member="Device_Configs">
-    <Type Name="Device_Config">
-      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="E_Port" Type="System.String" DbType="NChar(4)" CanBeNull="true" />
-      <Column Name="Channel_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Port_No" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Location" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Instrument" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Interval" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Alarm" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Last_Record" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="CreateDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="ModifiedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="IsRowActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Rh_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Upper_Limit" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Lower_Limit" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Upper_Range" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Lower_Range" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Device_Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Offset" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="dateofCalibration" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Lower" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="higher" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Department_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="NetworkID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Department_Device_Config" Member="Department" ThisKey="Department_Id" OtherKey="Department_Id" Type="Department" IsForeignKey="true" />
-      <Association Name="Device_Enum_Device_Config" Member="Device_Enum" ThisKey="Device_Type" OtherKey="ID" Type="Device_Enum" IsForeignKey="true" />
-      <Association Name="Network_Device_Config" Member="Network" ThisKey="NetworkID" OtherKey="ID" Type="Network" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Device_Enum" Member="Device_Enums">
     <Type Name="Device_Enum">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -123,15 +89,6 @@
       <Column Name="Port_Id" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="[_Data]" Member="_Data" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Column Name="date_" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Network" Member="Networks">
-    <Type Name="Network">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="IPAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Port" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Channel" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Network_Device_Config" Member="Device_Configs" ThisKey="ID" OtherKey="NetworkID" Type="Device_Config" />
     </Type>
   </Table>
   <Table Name="dbo.ofsetAuditRecord" Member="ofsetAuditRecords">
@@ -201,6 +158,38 @@
       <Column Name="SMSToken" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
       <Column Name="GSM" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="WebLink" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Device_Config" Member="Device_Configs">
+    <Type Name="Device_Config">
+      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="E_Port" Type="System.String" DbType="NChar(4)" CanBeNull="true" />
+      <Column Name="Channel_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Port_No" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Location" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Instrument" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Interval" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Alarm" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Last_Record" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsRowActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Rh_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Upper_Limit" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Lower_Limit" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Upper_Range" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Lower_Range" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Device_Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Offset" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="dateofCalibration" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Lower" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="higher" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Department_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Department_Device_Config" Member="Department" ThisKey="Department_Id" OtherKey="Department_Id" Type="Department" IsForeignKey="true" />
+      <Association Name="Device_Enum_Device_Config" Member="Device_Enum" ThisKey="Device_Type" OtherKey="ID" Type="Device_Enum" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.Create_dbBackup" Method="Create_dbBackup">
