@@ -244,14 +244,15 @@ namespace DAL
 			return ((int)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Insert_User", IsComposable=true)]
-		public object Insert_User([global::System.Data.Linq.Mapping.ParameterAttribute(Name="User_Name", DbType="NVarChar(50)")] string user_Name, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Password", DbType="NVarChar(2000)")] string password, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Role", DbType="Int")] System.Nullable<int> role, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CreatedBy", DbType="NVarChar(50)")] string createdBy, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Full_Name", DbType="NVarChar(MAX)")] string full_Name, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Authority", DbType="NVarChar(50)")] string authority, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Email", DbType="NVarChar(50)")] string email, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Phone", DbType="NVarChar(50)")] string phone, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Department", DbType="NVarChar(50)")] string department, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Signature", DbType="NVarChar(50)")] string signature, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Password_expiry_date", DbType="DateTime")] System.Nullable<System.DateTime> password_expiry_date, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Password_Expiry", DbType="Int")] System.Nullable<int> password_Expiry, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Bit")] System.Nullable<bool> sms_notification, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Bit")] System.Nullable<bool> email_notification, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Title", DbType="NVarChar(200)")] string title)
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.Insert_User")]
+		public int Insert_User([global::System.Data.Linq.Mapping.ParameterAttribute(Name="User_Name", DbType="NVarChar(50)")] string user_Name, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Password", DbType="NVarChar(2000)")] string password, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Role", DbType="Int")] System.Nullable<int> role, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="CreatedBy", DbType="NVarChar(50)")] string createdBy, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Full_Name", DbType="NVarChar(MAX)")] string full_Name, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Authority", DbType="NVarChar(50)")] string authority, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Email", DbType="NVarChar(50)")] string email, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Phone", DbType="NVarChar(50)")] string phone, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Department_Id", DbType="Int")] System.Nullable<int> department_Id, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Signature", DbType="NVarChar(50)")] string signature, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Password_expiry_date", DbType="DateTime")] System.Nullable<System.DateTime> password_expiry_date, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Password_Expiry", DbType="Int")] System.Nullable<int> password_Expiry, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Bit")] System.Nullable<bool> sms_notification, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Bit")] System.Nullable<bool> email_notification, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Title", DbType="NVarChar(200)")] string title)
 		{
-			return ((object)(this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), user_Name, password, role, createdBy, full_Name, authority, email, phone, department, signature, password_expiry_date, password_Expiry, sms_notification, email_notification, title).ReturnValue));
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), user_Name, password, role, createdBy, full_Name, authority, email, phone, department_Id, signature, password_expiry_date, password_Expiry, sms_notification, email_notification, title);
+			return ((int)(result.ReturnValue));
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.sp_Update_User", IsComposable=true)]
-		public object sp_Update_User(
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.sp_Update_User")]
+		public int sp_Update_User(
 					[global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> id, 
 					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="User_Name", DbType="NVarChar(50)")] string user_Name, 
 					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="Password", DbType="NVarChar(2000)")] string password, 
@@ -261,7 +262,7 @@ namespace DAL
 					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="Authority", DbType="NVarChar(50)")] string authority, 
 					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="Email", DbType="NVarChar(50)")] string email, 
 					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="Phone", DbType="NVarChar(50)")] string phone, 
-					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="Department", DbType="NVarChar(50)")] string department, 
+					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="Department_Id", DbType="Int")] System.Nullable<int> department_Id, 
 					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="Active", DbType="Bit")] System.Nullable<bool> active, 
 					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="Signature", DbType="NVarChar(50)")] string signature, 
 					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="Password_expiry_date", DbType="DateTime")] System.Nullable<System.DateTime> password_expiry_date, 
@@ -270,7 +271,8 @@ namespace DAL
 					[global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Bit")] System.Nullable<bool> email_notification, 
 					[global::System.Data.Linq.Mapping.ParameterAttribute(Name="Title", DbType="NVarChar(200)")] string title)
 		{
-			return ((object)(this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id, user_Name, password, role, createdBy, full_Name, authority, email, phone, department, active, signature, password_expiry_date, password_Expiry, sms_notification, email_notification, title).ReturnValue));
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id, user_Name, password, role, createdBy, full_Name, authority, email, phone, department_Id, active, signature, password_expiry_date, password_Expiry, sms_notification, email_notification, title);
+			return ((int)(result.ReturnValue));
 		}
 	}
 	

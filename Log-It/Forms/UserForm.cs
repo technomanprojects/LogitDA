@@ -27,7 +27,18 @@ namespace Log_It.Forms
             InitializeComponent();
             try
             {
-                comboBoxRole.SelectedIndex = 0;
+                List<DAL.Department> dlist = instace.DataLink.Departments.ToList();
+
+                foreach (var item in dlist)
+                {
+                    deptComboBox1.Items.Add(item);
+                }
+
+                List<DAL.Role> rlist = instace.DataLink.Roles.Skip(1).ToList();
+                foreach (var item in rlist)
+                {
+                    roleComboBox1.Items.Add(item);
+                }
                 if (id > 0)
                 {
                     this.userid = id;
@@ -41,11 +52,11 @@ namespace Log_It.Forms
                     textBoxUserName.Text = user.User_Name.ToLower();
                     textBoxUserName.Enabled = false;
                     textBoxFullName.Text = user.Full_Name;
-                    //textBoxDescription.Text = user.Department;
+                    deptComboBox1.Text = user.Department.Department_Name;
                     textBoxPassword.Text = BAL.Authentication.GetDec(user.Password);
                     textBoxSignature.Enabled = false;
                     textBoxSignature.Text = user.Signature;
-                    comboBoxRole.Text = user.Authority;
+                    deptComboBox1.Text = user.Authority;
                     textBoxTitle.Text = user.Title;
                     txtPhone.Text = user.Phone;
                     checkBoxEmail.Checked = (bool)user.email_notification;
@@ -66,7 +77,7 @@ namespace Log_It.Forms
                         textBoxUserName.Enabled = false;
                     }
                     textBoxexpires.Text = user.Password_Expiry.ToString();
-                    comboBoxRole.SelectedIndex = (int)user.Role - 1;
+                    roleComboBox1.Text = user.Role1.RoleName;
                     checkBoxActive.Checked = (bool)user.Active;
                 }
                 else
@@ -99,8 +110,9 @@ namespace Log_It.Forms
             tempuser.Id = user.Id;
             tempuser.ModefiedBy = user.ModefiedBy;
             tempuser.ModifiedDateTime = user.ModifiedDateTime;
+            tempuser.Department = user.Department;
             tempuser.Password = user.Password;
-            tempuser.Role = user.Role;
+            tempuser.Role1 = user.Role1;
             tempuser.User_Name = user.User_Name;
             tempuser.Email = user.Email;
             tempuser.Phone = user.Phone;
@@ -150,12 +162,16 @@ namespace Log_It.Forms
                         return false;
                     }
                 }
-             
-
-                if (!comboBoxRole.Items.Contains(comboBoxRole.Text))
+                if (roleComboBox1.SelectedEntity == null)
                 {
-                    MessageBox.Show("Please select correct role");
-                    return false;
+                    MessageBox.Show("Please assign user Role");
+                        return false;
+                }
+
+                if (deptComboBox1.SelectedEntity == null)
+                {
+                    MessageBox.Show("Please select Department");
+                        return false;
                 }
 
             }
@@ -191,21 +207,22 @@ namespace Log_It.Forms
                     {
                         DAL.User user = new DAL.User();
                         user.Active = true;
-                        user.Authority = comboBoxRole.Text;
+                        user.Authority = roleComboBox1.SelectedEntity.RoleName;
                         user.CreateDateTime = DateTime.Now;
-                        //user.Department = textBoxDescription.Text;
+                        user.Department = deptComboBox1.SelectedEntity;
                         user.Full_Name = textBoxFullName.Text;
                         user.IsRowEnable = true;
                         user.Password = BAL.Authentication.GetEc(textBoxPassword.Text);
                         user.User_Name = textBoxUserName.Text;
                         user.CreatedBy = instace.UserInstance.Full_Name;
-                        user.Role = comboBoxRole.SelectedIndex + 1;
+                        user.Department = deptComboBox1.SelectedEntity;
+                        user.Role1 = roleComboBox1.SelectedEntity;
                         user.Email = textBoxEmail.Text;
                         user.Phone = txtPhone.Text;
 
                         DateTime dt = DateTime.Now.AddDays(Convert.ToInt32(textBoxexpires.Text));
-                        instace.DataLink.Insert_User(textBoxUserName.Text, BAL.Authentication.GetEc(textBoxPassword.Text), user.Role, instace.UserInstance.Full_Name, textBoxFullName.Text, user.Authority, textBoxEmail.Text,
-                            txtPhone.Text, textBoxDescription.Text, textBoxSignature.Text, dt, Convert.ToInt16(textBoxexpires.Text), checkBoxSMS.Checked, checkBoxEmail.Checked, textBoxTitle.Text);
+                        instace.DataLink.Insert_User( textBoxUserName.Text.ToLower(), BAL.Authentication.GetEc(textBoxPassword.Text), user.Role, instace.UserInstance.Full_Name, textBoxFullName.Text, user.Authority, textBoxEmail.Text,
+                            txtPhone.Text,deptComboBox1.SelectedEntity.Department_Id, textBoxSignature.Text, dt, Convert.ToInt16(textBoxexpires.Text), checkBoxSMS.Checked, checkBoxEmail.Checked, textBoxTitle.Text);
                         int a = instace.RefresUsers;
                         this.DialogResult = System.Windows.Forms.DialogResult.OK;
                         Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Add new user ", instace.UserInstance.Full_Name);
@@ -282,19 +299,19 @@ namespace Log_It.Forms
                         }
 
 
-                        if (user.Authority != comboBoxRole.Text)
+                        if (user.Role1 != roleComboBox1.SelectedEntity)
                         {
-                            Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties of Role : from " + tempuser.Authority + " to " + comboBoxRole.Text, instace.UserInstance.Full_Name);
-                            user.Authority = comboBoxRole.Text;
+                            Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties of Role : from " + tempuser.Authority + " to " + roleComboBox1.SelectedEntity.RoleName , instace.UserInstance.Full_Name);
+                            user.Authority = roleComboBox1.SelectedEntity.RoleName;
                             ischange = true;
                         }
 
-                        //if (user.Department != textBoxDescription.Text)
-                        //{
-                        //    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties of Department: from " + tempuser.Department + " to " + textBoxDescription.Text, instace.UserInstance.Full_Name);
-                        //    user.Department = textBoxDescription.Text;
-                        //    ischange = true;
-                        //}
+                        if (user.Department != deptComboBox1.SelectedEntity)
+                        {
+                            Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties of Department: from " + tempuser.Department.Department_Name + " to " + deptComboBox1.SelectedEntity.Department_Name, instace.UserInstance.Full_Name);
+                            user.Department = deptComboBox1.SelectedEntity;
+                            ischange = true;
+                        }
                         if (user.Signature != textBoxSignature.Text)
                         {
                             Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties of Signature: from " + tempuser.Signature + " to " + textBoxSignature.Text, instace.UserInstance.Full_Name);
@@ -307,8 +324,8 @@ namespace Log_It.Forms
                             user.ModefiedBy = instace.UserInstance.Full_Name;
                             user.ModifiedDateTime = DateTime.Now;
 
-                            //instace.DataLink.sp_Update_User(user.Id, user.User_Name, user.Password, (int)comboBoxRole.SelectedIndex + 1, instace.UserInstance.Full_Name, user.Full_Name,
-                            //    comboBoxRole.Text, user.Email, user.Phone, user.Department, user.Active, user.Signature, user.Password_expiry_date, Convert.ToInt16(textBoxexpires.Text), user.sms_notification, user.email_notification, user.Title);
+                            instace.DataLink.sp_Update_User(user.Id, user.User_Name, user.Password, roleComboBox1.SelectedEntity.Id, instace.UserInstance.Full_Name, user.Full_Name,user.Authority,
+                                  user.Email, user.Phone, deptComboBox1.SelectedEntity.Department_Id, user.Active, user.Signature, user.Password_expiry_date, Convert.ToInt16(textBoxexpires.Text), user.sms_notification, user.email_notification, user.Title);
                             int a = instace.RefresUsers;
 
                             //Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "User Modified ", instace.UserInstance.Full_Name);

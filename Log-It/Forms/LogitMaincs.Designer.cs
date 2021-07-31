@@ -33,11 +33,13 @@
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("DataBase Maintenance", 2, 2);
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Event Log", 3, 3);
             System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("User Option", 4, 4);
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Application Options", -2, -2, new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Department", 5, 5);
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Application Options", -2, -2, new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2,
             treeNode3,
-            treeNode4});
+            treeNode4,
+            treeNode5});
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogitMaincs));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusUser = new System.Windows.Forms.ToolStripDropDownButton();
@@ -49,6 +51,10 @@
             this.dockContainerItem1 = new DevComponents.DotNetBar.DockContainerItem();
             this.controlContainerItem1 = new DevComponents.DotNetBar.ControlContainerItem();
             this.sideNav1 = new DevComponents.DotNetBar.Controls.SideNav();
+            this.sideNavPanel1 = new DevComponents.DotNetBar.Controls.SideNavPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.paneltask = new System.Windows.Forms.Panel();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.sideNavPanel2 = new DevComponents.DotNetBar.Controls.SideNavPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panelDeviceTask = new System.Windows.Forms.Panel();
@@ -58,10 +64,6 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.sideNavPanel1 = new DevComponents.DotNetBar.Controls.SideNavPanel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.paneltask = new System.Windows.Forms.Panel();
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.sideNavPanel3 = new DevComponents.DotNetBar.Controls.SideNavPanel();
             this.panelReport = new System.Windows.Forms.Panel();
             this.sideNavItem1 = new DevComponents.DotNetBar.Controls.SideNavItem();
@@ -72,12 +74,12 @@
             this.panelControl = new System.Windows.Forms.Panel();
             this.statusStrip.SuspendLayout();
             this.sideNav1.SuspendLayout();
+            this.sideNavPanel1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.sideNavPanel2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
-            this.sideNavPanel1.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             this.sideNavPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -135,8 +137,8 @@
             // 
             // sideNav1
             // 
-            this.sideNav1.Controls.Add(this.sideNavPanel2);
             this.sideNav1.Controls.Add(this.sideNavPanel1);
+            this.sideNav1.Controls.Add(this.sideNavPanel2);
             this.sideNav1.Controls.Add(this.sideNavPanel3);
             this.sideNav1.Dock = System.Windows.Forms.DockStyle.Left;
             this.sideNav1.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
@@ -152,6 +154,75 @@
             this.sideNav1.TabIndex = 16;
             this.sideNav1.Text = "sideNav1";
             // 
+            // sideNavPanel1
+            // 
+            this.sideNavPanel1.Controls.Add(this.tableLayoutPanel1);
+            this.sideNavPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sideNavPanel1.Location = new System.Drawing.Point(87, 37);
+            this.sideNavPanel1.Name = "sideNavPanel1";
+            this.sideNavPanel1.Size = new System.Drawing.Size(201, 411);
+            this.sideNavPanel1.TabIndex = 2;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.paneltask, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.treeView1, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(201, 411);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // paneltask
+            // 
+            this.paneltask.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.paneltask.Location = new System.Drawing.Point(3, 208);
+            this.paneltask.Name = "paneltask";
+            this.paneltask.Size = new System.Drawing.Size(195, 200);
+            this.paneltask.TabIndex = 1;
+            // 
+            // treeView1
+            // 
+            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView1.ImageKey = "icons8-database-40.png";
+            this.treeView1.Location = new System.Drawing.Point(3, 3);
+            this.treeView1.Name = "treeView1";
+            treeNode1.ImageIndex = 1;
+            treeNode1.Name = "Node1";
+            treeNode1.SelectedImageIndex = 1;
+            treeNode1.Text = "Application Properties";
+            treeNode2.ImageIndex = 2;
+            treeNode2.Name = "Node2";
+            treeNode2.SelectedImageIndex = 2;
+            treeNode2.Text = "DataBase Maintenance";
+            treeNode3.ImageIndex = 3;
+            treeNode3.Name = "Node4";
+            treeNode3.SelectedImageIndex = 3;
+            treeNode3.Text = "Event Log";
+            treeNode4.ImageIndex = 4;
+            treeNode4.Name = "Node5";
+            treeNode4.SelectedImageIndex = 4;
+            treeNode4.Text = "User Option";
+            treeNode5.ImageIndex = 5;
+            treeNode5.Name = "Node6";
+            treeNode5.SelectedImageIndex = 5;
+            treeNode5.Text = "Department";
+            treeNode6.ImageIndex = -2;
+            treeNode6.Name = "Node0";
+            treeNode6.SelectedImageIndex = -2;
+            treeNode6.Tag = "Option";
+            treeNode6.Text = "Application Options";
+            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode6});
+            this.treeView1.Size = new System.Drawing.Size(195, 199);
+            this.treeView1.TabIndex = 0;
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            // 
             // sideNavPanel2
             // 
             this.sideNavPanel2.Controls.Add(this.tableLayoutPanel2);
@@ -160,6 +231,7 @@
             this.sideNavPanel2.Name = "sideNavPanel2";
             this.sideNavPanel2.Size = new System.Drawing.Size(201, 411);
             this.sideNavPanel2.TabIndex = 10;
+            this.sideNavPanel2.Visible = false;
             // 
             // tableLayoutPanel2
             // 
@@ -268,72 +340,6 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // sideNavPanel1
-            // 
-            this.sideNavPanel1.Controls.Add(this.tableLayoutPanel1);
-            this.sideNavPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sideNavPanel1.Location = new System.Drawing.Point(87, 37);
-            this.sideNavPanel1.Name = "sideNavPanel1";
-            this.sideNavPanel1.Size = new System.Drawing.Size(201, 682);
-            this.sideNavPanel1.TabIndex = 2;
-            this.sideNavPanel1.Visible = false;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.paneltask, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.treeView1, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(201, 682);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // paneltask
-            // 
-            this.paneltask.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.paneltask.Location = new System.Drawing.Point(3, 344);
-            this.paneltask.Name = "paneltask";
-            this.paneltask.Size = new System.Drawing.Size(195, 335);
-            this.paneltask.TabIndex = 1;
-            // 
-            // treeView1
-            // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.ImageKey = "icons8-database-40.png";
-            this.treeView1.Location = new System.Drawing.Point(3, 3);
-            this.treeView1.Name = "treeView1";
-            treeNode1.ImageIndex = 1;
-            treeNode1.Name = "Node1";
-            treeNode1.SelectedImageIndex = 1;
-            treeNode1.Text = "Application Properties";
-            treeNode2.ImageIndex = 2;
-            treeNode2.Name = "Node2";
-            treeNode2.SelectedImageIndex = 2;
-            treeNode2.Text = "DataBase Maintenance";
-            treeNode3.ImageIndex = 3;
-            treeNode3.Name = "Node4";
-            treeNode3.SelectedImageIndex = 3;
-            treeNode3.Text = "Event Log";
-            treeNode4.ImageIndex = 4;
-            treeNode4.Name = "Node5";
-            treeNode4.SelectedImageIndex = 4;
-            treeNode4.Text = "User Option";
-            treeNode5.ImageIndex = -2;
-            treeNode5.Name = "Node0";
-            treeNode5.SelectedImageIndex = -2;
-            treeNode5.Tag = "Option";
-            treeNode5.Text = "Application Options";
-            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5});
-            this.treeView1.Size = new System.Drawing.Size(195, 335);
-            this.treeView1.TabIndex = 0;
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
-            // 
             // sideNavPanel3
             // 
             this.sideNavPanel3.Controls.Add(this.panelReport);
@@ -372,6 +378,7 @@
             // 
             // sideNavItem2
             // 
+            this.sideNavItem2.Checked = true;
             this.sideNavItem2.Image = global::Log_It.Properties.Resources.if_Grid_home_menu_options_squares_table_1887040;
             this.sideNavItem2.Name = "sideNavItem2";
             this.sideNavItem2.Panel = this.sideNavPanel1;
@@ -383,7 +390,6 @@
             // 
             // sideNavItem3
             // 
-            this.sideNavItem3.Checked = true;
             this.sideNavItem3.Name = "sideNavItem3";
             this.sideNavItem3.Panel = this.sideNavPanel2;
             this.sideNavItem3.Symbol = "57532";
@@ -431,12 +437,12 @@
             this.statusStrip.PerformLayout();
             this.sideNav1.ResumeLayout(false);
             this.sideNav1.PerformLayout();
+            this.sideNavPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.sideNavPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
-            this.sideNavPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
             this.sideNavPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

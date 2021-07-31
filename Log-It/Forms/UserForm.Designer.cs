@@ -48,16 +48,16 @@
             this.textBoxFullName = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
-            this.comboBoxRole = new System.Windows.Forms.ComboBox();
             this.textBoxSignature = new System.Windows.Forms.TextBox();
             this.textBoxexpires = new System.Windows.Forms.TextBox();
             this.checkBoxActive = new System.Windows.Forms.CheckBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
+            this.deptComboBox1 = new Log_It.CustomControls.DeptComboBox(this.components);
+            this.roleComboBox1 = new Log_It.CustomControls.RoleComboBox(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -72,7 +72,7 @@
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            this.groupBox2.Location = new System.Drawing.Point(12, 238);
+            this.groupBox2.Location = new System.Drawing.Point(12, 254);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(376, 136);
             this.groupBox2.TabIndex = 25;
@@ -139,6 +139,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.roleComboBox1);
+            this.groupBox1.Controls.Add(this.deptComboBox1);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label1);
@@ -148,11 +150,9 @@
             this.groupBox1.Controls.Add(this.textBoxFullName);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.textBoxDescription);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.textBoxPassword);
-            this.groupBox1.Controls.Add(this.comboBoxRole);
             this.groupBox1.Controls.Add(this.textBoxSignature);
             this.groupBox1.Controls.Add(this.textBoxexpires);
             this.groupBox1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -206,7 +206,7 @@
             // textBoxUserName
             // 
             this.textBoxUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxUserName.Location = new System.Drawing.Point(131, 96);
+            this.textBoxUserName.Location = new System.Drawing.Point(131, 95);
             this.textBoxUserName.Name = "textBoxUserName";
             this.textBoxUserName.Size = new System.Drawing.Size(228, 20);
             this.textBoxUserName.TabIndex = 3;
@@ -247,15 +247,6 @@
             this.label5.TabIndex = 7;
             this.label5.Text = "Department:";
             // 
-            // textBoxDescription
-            // 
-            this.textBoxDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxDescription.Location = new System.Drawing.Point(131, 73);
-            this.textBoxDescription.Multiline = true;
-            this.textBoxDescription.Name = "textBoxDescription";
-            this.textBoxDescription.Size = new System.Drawing.Size(228, 17);
-            this.textBoxDescription.TabIndex = 2;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -285,20 +276,6 @@
             this.textBoxPassword.Size = new System.Drawing.Size(228, 20);
             this.textBoxPassword.TabIndex = 4;
             // 
-            // comboBoxRole
-            // 
-            this.comboBoxRole.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxRole.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.comboBoxRole.FormattingEnabled = true;
-            this.comboBoxRole.Items.AddRange(new object[] {
-            "Administrator",
-            "Power",
-            "User"});
-            this.comboBoxRole.Location = new System.Drawing.Point(131, 175);
-            this.comboBoxRole.Name = "comboBoxRole";
-            this.comboBoxRole.Size = new System.Drawing.Size(228, 21);
-            this.comboBoxRole.TabIndex = 6;
-            // 
             // textBoxSignature
             // 
             this.textBoxSignature.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
@@ -320,7 +297,7 @@
             this.checkBoxActive.AutoSize = true;
             this.checkBoxActive.Checked = true;
             this.checkBoxActive.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxActive.Location = new System.Drawing.Point(33, 386);
+            this.checkBoxActive.Location = new System.Drawing.Point(33, 402);
             this.checkBoxActive.Name = "checkBoxActive";
             this.checkBoxActive.Size = new System.Drawing.Size(56, 17);
             this.checkBoxActive.TabIndex = 22;
@@ -330,7 +307,7 @@
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(296, 382);
+            this.buttonCancel.Location = new System.Drawing.Point(296, 398);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 24;
@@ -340,7 +317,7 @@
             // 
             // buttonOk
             // 
-            this.buttonOk.Location = new System.Drawing.Point(215, 382);
+            this.buttonOk.Location = new System.Drawing.Point(215, 398);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
             this.buttonOk.TabIndex = 23;
@@ -348,11 +325,31 @@
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
+            // deptComboBox1
+            // 
+            this.deptComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.deptComboBox1.FormattingEnabled = true;
+            this.deptComboBox1.Location = new System.Drawing.Point(131, 70);
+            this.deptComboBox1.Name = "deptComboBox1";
+            this.deptComboBox1.SelectedEntity = null;
+            this.deptComboBox1.Size = new System.Drawing.Size(228, 24);
+            this.deptComboBox1.TabIndex = 19;
+            // 
+            // roleComboBox1
+            // 
+            this.roleComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.roleComboBox1.FormattingEnabled = true;
+            this.roleComboBox1.Location = new System.Drawing.Point(131, 174);
+            this.roleComboBox1.Name = "roleComboBox1";
+            this.roleComboBox1.SelectedEntity = null;
+            this.roleComboBox1.Size = new System.Drawing.Size(228, 24);
+            this.roleComboBox1.TabIndex = 20;
+            // 
             // UserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(406, 418);
+            this.ClientSize = new System.Drawing.Size(406, 458);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.checkBoxActive);
@@ -395,15 +392,15 @@
         public System.Windows.Forms.TextBox textBoxFullName;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label5;
-        public System.Windows.Forms.TextBox textBoxDescription;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.TextBox textBoxPassword;
-        public System.Windows.Forms.ComboBox comboBoxRole;
         public System.Windows.Forms.TextBox textBoxSignature;
         public System.Windows.Forms.TextBox textBoxexpires;
         public System.Windows.Forms.CheckBox checkBoxActive;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonOk;
+        private CustomControls.DeptComboBox deptComboBox1;
+        private CustomControls.RoleComboBox roleComboBox1;
     }
 }

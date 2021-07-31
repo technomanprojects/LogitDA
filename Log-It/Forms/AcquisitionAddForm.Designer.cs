@@ -33,7 +33,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.deptComboBox1 = new Log_It.CustomControls.DeptComboBox(this.components);
             this.comboBoxPort = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBoxDeviceUL = new System.Windows.Forms.TextBox();
@@ -60,11 +59,12 @@
             this.textBoxLocation = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBoxE_Port = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.textBoxChannelID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
+            this.deptComboBox1 = new Log_It.CustomControls.DeptComboBox(this.components);
+            this.comboBoxNetwork = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBoxTemp.SuspendLayout();
@@ -93,6 +93,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.comboBoxNetwork);
             this.groupBox1.Controls.Add(this.deptComboBox1);
             this.groupBox1.Controls.Add(this.comboBoxPort);
             this.groupBox1.Controls.Add(this.groupBox2);
@@ -108,7 +109,6 @@
             this.groupBox1.Controls.Add(this.textBoxLocation);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.textBoxE_Port);
             this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.textBoxChannelID);
@@ -119,16 +119,6 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Detail";
-            // 
-            // deptComboBox1
-            // 
-            this.deptComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.deptComboBox1.FormattingEnabled = true;
-            this.deptComboBox1.Location = new System.Drawing.Point(99, 42);
-            this.deptComboBox1.Name = "deptComboBox1";
-            this.deptComboBox1.SelectedEntity = null;
-            this.deptComboBox1.Size = new System.Drawing.Size(324, 21);
-            this.deptComboBox1.TabIndex = 33;
             // 
             // comboBoxPort
             // 
@@ -395,15 +385,6 @@
             this.label2.TabIndex = 22;
             this.label2.Text = "Port ID:";
             // 
-            // textBoxE_Port
-            // 
-            this.textBoxE_Port.Location = new System.Drawing.Point(99, 16);
-            this.textBoxE_Port.Name = "textBoxE_Port";
-            this.textBoxE_Port.Size = new System.Drawing.Size(324, 20);
-            this.textBoxE_Port.TabIndex = 0;
-            this.textBoxE_Port.Text = "9999";
-            this.textBoxE_Port.TextChanged += new System.EventHandler(this.textBoxTLL_TextChanged);
-            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -439,6 +420,25 @@
             this.label13.Size = new System.Drawing.Size(65, 13);
             this.label13.TabIndex = 20;
             this.label13.Text = "Department:";
+            // 
+            // deptComboBox1
+            // 
+            this.deptComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.deptComboBox1.FormattingEnabled = true;
+            this.deptComboBox1.Location = new System.Drawing.Point(99, 42);
+            this.deptComboBox1.Name = "deptComboBox1";
+            this.deptComboBox1.SelectedEntity = null;
+            this.deptComboBox1.Size = new System.Drawing.Size(324, 21);
+            this.deptComboBox1.TabIndex = 33;
+            // 
+            // comboBoxNetwork
+            // 
+            this.comboBoxNetwork.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxNetwork.FormattingEnabled = true;
+            this.comboBoxNetwork.Location = new System.Drawing.Point(99, 16);
+            this.comboBoxNetwork.Name = "comboBoxNetwork";
+            this.comboBoxNetwork.Size = new System.Drawing.Size(324, 21);
+            this.comboBoxNetwork.TabIndex = 34;
             // 
             // AcquisitionAddForm
             // 
@@ -498,10 +498,10 @@
         private System.Windows.Forms.Label label14;
         public System.Windows.Forms.TextBox textBoxdeviceLL;
         private System.Windows.Forms.Label label15;
-        public System.Windows.Forms.TextBox textBoxE_Port;
         private System.Windows.Forms.Label label12;
         public System.Windows.Forms.ComboBox comboBoxPort;
         private CustomControls.DeptComboBox deptComboBox1;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox comboBoxNetwork;
     }
 }

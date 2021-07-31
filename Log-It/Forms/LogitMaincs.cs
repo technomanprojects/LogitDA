@@ -51,6 +51,7 @@ namespace Log_It.Forms
         CancellationToken cancellationToken;
         private bool isRun = false;
         private int UserID;
+        private int DeptID;
         private Guid _DeviceID;        
         public string LastValue;
         private string _result = "";
@@ -408,6 +409,13 @@ namespace Log_It.Forms
                 taskPanel[4] = usertask;
 
 
+                Log_It.Pages.TaskPanel.DeptTask depttask = new Log_It.Pages.TaskPanel.DeptTask(0, instance);
+                depttask.AddDept += depttask_AddDept;
+                depttask.ModifiedDept += depttask_ModifiedDept;
+                depttask.DeleteDept += depttask_DeleteDept;
+                taskPanel[5] = depttask;
+
+
 
                 Pages = new Log_It.Pages.ControlPage[8];
                 Log_It.Pages.HomePage home = new Log_It.Pages.HomePage();
@@ -429,21 +437,21 @@ namespace Log_It.Forms
                 Pages[3] = new Log_It.Pages.Eventpage(instance);
 
                 Log_It.Pages.UserPage userpage = new Log_It.Pages.UserPage(instance);
-                userpage.IDSet += userpage_IDSet;
-
+                userpage.IDSet +=userpage_IDSet;
                 Pages[4] = userpage;
 
-                //Log_It.Pages.EmailConfigPage emailpage = new EmailConfigPage(instance);
-                //Pages[5] = emailpage;
-                //Log_It.Pages.TaskPanel.EmailTask emailtask = new Log_It.Pages.TaskPanel.EmailTask();
-                //taskPanel[5] = emailtask;
+                Log_It.Pages.DeptPage deptpage = new Log_It.Pages.DeptPage(instance);
+                deptpage.IDSet += deptpage_IDSet;
 
+                Pages[5] = deptpage;
                 
 
 
                 Log_It.Pages.DeviceConfigPage devicepage = new DeviceConfigPage(instance);
                 devicepage.IDSet += devicepage_IDSet;
                 Pages[6] = devicepage;
+
+
 
                 Log_It.Pages.AcknowledgePage ack_pages = new AcknowledgePage(instance);
                 
@@ -494,6 +502,72 @@ namespace Log_It.Forms
 
             }
 
+        }
+
+        void depttask_DeleteDept()
+        {
+            try
+            {
+                //if (UserID > -1)
+                //{
+                //    DialogResult r = MessageBox.Show("Are your sure you want to delete select user", "Delete user", MessageBoxButtons.YesNo);
+                //    if (r == System.Windows.Forms.DialogResult.No)
+                //    {
+                //        return;
+                //    }
+                    
+                //    instance.DataLink.SubmitChanges();
+
+                //    Log_It.Pages.DeptPage deptpage = (Log_It.Pages.DeptPage)Pages[5];
+                //    deptpage.RefreshPage();
+                //    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modfiy, "User  (" + _user.Full_Name + ") Delete by " + instance.UserInstance.Full_Name, instance.UserInstance.Full_Name);
+
+                //}
+            }
+            catch (Exception m)
+            {
+
+                var st = new StackTrace();
+                var sf = st.GetFrame(0);
+
+                var currentMethodName = sf.GetMethod();
+                Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
+
+            }
+        }
+
+        void depttask_ModifiedDept()
+        {
+            try
+            {
+                Log_It.Forms.AddDepartment form = new Forms.AddDepartment(false, instance, DeptID);
+                form.ShowDialog();
+                Log_It.Pages.DeptPage deptpage = (Log_It.Pages.DeptPage)Pages[5];
+                deptpage.RefreshPage();
+            }
+            catch (Exception m)
+            {
+
+                var st = new StackTrace();
+                var sf = st.GetFrame(0);
+
+                var currentMethodName = sf.GetMethod();
+                Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
+
+            }
+           
+        }
+
+        void depttask_AddDept()
+        {
+            Log_It.Pages.DeptPage deptpage = (Log_It.Pages.DeptPage)Pages[5];
+            deptpage.RefreshPage();
+
+        }
+
+        void deptpage_IDSet(int id)
+        {
+            DeptID = id;
         }
 
         void dbMaintenance_CreatedbBackupManually()
@@ -863,9 +937,12 @@ namespace Log_It.Forms
                     this.DestroyLogItObject();
 
                     AcquisitionAddForm form = new AcquisitionAddForm(_DeviceID, instance, false);
-                    form.ShowDialog();
-                    Log_It.Pages.DeviceConfigPage devicepage = (Log_It.Pages.DeviceConfigPage)Pages[6];
-                    devicepage.RefreshPage();
+                    if (form.ShowDialog() ==  System.Windows.Forms.DialogResult.OK)
+                    {
+                        Log_It.Pages.DeviceConfigPage devicepage = (Log_It.Pages.DeviceConfigPage)Pages[6];
+                        devicepage.RefreshPage();
+                        
+                    }
                     if (panelControl.Controls.Count > 0)
                     {
 

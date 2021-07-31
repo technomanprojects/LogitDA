@@ -27,6 +27,9 @@ namespace Log_It.Forms
             InitializeComponent();
             this.Id = Id;
             comboBoxType.SelectedIndex = 0;
+            comboBoxNetwork.Items.Clear();
+            comboBoxNetwork.Items.Add(Instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1).Port1);
+            comboBoxNetwork.Items.Add(Instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1).Port2);
             DAL.Device_Config config = Instance.Device_Configes.SingleOrDefault(x => x.ID == Id && x.Active == true && x.IsRowActive == true);
             List<DAL.Department> dlist = Instance.DataLink.Departments.ToList();
 
@@ -38,7 +41,7 @@ namespace Log_It.Forms
             {
                 //checkBoxAlaram.Checked = (bool)config.Alaram;
 
-                textBoxE_Port.Text = config.E_Port;
+                comboBoxNetwork.Text = config.E_Port;
                 comboBoxPort.Text = config.Channel_id;
                 textBoxChannelID.Text = config.Channel_id.ToString();
                 textBoxInstrument.Text = config.Instrument;
@@ -70,7 +73,7 @@ namespace Log_It.Forms
                     MessageBox.Show("Please Enter Device ID");
                     return false;
                 }
-                if (textBoxE_Port.Text == string.Empty)
+                if (comboBoxNetwork.Text == string.Empty)
                 {
                     MessageBox.Show("Please Enter Network Port");
                     return false;
@@ -115,7 +118,7 @@ namespace Log_It.Forms
         {
             try
             {
-                if (!Validate())
+                if (!Validation())
                 {
                     return;
                 }
@@ -125,7 +128,7 @@ namespace Log_It.Forms
                     DAL.Device_Config config = new DAL.Device_Config();
                     config.ID = Guid.NewGuid();
                     config.Active = true;
-                    config.E_Port = textBoxE_Port.Text;
+                    config.E_Port = comboBoxNetwork.Text;
                     config.Channel_id = comboBoxPort.Text;
                     config.Port_No = Convert.ToInt32( comboBoxPort.Text);
                     config.CreateDateTime = DateTime.Now;
@@ -164,7 +167,7 @@ namespace Log_It.Forms
                     config.Active = true;
                     
                     config.Channel_id = comboBoxPort.Text;
-                    config.E_Port = textBoxE_Port.Text;
+                    config.E_Port = comboBoxNetwork.Text;
                     config.CreateDateTime = DateTime.Now;
                     config.CreatedBy = Instance.UserInstance.Full_Name;
                     config.Channel_id = textBoxChannelID.Text;

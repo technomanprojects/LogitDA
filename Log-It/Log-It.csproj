@@ -131,6 +131,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="CustomControls\Reports.cs" />
+    <Compile Include="CustomControls\RoleComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomControls\RoleComboBox.Designer.cs">
+      <DependentUpon>RoleComboBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\SMSComponent.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -172,6 +178,12 @@
     </Compile>
     <Compile Include="Forms\AcquisitionAddForm.Designer.cs">
       <DependentUpon>AcquisitionAddForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AddDepartment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddDepartment.Designer.cs">
+      <DependentUpon>AddDepartment.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ApprovalForm.cs">
       <SubType>Form</SubType>
@@ -314,6 +326,12 @@
     <Compile Include="Pages\DBMaintenance.Designer.cs">
       <DependentUpon>DBMaintenance.cs</DependentUpon>
     </Compile>
+    <Compile Include="Pages\DeptPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Pages\DeptPage.Designer.cs">
+      <DependentUpon>DeptPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\DeviceConfigPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -356,17 +374,17 @@
     <Compile Include="Pages\TaskPanel\DatabaseTask.Designer.cs">
       <DependentUpon>DatabaseTask.cs</DependentUpon>
     </Compile>
+    <Compile Include="Pages\TaskPanel\DeptTask.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Pages\TaskPanel\DeptTask.Designer.cs">
+      <DependentUpon>DeptTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TaskPanel\DeviceTask.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Pages\TaskPanel\DeviceTask.Designer.cs">
       <DependentUpon>DeviceTask.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\TaskPanel\EmailTask.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Pages\TaskPanel\EmailTask.Designer.cs">
-      <DependentUpon>EmailTask.cs</DependentUpon>
     </Compile>
     <Compile Include="Pages\TaskPanel\EventTask.cs">
       <SubType>UserControl</SubType>
@@ -444,6 +462,9 @@
     <EmbeddedResource Include="Forms\AcquisitionAddForm.resx">
       <DependentUpon>AcquisitionAddForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AddDepartment.resx">
+      <DependentUpon>AddDepartment.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ApprovalForm.resx">
       <DependentUpon>ApprovalForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -507,6 +528,9 @@
     <EmbeddedResource Include="Pages\DBMaintenance.resx">
       <DependentUpon>DBMaintenance.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Pages\DeptPage.resx">
+      <DependentUpon>DeptPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Pages\DeviceConfigPage.resx">
       <DependentUpon>DeviceConfigPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -528,11 +552,11 @@
     <EmbeddedResource Include="Pages\TaskPanel\DatabaseTask.resx">
       <DependentUpon>DatabaseTask.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Pages\TaskPanel\DeptTask.resx">
+      <DependentUpon>DeptTask.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Pages\TaskPanel\DeviceTask.resx">
       <DependentUpon>DeviceTask.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\TaskPanel\EmailTask.resx">
-      <DependentUpon>EmailTask.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\TaskPanel\EventTask.resx">
       <DependentUpon>EventTask.cs</DependentUpon>
