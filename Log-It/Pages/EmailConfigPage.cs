@@ -29,7 +29,7 @@ namespace Log_It.Pages
             {
                 foreach (var item in instance.DataLink.Emails.ToList())
                 {
-                    listBoxAdded.Items.Add(item.EmailID);
+                    listBoxAdded.Items.Add(item..EmailID);
                     listEmail.Add(item);
 
                 }

@@ -433,10 +433,10 @@ namespace Log_It.Forms
 
                 Pages[4] = userpage;
 
-                Log_It.Pages.EmailConfigPage emailpage = new EmailConfigPage(instance);
-                Pages[5] = emailpage;
-                Log_It.Pages.TaskPanel.EmailTask emailtask = new Log_It.Pages.TaskPanel.EmailTask();
-                taskPanel[5] = emailtask;
+                //Log_It.Pages.EmailConfigPage emailpage = new EmailConfigPage(instance);
+                //Pages[5] = emailpage;
+                //Log_It.Pages.TaskPanel.EmailTask emailtask = new Log_It.Pages.TaskPanel.EmailTask();
+                //taskPanel[5] = emailtask;
 
                 
 

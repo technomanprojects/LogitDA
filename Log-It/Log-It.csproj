@@ -103,6 +103,12 @@
     <Compile Include="CustomControls\Chart.Designer.cs">
       <DependentUpon>Chart.cs</DependentUpon>
     </Compile>
+    <Compile Include="CustomControls\DeptComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomControls\DeptComboBox.Designer.cs">
+      <DependentUpon>DeptComboBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\DeviceEntityComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -314,12 +320,6 @@
     <Compile Include="Pages\DeviceConfigPage.Designer.cs">
       <DependentUpon>DeviceConfigPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Pages\EmailConfigPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Pages\EmailConfigPage.Designer.cs">
-      <DependentUpon>EmailConfigPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Eventpage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -509,9 +509,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\DeviceConfigPage.resx">
       <DependentUpon>DeviceConfigPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\EmailConfigPage.resx">
-      <DependentUpon>EmailConfigPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\Eventpage.resx">
       <DependentUpon>Eventpage.cs</DependentUpon>

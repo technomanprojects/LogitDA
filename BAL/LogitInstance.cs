@@ -52,14 +52,7 @@ namespace BAL
                 return DataLink.Users;
             }
         }
-        public IQueryable<Alaram_Log> Alaram_Logs
-        {
-            get
-            {
-                DataLink.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, DataLink.Alaram_Logs);
-                return DataLink.Alaram_Logs;
-            }
-        }
+       
         public IQueryable<Email> Emails
         {
             get
@@ -85,30 +78,7 @@ namespace BAL
                 return DataLink.Device_Configs;
             }
         }
-        public IQueryable<Group> Groups
-        {
-            get
-            {
-                DataLink.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, DataLink.Groups);
-                return DataLink.Groups;
-            }
-        }
-        public IQueryable<Group_Device> Groups_Devices
-        {
-            get
-            {
-                DataLink.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, DataLink.Group_Devices);
-                return DataLink.Group_Devices;
-            }
-        }
-        public IQueryable<Group_User> Groups_Users
-        {
-            get
-            {
-                DataLink.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, DataLink.Group_Users);
-                return DataLink.Group_Users;
-            }
-        }
+        
         public IQueryable<Log> Logs
         {
             get

@@ -324,10 +324,7 @@ namespace BAL
                 {
 
                     Logging(parameter[0].GUIDID, Channedl_ID, Port_No, parameter[0].ParameterValue);
-                    //if (rhActive)
-                    //    Logging(sDeviceID, sDType, parameter[0].ParameterValue, parameter[0].ParameterValue,-1);
-                    //else
-                    //    Logging(sDeviceID, sDType, parameter[0].ParameterValue, -1,-1);
+                  
 
                     if (LastRecord != null)
                     {

@@ -18,6 +18,7 @@ namespace Log_It.Forms
         BAL.LogitInstance Instance;
         bool isNew;
         Guid Id;
+
         public AcquisitionAddForm(Guid Id, BAL.LogitInstance Instance, bool isNew)
         {
             this.Instance = Instance;
@@ -27,7 +28,12 @@ namespace Log_It.Forms
             this.Id = Id;
             comboBoxType.SelectedIndex = 0;
             DAL.Device_Config config = Instance.Device_Configes.SingleOrDefault(x => x.ID == Id && x.Active == true && x.IsRowActive == true);
+            List<DAL.Department> dlist = Instance.DataLink.Departments.ToList();
 
+            foreach (var item in dlist)
+            {
+                deptComboBox1.Items.Add(item);
+            }
             if (config != null)
             {
                 //checkBoxAlaram.Checked = (bool)config.Alaram;
@@ -39,6 +45,11 @@ namespace Log_It.Forms
                 numericInterval.Value = Convert.ToDecimal(config.Interval);
                 config.IsRowActive = true;
                 textBoxLocation.Text = config.Location;
+                if (config.Department != null)
+                {
+                    deptComboBox1.Text = Instance.DataLink.Departments.SingleOrDefault(x => x.Department_Id == config.Department_Id).Department_Name;    
+                }
+                
                 textBoxTLL.Text = config.Lower_Limit.ToString();
                 textBoxTUL.Text = config.Upper_Limit.ToString();
                 textBoxTLR.Text = config.Lower_Range.ToString();
@@ -46,7 +57,7 @@ namespace Log_It.Forms
                 comboBoxType.SelectedIndex = (int)config.Device_Type - 1;
                 textBoxdeviceLL.Text = config.Lower.ToString();
                 textBoxDeviceUL.Text = config.higher.ToString();
-                checkBoxAlaram.Checked = (bool)config.Alaram;
+                checkBoxAlaram.Checked = (bool)config.Alarm;
             }
         }
 
@@ -125,7 +136,8 @@ namespace Log_It.Forms
                     config.IsRowActive = true;
                     config.Location = textBoxLocation.Text;
                     config.Last_Record = DateTime.Now;
-              
+                    config.Department_Id = deptComboBox1.SelectedEntity.Department_Id;
+                    config.Department = deptComboBox1.SelectedEntity;
                     config.Lower_Limit = Convert.ToInt32(textBoxTLL.Text);
                     config.Upper_Limit = Convert.ToInt32(textBoxTUL.Text);
                     config.Lower_Range = Convert.ToInt32(textBoxTLR.Text);
@@ -135,7 +147,7 @@ namespace Log_It.Forms
                     config.dateofCalibration= DateTime.Now;
                     config.Lower = Convert.ToInt32(textBoxdeviceLL.Text);
                     config.higher = Convert.ToInt32(textBoxDeviceUL.Text);
-                    config.Alaram = checkBoxAlaram.Checked;
+                    config.Alarm = checkBoxAlaram.Checked;
 
                     Instance.DataLink.Device_Configs.InsertOnSubmit(config);
 
@@ -166,11 +178,11 @@ namespace Log_It.Forms
                     config.Upper_Range = Convert.ToInt32(textBoxTUR.Text);
                     config.Lower = Convert.ToInt32(textBoxdeviceLL.Text);
                     config.higher = Convert.ToInt32(textBoxDeviceUL.Text);
-
+                    config.Department = deptComboBox1.SelectedEntity;
                     config.Device_Type = comboBoxType.SelectedIndex + 1;
 
 
-                    config.Alaram = checkBoxAlaram.Checked;
+                    config.Alarm = checkBoxAlaram.Checked;
                     Instance.DataLink.SubmitChanges();
                     Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modfiy, "Modifed Device by " + Instance.UserInstance.Full_Name, Instance.UserInstance.Full_Name);
                     this.DialogResult = System.Windows.Forms.DialogResult.OK;

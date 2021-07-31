@@ -38,16 +38,7 @@
       <Column Name="email_notification" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="sms_notification" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="Department_User" Member="Department" ThisKey="Department_Id" OtherKey="Department_Id" Type="Department" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Alaram_Log" Member="Alaram_Logs">
-    <Type Name="Alaram_Log">
-      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="Device_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Device_Type" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Description" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Time" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="[_data]" Member="_data" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Association Name="Role_User" Member="Role1" ThisKey="Role" OtherKey="Id" Type="Role" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Company" Member="Companies">
@@ -66,6 +57,40 @@
       <Association Name="Department_Device_Config" Member="Device_Configs" ThisKey="Department_Id" OtherKey="Department_Id" Type="Device_Config" />
     </Type>
   </Table>
+  <Table Name="dbo.Device_Config" Member="Device_Configs">
+    <Type Name="Device_Config">
+      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="E_Port" Type="System.String" DbType="NChar(4)" CanBeNull="true" />
+      <Column Name="Channel_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Port_No" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Location" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Instrument" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Interval" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Alarm" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Last_Record" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsRowActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Rh_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Upper_Limit" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Lower_Limit" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Upper_Range" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Lower_Range" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Device_Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Offset" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="dateofCalibration" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Lower" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="higher" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Department_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NetworkID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Department_Device_Config" Member="Department" ThisKey="Department_Id" OtherKey="Department_Id" Type="Department" IsForeignKey="true" />
+      <Association Name="Device_Enum_Device_Config" Member="Device_Enum" ThisKey="Device_Type" OtherKey="ID" Type="Device_Enum" IsForeignKey="true" />
+      <Association Name="Network_Device_Config" Member="Network" ThisKey="NetworkID" OtherKey="ID" Type="Network" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.Device_Enum" Member="Device_Enums">
     <Type Name="Device_Enum">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -76,7 +101,10 @@
   <Table Name="dbo.Email" Member="Emails">
     <Type Name="Email">
       <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="EmailID" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="MailAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Message" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Delivered_Status" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Date_Time" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.EventLog" Member="EventLogs">
@@ -88,28 +116,6 @@
       <Column Name="MessageLog" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.[Group]" Member="Groups">
-    <Type Name="Group">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Group_Name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Association Name="Group_Group_User" Member="Group_Users" ThisKey="ID" OtherKey="Group_ID" Type="Group_User" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Group_Devices" Member="Group_Devices">
-    <Type Name="Group_Device">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Group_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Device_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Group_User" Member="Group_Users">
-    <Type Name="Group_User">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="User_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Group_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Group_Group_User" Member="Group" ThisKey="Group_ID" OtherKey="ID" Type="Group" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.[Log]" Member="Logs">
     <Type Name="Log">
       <Column Name="DeviceID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -117,6 +123,15 @@
       <Column Name="Port_Id" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="[_Data]" Member="_Data" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Column Name="date_" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Network" Member="Networks">
+    <Type Name="Network">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IPAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Port" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Channel" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Network_Device_Config" Member="Device_Configs" ThisKey="ID" OtherKey="NetworkID" Type="Device_Config" />
     </Type>
   </Table>
   <Table Name="dbo.ofsetAuditRecord" Member="ofsetAuditRecords">
@@ -132,6 +147,16 @@
     <Type Name="Role">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="RoleName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Role_User" Member="Users" ThisKey="Id" OtherKey="Role" Type="User" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SMS" Member="SMs">
+    <Type Name="SM">
+      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SMS_Number" Type="System.String" DbType="NVarChar(15)" CanBeNull="true" />
+      <Column Name="Message" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Delivered_Status" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Date_Time" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.SYSProperties" Member="SYSProperties">
@@ -176,48 +201,6 @@
       <Column Name="SMSToken" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
       <Column Name="GSM" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="WebLink" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.View_1" Member="View_1s">
-    <Type Name="View_1">
-      <Column Name="DeviceID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-      <Column Name="Location" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Instrument" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-      <Column Name="[_Data]" Member="_Data" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="date_" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Device_Config" Member="Device_Configs">
-    <Type Name="Device_Config">
-      <Column Name="ID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="E_Port" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
-      <Column Name="Channel_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Port_No" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Location" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Instrument" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Interval" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Alaram" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Last_Record" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="CreatedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="CreateDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="ModifiedBy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="ModifiedDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="IsRowActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Rh_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Upper_Limit" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Lower_Limit" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Upper_Range" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Lower_Range" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Device_Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Offset" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="dateofCalibration" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Lower" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="higher" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Department_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Department_Device_Config" Member="Department" ThisKey="Department_Id" OtherKey="Department_Id" Type="Department" IsForeignKey="true" />
-      <Association Name="Device_Enum_Device_Config" Member="Device_Enum" ThisKey="Device_Type" OtherKey="ID" Type="Device_Enum" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.Create_dbBackup" Method="Create_dbBackup">
