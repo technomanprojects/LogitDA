@@ -79,7 +79,7 @@ namespace Log_It.Forms
                     MessageBox.Show("Please select correct type");
                     return false;
                 }
-                if (Instance.DataLink.Device_Configs.FirstOrDefault(x => x.Active == true && x.Channel_id == textBoxChannelID.Text && x.Port_No == Convert.ToInt32( textBoxPortID.Text)) != null)
+                if (Instance.DataLink.Device_Configs.FirstOrDefault(x => x.Active == true && x.Channel_id == textBoxChannelID.Text && x.Port_No == Convert.ToInt32( comboBoxPort.Text)) != null)
                 {
                     MessageBox.Show("Channel and Port already configured.");
                     return false;

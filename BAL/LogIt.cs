@@ -45,7 +45,7 @@ namespace BAL
         private DateTime dtTimeOut = DateTime.Now;
         private Parameters[] parameter;
         private System.Windows.Forms.Timer LoggingTimer = new System.Windows.Forms.Timer();
-        private static System.Windows.Forms.Timer AlarmTimer = new System.Windows.Forms.Timer();
+        
         private static System.Windows.Forms.Timer SMS_Timer = new System.Windows.Forms.Timer();
         public static event EventHandler SendAlarmSMS;
         public static event EventHandler SendAlarmCondition;
@@ -151,7 +151,7 @@ namespace BAL
                
             }
             LoggingTimer.Stop();
-            AlarmTimer.Stop();
+            
             deviceCreated.Clear();
             base.Dispose(disposing);
         }
@@ -159,8 +159,7 @@ namespace BAL
         static LogIt()
         {
             AlarmStartTiming = DateTime.Now;
-            AlarmTimer.Interval = 5000;
-            AlarmTimer.Tick += new EventHandler(AlarmTimer_Tick);
+          
         }
 
         public LogIt(string DeviceType, string DeviceID, string Location,
@@ -199,10 +198,7 @@ namespace BAL
             LoggingTimer.Start();
             //Parameters.OutOfLimit += new AlarmConditions(Parameters_OutOfLimit);
             LogIt.deviceCreated.Add(this);
-            if (!AlarmTimer.Enabled)
-            {
-                AlarmTimer.Start();
-            }
+           
         }
 
         public LogIt(DAL.Device_Config Device, int interval, List<string> Email, List<string> SMS)
@@ -272,33 +268,30 @@ namespace BAL
             LoggingTimer.Interval = 5000;
             LoggingTimer.Start();
             LogIt.deviceCreated.Add(this);
-            if (!AlarmTimer.Enabled)
-            {
-                AlarmTimer.Start();
-            }
+            
 
         }
         
         private static void AlarmTimer_Tick(object sender, EventArgs e)
         {
-            bool result = false;
-            List<string> AlarmList = new List<string>();
-            foreach (LogIt logitObject in LogIt.deviceCreated)
-            {
-                foreach (Parameters p in logitObject.parameter)
-                {
-                    if (p!= null)
-                    {
-                        result = result | p.OutofLimit;
-                        if (p.OutofLimit)
-                        {
-                            SendAlarmSMS(sender, e); 
+            //bool result = false;
+            //List<string> AlarmList = new List<string>();
+            //foreach (LogIt logitObject in LogIt.deviceCreated)
+            //{
+            //    foreach (Parameters p in logitObject.parameter)
+            //    {
+            //        if (p!= null)
+            //        {
+            //            result = result | p.OutofLimit;
+            //            if (p.OutofLimit)
+            //            {
+            //                //SendAlarmSMS(sender, e); 
                          
-                        }
-                    }
+            //            }
+            //        }
                     
-                }
-            }
+            //    }
+            //}
             //if (result)
             //{
             //    //Beep(1000, 2000);

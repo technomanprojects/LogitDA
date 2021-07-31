@@ -70,7 +70,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(360, 408);
+            this.button1.Location = new System.Drawing.Point(360, 422);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -80,7 +80,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(279, 408);
+            this.button2.Location = new System.Drawing.Point(279, 422);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
@@ -108,7 +108,7 @@
             this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.textBoxChannelID);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 5);
+            this.groupBox1.Location = new System.Drawing.Point(12, 14);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(438, 397);
             this.groupBox1.TabIndex = 2;
@@ -420,7 +420,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(468, 472);
+            this.ClientSize = new System.Drawing.Size(468, 456);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
