@@ -12,7 +12,7 @@ namespace Log_It.Pages.TaskPanel
 {
     public partial class HomeTask : TaskControl
     {
-        BAL.LogitInstance instance;
+        private readonly BAL.LogitInstance instance;
         public HomeTask(BAL.LogitInstance instance)
         {
             InitializeComponent();
@@ -24,22 +24,20 @@ namespace Log_It.Pages.TaskPanel
             this.instance = instance;
         }
 
-      
-
-        private void linkLabel1_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel1_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
         {
             linkLabel1.LinkVisited = true;
             System.Diagnostics.Process.Start("http://www.technoman.biz");  
         }
 
-        private void linkLabel2_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel2_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Application.Run(new Forms.Splash());
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void Button1_Click_1(object sender, EventArgs e)
         {
-            Log_It.Forms.Calibrator cl = new Forms.Calibrator(instance);
+            Forms.Calibrator cl = new Forms.Calibrator(instance);
             cl.ShowDialog();
         }
     }

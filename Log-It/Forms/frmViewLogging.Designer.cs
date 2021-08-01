@@ -54,7 +54,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Ok";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // radioCustom
             // 
@@ -63,7 +63,7 @@
             this.radioCustom.Size = new System.Drawing.Size(72, 16);
             this.radioCustom.TabIndex = 9;
             this.radioCustom.Text = "Custom";
-            this.radioCustom.CheckedChanged += new System.EventHandler(this.radioToday_CheckedChanged);
+            this.radioCustom.CheckedChanged += new System.EventHandler(this.RadioToday_CheckedChanged);
             // 
             // radioThisMonth
             // 
@@ -72,7 +72,7 @@
             this.radioThisMonth.Size = new System.Drawing.Size(80, 16);
             this.radioThisMonth.TabIndex = 8;
             this.radioThisMonth.Text = "This Month";
-            this.radioThisMonth.CheckedChanged += new System.EventHandler(this.radioToday_CheckedChanged);
+            this.radioThisMonth.CheckedChanged += new System.EventHandler(this.RadioToday_CheckedChanged);
             // 
             // radioYesterday
             // 
@@ -81,7 +81,7 @@
             this.radioYesterday.Size = new System.Drawing.Size(76, 16);
             this.radioYesterday.TabIndex = 7;
             this.radioYesterday.Text = "Yesterday";
-            this.radioYesterday.CheckedChanged += new System.EventHandler(this.radioToday_CheckedChanged);
+            this.radioYesterday.CheckedChanged += new System.EventHandler(this.RadioToday_CheckedChanged);
             // 
             // radioLastDays
             // 
@@ -90,7 +90,7 @@
             this.radioLastDays.Size = new System.Drawing.Size(72, 16);
             this.radioLastDays.TabIndex = 6;
             this.radioLastDays.Text = "LastDays";
-            this.radioLastDays.CheckedChanged += new System.EventHandler(this.radioToday_CheckedChanged);
+            this.radioLastDays.CheckedChanged += new System.EventHandler(this.RadioToday_CheckedChanged);
             // 
             // radioToday
             // 
@@ -101,7 +101,7 @@
             this.radioToday.TabIndex = 5;
             this.radioToday.TabStop = true;
             this.radioToday.Text = "Today";
-            this.radioToday.CheckedChanged += new System.EventHandler(this.radioToday_CheckedChanged);
+            this.radioToday.CheckedChanged += new System.EventHandler(this.RadioToday_CheckedChanged);
             // 
             // groupBox1
             // 
@@ -237,7 +237,8 @@
             this.daysChanger.Name = "daysChanger";
             this.daysChanger.Size = new System.Drawing.Size(61, 20);
             this.daysChanger.TabIndex = 18;
-            this.daysChanger.TextChanged += new System.EventHandler(this.daysChanger_TextChanged);
+            this.daysChanger.TextChanged += new System.EventHandler(this.DaysChanger_TextChanged);
+            this.daysChanger.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.daysChanger_KeyPress);
             // 
             // frmViewLogging
             // 
@@ -258,7 +259,7 @@
             this.Name = "frmViewLogging";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "View Logging";
-            this.Load += new System.EventHandler(this.frmViewLogging_Load);
+            this.Load += new System.EventHandler(this.FrmViewLogging_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimeInputfrom)).EndInit();

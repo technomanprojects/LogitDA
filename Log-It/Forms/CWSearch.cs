@@ -17,33 +17,28 @@ namespace Log_It.Forms
         public event WizardCom NewDevice;
 
 
-        private string[] sChannelIDs;
+        private readonly string[] sChannelIDs;
 
         public CWSearch()
         {
             InitializeComponent();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
             if (this.progressBarControl1.Value >= 100)
             {
                 timer1.Enabled = false;
-                if (TimeOut != null)
-                    TimeOut();
+                TimeOut?.Invoke();
             }
             else
-                this.progressBarControl1.Value = this.progressBarControl1.Value + 1;
+                this.progressBarControl1.Value++;
         }
-        private void mp_NextPage(int i)
-        {
-            Console.WriteLine(i);
-        }
-        private void button3_Click(object sender, EventArgs e)
+        private void Mp_NextPage(int i) => Console.WriteLine(i);
+        private void Button3_Click(object sender, EventArgs e)
         {
             timer1.Enabled = false;
-            if (MainPage != null)
-                MainPage();	
+            MainPage?.Invoke();
         }
 
         private void CWSearch_Activated(object sender, EventArgs e)

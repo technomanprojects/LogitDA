@@ -13,7 +13,7 @@ namespace Log_It.Pages
     public partial class AcknowledgePage : ControlPage
     {
         int rowindex;
-        BAL.LogitInstance Instance;
+        private readonly BAL.LogitInstance Instance;
         public AcknowledgePage(BAL.LogitInstance Instance)
         {
             this.Instance = Instance;
@@ -41,7 +41,7 @@ namespace Log_It.Pages
             dataGridView1.Columns[9].Visible = false;
         }
 
-        private void dataGridView2_MouseDown(object sender, MouseEventArgs e)
+        private void DataGridView2_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
@@ -55,22 +55,22 @@ namespace Log_It.Pages
             }
         }
 
-        private void dataGridView2_RowEnter(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView2_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            string s = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+            _ = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
         }
 
-        private void acknowladgeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AcknowladgeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (rowindex < 0)
             {
                 return;
             }
             DataGridViewRow row = dataGridView1.Rows[rowindex];
-            Log_It.Forms.Ack_DialogBox dialogbox = new Forms.Ack_DialogBox((Guid)row.Cells[0].Value, row.Cells[2].Value.ToString(), (DateTime)row.Cells[3].Value, row.Cells[6].Value.ToString(), row.Cells[4].Value.ToString(), row.Cells[5].Value.ToString());
+            Forms.Ack_DialogBox dialogbox = new Forms.Ack_DialogBox((Guid)row.Cells[0].Value, row.Cells[2].Value.ToString(), (DateTime)row.Cells[3].Value, row.Cells[6].Value.ToString(), row.Cells[4].Value.ToString(), row.Cells[5].Value.ToString());
             if (dialogbox.ShowDialog() == DialogResult.OK)
             {
-                Instance.DataLink.Update_Acknowladge(Instance.UserInstance.Full_Name, (Guid)row.Cells[0].Value, dialogbox.comments);
+                Instance.DataLink.Update_Acknowladge(Instance.UserInstance.Full_Name, (Guid)row.Cells[0].Value, dialogbox.Comments);
                 RefreshPage();
             }
         }

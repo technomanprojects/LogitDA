@@ -28,7 +28,6 @@ namespace Log_It.Forms
         {
             try
             {
-              
                 //XmlDocument xmlDocument = new XmlDocument();
                 //xmlDocument.Load(Application.StartupPath + "\\LogitSetting.xml");
               
@@ -105,25 +104,21 @@ namespace Log_It.Forms
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-            }
-
-            
-            
+            }  
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
             progressBar1.Increment(1);
             
             if (progressBar1.Value == 100)
             {
-                string s = Thread.CurrentThread.Name;
+                _ = Thread.CurrentThread.Name;
                 timer1.Stop();
                 isok = PreparingFile();
                 this.Close();

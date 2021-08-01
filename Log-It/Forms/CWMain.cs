@@ -18,14 +18,14 @@ namespace Log_It.Forms
         public event Wizard NextPage;
         public event WizardCom Finish;
 
-        private int iAllowedDevice = 0;
-        private bool IsAllowed = true;
-        public BAL.LogitInstance instance { get; set; }      
-        RadioButton rbuttion;
+        private readonly int iAllowedDevice = 0;
+        private readonly bool IsAllowed = true;
+        public BAL.LogitInstance instance { get; set; }
+
+        private RadioButton rbuttion;
         public CWMain()
         {
             InitializeComponent();
-            
           
             this.NextPage += CWMain_NextPage;
             if ( instance.Device_Configes.Count() > 0)
@@ -45,10 +45,10 @@ namespace Log_It.Forms
 
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton1_CheckedChanged(object sender, EventArgs e)
         {
             
-            System.Windows.Forms.RadioButton rb = (sender as RadioButton);
+            RadioButton rb = (sender as RadioButton);
 
             if (!rb.Checked)
             {
@@ -70,14 +70,13 @@ namespace Log_It.Forms
    
         }
 
-        private void buttoncancel_Click(object sender, EventArgs e)
+        private void Buttoncancel_Click(object sender, EventArgs e)
         {
-            if (Finish != null)
-                Finish();
+            Finish?.Invoke();
             this.Hide();
         }
 
-        private void buttonNext_Click(object sender, EventArgs e)
+        private void ButtonNext_Click(object sender, EventArgs e)
         {
             //if (userinstance.Role == 2)
             //{

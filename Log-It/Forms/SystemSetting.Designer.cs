@@ -144,7 +144,7 @@
             this.button1.TabIndex = 4;
             this.button1.Text = "Verify";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // panel8
             // 
@@ -327,6 +327,7 @@
             0,
             0,
             0});
+            this.numericUpDown1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.numericUpDown1_KeyPress);
             // 
             // panel11
             // 
@@ -477,6 +478,8 @@
             // 
             // comboBoxStopBit
             // 
+            this.comboBoxStopBit.BackColor = System.Drawing.Color.White;
+            this.comboBoxStopBit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxStopBit.FormattingEnabled = true;
             this.comboBoxStopBit.Items.AddRange(new object[] {
             "One",
@@ -485,10 +488,10 @@
             this.comboBoxStopBit.Name = "comboBoxStopBit";
             this.comboBoxStopBit.Size = new System.Drawing.Size(76, 21);
             this.comboBoxStopBit.TabIndex = 4;
-            this.comboBoxStopBit.Text = "One";
             // 
             // comboBoxParity
             // 
+            this.comboBoxParity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxParity.FormattingEnabled = true;
             this.comboBoxParity.Items.AddRange(new object[] {
             "None",
@@ -498,7 +501,6 @@
             this.comboBoxParity.Name = "comboBoxParity";
             this.comboBoxParity.Size = new System.Drawing.Size(76, 21);
             this.comboBoxParity.TabIndex = 3;
-            this.comboBoxParity.Text = "None";
             // 
             // textBoxDataBit
             // 
@@ -507,6 +509,7 @@
             this.textBoxDataBit.Size = new System.Drawing.Size(76, 20);
             this.textBoxDataBit.TabIndex = 2;
             this.textBoxDataBit.Text = "8";
+            this.textBoxDataBit.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxDataBit_KeyPress);
             // 
             // textBoxBaudRate
             // 
@@ -515,6 +518,7 @@
             this.textBoxBaudRate.Size = new System.Drawing.Size(76, 20);
             this.textBoxBaudRate.TabIndex = 1;
             this.textBoxBaudRate.Text = "9600";
+            this.textBoxBaudRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxBaudRate_KeyPress);
             // 
             // textBoxCom
             // 
@@ -523,6 +527,7 @@
             this.textBoxCom.Size = new System.Drawing.Size(76, 20);
             this.textBoxCom.TabIndex = 0;
             this.textBoxCom.Text = "1";
+            this.textBoxCom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxCom_KeyPress);
             // 
             // label10
             // 
@@ -636,6 +641,7 @@
             // 
             // comboBoxUnit
             // 
+            this.comboBoxUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxUnit.FormattingEnabled = true;
             this.comboBoxUnit.Items.AddRange(new object[] {
             "Celsius",
@@ -645,7 +651,6 @@
             this.comboBoxUnit.Name = "comboBoxUnit";
             this.comboBoxUnit.Size = new System.Drawing.Size(91, 21);
             this.comboBoxUnit.TabIndex = 8;
-            this.comboBoxUnit.Text = "Celsius ";
             // 
             // label18
             // 
@@ -683,7 +688,7 @@
             this.button2.TabIndex = 0;
             this.button2.Text = "Run";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // button3
             // 
@@ -693,7 +698,7 @@
             this.button3.TabIndex = 1;
             this.button3.Text = "Cancel";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // labelstatus
             // 

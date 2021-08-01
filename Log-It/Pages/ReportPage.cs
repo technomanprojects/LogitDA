@@ -18,9 +18,7 @@ namespace Log_It.Pages
 {
     public partial class ReportPage : UserControl
     {
-
-        LogIt logitObj;
-        BAL.LogitInstance instance;
+        LogitInstance instance;
         DAL.Device_Config config;
         Reports.DSLogit dt = null;
         public ReportPage()
@@ -28,7 +26,7 @@ namespace Log_It.Pages
             InitializeComponent();
         }
 
-        public void RefreshPage(BAL.LogitInstance instance, DAL.Device_Config config, DateTime SD, DateTime ED)
+        public void RefreshPage(LogitInstance instance, DAL.Device_Config config, DateTime SD, DateTime ED)
         {
             try
             {
@@ -67,40 +65,35 @@ namespace Log_It.Pages
                     labelsuffix.Text = "Pa";
                     labeldevicetype.Text = "Differential Pressure";
                     break;
-
             }
-
-
-
 
             SqlConnection Conn = new SqlConnection(instance.ConntectionLink);
             SqlDataReader reader = null;
-            SqlCommand cmd = new SqlCommand(hasRow, Conn);
-            cmd.CommandType = CommandType.Text;
-            Conn.Open();
+                SqlCommand cmd = new SqlCommand(hasRow, Conn)
+                {
+                    CommandType = CommandType.Text
+                };
+                Conn.Open();
             reader = cmd.ExecuteReader();
 
 
             while (reader.Read())
             {
-
                 if (Convert.ToInt32(reader[0]) <= 0)
                 {
                     MessageBox.Show("No record in selected dates");
-
                     Conn.Close();
                     return;
                 }
-
             }
             Conn.Close();
 
 
-           
-
-            cmd = new SqlCommand("Select * from [Company]", Conn);
-            cmd.CommandType = CommandType.Text;
-            Conn.Open();
+                cmd = new SqlCommand("Select * from [Company]", Conn)
+                {
+                    CommandType = CommandType.Text
+                };
+                Conn.Open();
             reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -110,9 +103,11 @@ namespace Log_It.Pages
             Conn.Close();
 
             reader = null;
-            cmd = new SqlCommand(maxdate, Conn);
-            cmd.CommandType = CommandType.Text;
-            Conn.Open();
+                cmd = new SqlCommand(maxdate, Conn)
+                {
+                    CommandType = CommandType.Text
+                };
+                Conn.Open();
             reader = cmd.ExecuteReader();
             DateTime dtstart = DateTime.Now;
             DateTime dtend = DateTime.Now;
@@ -144,9 +139,11 @@ namespace Log_It.Pages
 
             dt =  new Reports.DSLogit();
 
-            SqlCommand cmdAck = new SqlCommand("SELECT *  FROM [PlotterDA].[dbo].[Acknowledge]  where Device_ID = '" + config.ID + "' AND (Event_DateTime >=' " + SD.ToString("yyyy/MM/dd HH:MM:ss tt") + "'  AND Event_DateTime <= '" + ED.ToString("yyyy/MM/dd HH:MM:ss tt") + "' ) Order By Event_DateTime ASC", Conn); // Read user-> stored procedure name
-            cmdAck.CommandType = CommandType.Text;
-            Conn.Open();
+                SqlCommand cmdAck = new SqlCommand("SELECT *  FROM [PlotterDA].[dbo].[Acknowledge]  where Device_ID = '" + config.ID + "' AND (Event_DateTime >=' " + SD.ToString("yyyy/MM/dd HH:MM:ss tt") + "'  AND Event_DateTime <= '" + ED.ToString("yyyy/MM/dd HH:MM:ss tt") + "' ) Order By Event_DateTime ASC", Conn)
+                {
+                    CommandType = CommandType.Text
+                }; // Read user-> stored procedure name
+                Conn.Open();
             SqlDataReader readerAck = cmdAck.ExecuteReader();
             while (readerAck.Read())
             {
@@ -165,7 +162,7 @@ namespace Log_It.Pages
             readerAck.Close();
             Conn.Close();
 
-            Log_It.Reports.DSLogit.DeviceInformationRow drow = dt.DeviceInformation.NewDeviceInformationRow();
+            Reports.DSLogit.DeviceInformationRow drow = dt.DeviceInformation.NewDeviceInformationRow();
             drow.Device_ID = labelid.Text;
             drow.Location = labellocation.Text;
             drow.Instrument = labelinstrument.Text;
@@ -177,23 +174,25 @@ namespace Log_It.Pages
             drow.Min_Limit = (int)config.Lower_Limit;
             dt.DeviceInformation.AddDeviceInformationRow(drow);
 
-            Log_It.Reports.DSLogit.CompanyInfoRow companyrow = dt.CompanyInfo.NewCompanyInfoRow();
+            Reports.DSLogit.CompanyInfoRow companyrow = dt.CompanyInfo.NewCompanyInfoRow();
             companyrow.CompanyName = labelCompany.Text;
             companyrow.Department = labelDepartment.Text;
             dt.CompanyInfo.AddCompanyInfoRow(companyrow);
 
-            Log_It.Reports.DSLogit.UserInformationRow userrow = dt.UserInformation.NewUserInformationRow();
+            Reports.DSLogit.UserInformationRow userrow = dt.UserInformation.NewUserInformationRow();
             userrow.FullName = instance.UserInstance.Full_Name;
             userrow.UserName = instance.UserInstance.User_Name;
             dt.UserInformation.AddUserInformationRow(userrow);
 
 
-            Log_It.Reports.DSLogit.StatisticsRow statiscticRow = dt.Statistics.NewStatisticsRow();
+            Reports.DSLogit.StatisticsRow statiscticRow = dt.Statistics.NewStatisticsRow();
 
 
-            cmd = new SqlCommand(s, Conn);
-            cmd.CommandType = CommandType.Text;
-            Conn.Open();
+                cmd = new SqlCommand(s, Conn)
+                {
+                    CommandType = CommandType.Text
+                };
+                Conn.Open();
             reader = cmd.ExecuteReader();
             int i = 0;
             List<MKT> mkt = new List<MKT>();
@@ -204,19 +203,20 @@ namespace Log_It.Pages
 
 
 
-                Log_It.Reports.DSLogit.LogsTableRow row = dt.LogsTable.NewLogsTableRow();
+                Reports.DSLogit.LogsTableRow row = dt.LogsTable.NewLogsTableRow();
                 i++;
                 row.Point = i.ToString();
-                MKT mk = new MKT();
-
-                mk.data = Convert.ToDouble(reader["_Data"]);
-                mk._date = Convert.ToDateTime(reader["date_"]);
-                if (config.Device_Type == 1)
+                    MKT mk = new MKT
+                    {
+                        data = Convert.ToDouble(reader["_Data"]),
+                        _date = Convert.ToDateTime(reader["date_"])
+                    };
+                    if (config.Device_Type == 1)
                 {
                     mk.kvdata = Convert.ToDouble(mk.data + 273.15);
                     double d = (0.008314472 * mk.kvdata);
                     mk.expdata = Math.Exp(-83.14472 / d);
-                    sum = sum + mk.expdata;
+                    sum += mk.expdata;
                 }
                 mkt.Add(mk);
                 row.Channel_ID = reader["Channel_ID"].ToString();
@@ -229,11 +229,11 @@ namespace Log_It.Pages
             {
                 if (config.Device_Type == 0)
                 {
-                    sum = sum / mkt.Count;
+                    sum /= mkt.Count;
                     sum = Math.Log(sum);
-                    sum = sum / -1;
+                    sum /= -1;
                     sum = 10000 / sum;
-                    sum = sum - 273.15;
+                    sum -= 273.15;
                     labelTMKT.Text = sum.ToString("##.00");
                     statiscticRow.MKT = labelTMKT.Text;
                 }
@@ -251,7 +251,7 @@ namespace Log_It.Pages
                 dataGridView1.Columns[3].Visible = false;
 
 
-                this.chart1.ChartAreas[0].AxisX.Title = "Date Time";
+                chart1.ChartAreas[0].AxisX.Title = "Date Time";
                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "MM/dd/yyyy hh:mm:ss tt";
                 chart1.Series[0].IsXValueIndexed = true;
                 chart1.Series[0].XValueType = ChartValueType.DateTime;
@@ -288,9 +288,11 @@ namespace Log_It.Pages
 
                 Conn.Close();
 
-                cmd = new SqlCommand(max, Conn);
-                cmd.CommandType = CommandType.Text;
-                Conn.Open();
+                    cmd = new SqlCommand(max, Conn)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    Conn.Open();
                 reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -362,7 +364,7 @@ namespace Log_It.Pages
             e.DataSources.Add(datasource);
         }
 
-        private void chart1_GetToolTipText(object sender, System.Windows.Forms.DataVisualization.Charting.ToolTipEventArgs e)
+        private void Chart1_GetToolTipText(object sender, System.Windows.Forms.DataVisualization.Charting.ToolTipEventArgs e)
         {
             if (e.HitTestResult.ChartElementType == ChartElementType.DataPoint)
             {
@@ -374,7 +376,7 @@ namespace Log_It.Pages
             }
         }
 
-        private void chart1_MouseMove(object sender, MouseEventArgs e)
+        private void Chart1_MouseMove(object sender, MouseEventArgs e)
         {
 
             //Point mousePoint = new Point(e.X, e.Y);
@@ -383,7 +385,7 @@ namespace Log_It.Pages
             //chart1.ChartAreas[0].CursorY.SetCursorPixelPosition(mousePoint, true);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             DialogResult dr;
             try
@@ -424,20 +426,20 @@ namespace Log_It.Pages
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             DialogResult dr;
             try
             {
-                dr = this.ppreview.ShowDialog();
+                dr = ppreview.ShowDialog();
             }
-            catch (System.Exception winex)
+            catch (Exception winex)
             {
                 MessageBox.Show(winex.Message, "Print Preview Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }     
         }
 
-        private void pDoc_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        private void PDoc_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
 
 
@@ -574,7 +576,7 @@ namespace Log_It.Pages
         private void Picture(string path, Graphics g)
         {
             g.PageUnit = GraphicsUnit.Inch;
-           g.DrawImage(Log_It.Properties.Resources.Log_it_Chart1, 0.5f, 0.5f);
+           g.DrawImage(Properties.Resources.Log_it_Chart1, 0.5f, 0.5f);
         }
 
         private object[] GetChannelParameter()
@@ -610,13 +612,11 @@ namespace Log_It.Pages
 
         }
 
-        private void button2_Click_2(object sender, EventArgs e)
+        private void Button2_Click_2(object sender, EventArgs e)
         {
             try
             {
-
-
-                Log_It.Reports.DSLogit.ApprovalRow approvedrow= dt.Approval.NewApprovalRow();
+                Reports.DSLogit.ApprovalRow approvedrow= dt.Approval.NewApprovalRow();
                 if (!GetApproval("Reviewed By"))
                 {
                     return;
@@ -658,7 +658,7 @@ namespace Log_It.Pages
                 if (savedialog.ShowDialog() == DialogResult.OK)
                 {
                     string fileName = savedialog.FileName;
-                    System.IO.FileInfo fi = new System.IO.FileInfo(fileName);
+                    FileInfo fi = new FileInfo(fileName);
                     if (fi.Exists)
                     {
                         fi.Delete();
@@ -682,7 +682,7 @@ namespace Log_It.Pages
                 MessageBox.Show(m.Message);
             }
         }
-        Log_It.Forms.ApprovalForm forms;
+        Forms.ApprovalForm forms;
 
         private bool GetApproval(string s)
         {

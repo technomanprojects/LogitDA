@@ -22,45 +22,48 @@ using System.Data.SqlClient;
 using System.Net.Mail;
 using System.Net;
 using System.Net.Sockets;
+using Log_It.Pages.TaskPanel;
+using DAL;
+using Timer = System.Windows.Forms.Timer;
 
 // Syed Rafiuddin
 namespace Log_It.Forms
 {
 
     
-    public partial class LogitMaincs : Form
+    public partial class LogitMaincs : Form, IMessageFilter
     {
-        private Pages.TaskPanel.TaskControl[] taskPanel;
-        private Pages.ControlPage[] Pages;
+        private TaskControl[] taskPanel;
+        private ControlPage[] Pages;
         private PageControlEnum displayMode;
-        private Log_It.Pages.TankView tk;
-        private Log_It.Pages.TVView tvv;
-        private CustomControls.TVControl[] tvc;
-        bool signal = false;
-        BAL.LogitInstance instance;
-        DAL.User userIntance;
-        WizardController wc;
+        private TankView tk;
+        private TVView tvv;
+        private TVControl[] tvc;
+        private readonly bool signal = false;
+        private readonly LogitInstance instance;
+        private DAL.User userIntance;
+        private readonly WizardController wc;
         private LogIt[] channel;
         private BarPack[] bp;
         public bool isCalibratorOn;
-        private Logit_Device logit_device;
-        DateTime backuplast;
-        private Thread t1;
-        Task<string> task;
-        CancellationTokenSource cancellationTokenSource; //Declare a cancellation token source
-        CancellationToken cancellationToken;
+        private readonly Logit_Device logit_device;
+        private DateTime backuplast;
+        private readonly Thread t1;
+        private Task<string> task;
+        private CancellationTokenSource cancellationTokenSource; //Declare a cancellation token source
+        private CancellationToken cancellationToken;
         private bool isRun = false;
         private int UserID;
         private int DeptID;
         private Guid _DeviceID;        
         public string LastValue;
         private string _result = "";
-        List<string> SMSUser;
-        List<string> EmailUser;
-
-        TcpClient client = null;
-        NetworkStream netStream = null;
-        public LogitMaincs(BAL.LogitInstance instance, DAL.User userIntance)
+        private List<string> SMSUser;
+        private List<string> EmailUser;
+        private readonly Timer mTimer;
+        private TcpClient client = null;
+        private NetworkStream netStream = null;
+        public LogitMaincs(LogitInstance instance, User userIntance)
         {
             try
             {
@@ -68,7 +71,13 @@ namespace Log_It.Forms
                 logit_device = new Logit_Device(instance);
                 LogIt.Logging += LogIt_Logging;
                 LogIt.LastRecord += LogIt_LastRecord;
-               
+                mTimer = new Timer
+                {
+                    Interval = 10000//instance.SystemProperties.s
+                };
+                mTimer.Tick += LogoutUser;
+                mTimer.Enabled = true;
+                Application.AddMessageFilter(this);
                 this.instance = instance;
                 this.userIntance = userIntance;
                 toolStripStatusUser.Text = "Login User: " + userIntance.User_Name;
@@ -79,25 +88,21 @@ namespace Log_It.Forms
                 LogIt.Parameters.InsertAckTMP += Parameters_InsertAckTMP;
                 LogIt.Parameters.BarAlaram += Parameters_BarAlaram;
                 LogIt.SendAlarmCondition += LogIt_SendAlarmCondition;
-                Control.CheckForIllegalCrossThreadCalls = false;
+                CheckForIllegalCrossThreadCalls = false;
 
                 if (instance.DataLink.SYSProperties.Single().D_Type == 2)
                 {
-
                     
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-                //MessageBox.Show(m.Message);
             }
-
         }
 
         void LogIt_SendAlarmCondition(object sender, EventArgs e)
@@ -105,25 +110,27 @@ namespace Log_It.Forms
             
         }
 
-        void Parameters_BarAlaram(uint Index, double values, bool isactive)
+        private void Parameters_BarAlaram(uint Index, double values, bool isactive)
         {
             try
             {
                 if (bp != null)
                 {
-                    this.bp[Index].AlaramActive = isactive;
+                    bp[Index].AlaramActive = isactive;
                 }
             }
-            catch (Exception)
+            catch (Exception m)
             {
+                var st = new StackTrace();
+                var sf = st.GetFrame(0);
 
-
+                var currentMethodName = sf.GetMethod();
+                Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
             }
-
         }
 
-        async void Parameters_InsertAckTMP(Guid id, Guid Device_ID, string Location, string Instrument, string Event_Type, DateTime Event_DateTime, string Event, string Value)
-                {
+        private async void Parameters_InsertAckTMP(Guid id, Guid Device_ID, string Location, string Instrument, string Event_Type, DateTime Event_DateTime, string Event, string Value)
+        {
             try
             {
                 await Task.Run(() =>
@@ -166,19 +173,21 @@ namespace Log_It.Forms
                 });
 
             }
-            catch (Exception)
+            catch (Exception m)
             {
+                var st = new StackTrace();
+                var sf = st.GetFrame(0);
+
+                var currentMethodName = sf.GetMethod();
+                Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
             }
         }
 
-        async void Parameters_outofLimits(LogIt.Parameters p, string name, double values, bool isactive, uint Index, string read, string remakr, List<string> Email, List<string> SMS)
+        private async void Parameters_outofLimits(LogIt.Parameters p, string name, double values, bool isactive, uint Index, string read, string remakr, List<string> Email, List<string> SMS)
         {
             try
             {
-
-                System.Diagnostics.Debug.Print("Send Alerts.  " + DateTime.Now.ToString());
-
-
+                Debug.Print("Send Alerts.  " + DateTime.Now.ToString());
 
                 if (instance.SystemProperties.Email == true)
                 {
@@ -191,10 +200,8 @@ namespace Log_It.Forms
                     {
                         if (isconnected)
                         {
-
                             bool b = await SendMail(DateTime.Now, name, p.Name, values.ToString(), remakr, Email);
                         }
-
                     }
 
                     if (!isactive)
@@ -219,16 +226,15 @@ namespace Log_It.Forms
                         {
                             if (isconnected)
                             {
-
                                 if (SMS != null)
                                 {
                                     if (p.Name == "Temperature")
                                     {
-                                        read = read + " C";
+                                        read += " C";
                                     }
                                     if (p.Name == "Humidity")
                                     {
-                                        read = read + " %";
+                                        read += " %";
                                     }
                                     string status = (string)remakr.Clone();
 
@@ -239,14 +245,12 @@ namespace Log_It.Forms
                                     smscomponent.Dispose();
                                 }
                             }
-
                         }
 
                         if (!isactive)
                         {
                             if (isconnected)
                             {
-
                                 string status = (string)remakr.Clone();
 
                                 if (SMS != null)
@@ -255,11 +259,11 @@ namespace Log_It.Forms
                                     {
                                         if (p.Name == "Temperature")
                                         {
-                                            read = read + " C";
+                                            read += " C";
                                         }
                                         if (p.Name == "Humidity")
                                         {
-                                            read = read + " %";
+                                            read += " %";
                                         }
                                         //string status = (string)remakr.Clone();
 
@@ -269,22 +273,23 @@ namespace Log_It.Forms
                                         smscomponent.send(SMS, body);
                                         smscomponent.Dispose();
                                     }
-
                                 }
                             }
                         }
                     }                   
                 }
             }
-            catch (Exception)
+            catch (Exception m)
             {
+                var st = new StackTrace();
+                var sf = st.GetFrame(0);
 
-
+                var currentMethodName = sf.GetMethod();
+                Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
             }
-
         }
-        
-        async Task<bool> SendMail(DateTime lastRecord, string device, string status, string read, string remakr, List<string> Email)
+
+        private async Task<bool> SendMail(DateTime lastRecord, string device, string status, string read, string remakr, List<string> Email)
         {
             try
             {
@@ -294,13 +299,12 @@ namespace Log_It.Forms
 
                     if (status == "Temperature")
                     {
-                        read = read + " C";
+                        read += " C";
                     }
                     if (status == "Humidity")
                     {
-                        read = read + " %";
+                        read += " %";
                     }
-
 
                     string smtpAddress = instance.SystemProperties.EmailSMTP; //ConfigurationManager.AppSettings["SMTP"].ToString();
                     int portNumber = Convert.ToInt32(instance.SystemProperties.EmailPort);// ConfigurationManager.AppSettings["Port"].ToString());
@@ -329,7 +333,6 @@ namespace Log_It.Forms
                                 toolStripStatusLabel1.Text = "No any Email Address!";
                                 return;
                             }
-
                         }
                         else
                         {
@@ -337,7 +340,6 @@ namespace Log_It.Forms
                             toolStripStatusLabel1.Text = "No any Email Address!";
                             return;
                         }
-
 
                         mail.Subject = subject;
                         mail.Body = body;
@@ -347,21 +349,20 @@ namespace Log_It.Forms
                         {
                             try
                             {
-
                                 smtp.Credentials = new NetworkCredential(emailFromAddress, password);
                                 smtp.EnableSsl = enableSSL;
                                 toolStripStatusLabel1.Text = "Email is Sending";
                                 smtp.Send(mail);
                                 toolStripStatusLabel1.Text = "Email has been Sent";
                             }
-                            catch (Exception)
+                            catch (Exception m)
                             {
                                 toolStripStatusLabel1.Text = "Email Send Fail";
                                 var st = new StackTrace();
                                 var sf = st.GetFrame(0);
 
                                 var currentMethodName = sf.GetMethod();
-                                //Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
+                                Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
                             }
                         }
                     }
@@ -374,11 +375,11 @@ namespace Log_It.Forms
             }
         }
 
-        void LogIt_LastRecord(Guid Id, DateTime dt)
+        private void LogIt_LastRecord(Guid Id, DateTime dt)
         {
             DAL.Device_Config config = instance.Device_Configes.SingleOrDefault(x => x.ID == Id);
             config.Last_Record = dt;
-            if (instance.DataLink.Connection.State == System.Data.ConnectionState.Closed)
+            if (instance.DataLink.Connection.State == ConnectionState.Closed)
             {
                 instance.DataLink.Connection.Open();
             }
@@ -391,69 +392,69 @@ namespace Log_It.Forms
             {
                 sideNavItem2.Checked = true;
 
-                taskPanel = new Log_It.Pages.TaskPanel.TaskControl[6];
-                taskPanel[0] = new Log_It.Pages.TaskPanel.HomeTask(instance);
-                taskPanel[1] = new Log_It.Pages.TaskPanel.AppTask();
+                taskPanel = new TaskControl[6];
+                taskPanel[0] = new HomeTask(instance);
+                taskPanel[1] = new AppTask();
 
-                taskPanel[2] = new Log_It.Pages.TaskPanel.DatabaseTask();
+                taskPanel[2] = new DatabaseTask();
                  
-                Log_It.Pages.TaskPanel.EventTask eventtask = new Log_It.Pages.TaskPanel.EventTask();
-                eventtask.RefreshControl += eventtask_RefreshControl;
-                eventtask.PrintP += eventtask_PrintP;
+                EventTask eventtask = new EventTask();
+                eventtask.RefreshControl += Eventtask_RefreshControl;
+                eventtask.PrintP += Eventtask_PrintP;
                 taskPanel[3] = eventtask;
 
-                Log_It.Pages.TaskPanel.UserTask usertask = new Log_It.Pages.TaskPanel.UserTask(0, instance);
-                usertask.AddUser += usertask_AddUser;
-                usertask.ModifiedUser += usertask_ModifiedUser;
-                usertask.DeleteUser += usertask_DeleteUser;
+                UserTask usertask = new UserTask(0, instance);
+                usertask.AddUser += Usertask_AddUser;
+                usertask.ModifiedUser += Usertask_ModifiedUser;
+                usertask.DeleteUser += Usertask_DeleteUser;
                 taskPanel[4] = usertask;
 
-
-                Log_It.Pages.TaskPanel.DeptTask depttask = new Log_It.Pages.TaskPanel.DeptTask(0, instance);
-                depttask.AddDept += depttask_AddDept;
-                depttask.ModifiedDept += depttask_ModifiedDept;
-                depttask.DeleteDept += depttask_DeleteDept;
+                
+                DeptTask depttask = new DeptTask(0, instance);
+                depttask.AddDept += Depttask_AddDept;
+                depttask.ModifiedDept += Depttask_ModifiedDept;
+                depttask.DeleteDept += Depttask_DeleteDept;
                 taskPanel[5] = depttask;
 
 
 
-                Pages = new Log_It.Pages.ControlPage[8];
-                Log_It.Pages.HomePage home = new Log_It.Pages.HomePage();
-                home.PageIndex += home_PageIndex;
+                Pages = new ControlPage[8];
+                HomePage home = new HomePage();
+                home.PageIndex += Home_PageIndex;
                 Pages[0] = home;
 
-                Log_It.Pages.ApplicationProperties propertiespage = new Log_It.Pages.ApplicationProperties(instance, userIntance.User_Name);
-                propertiespage.RefresPageProperties += propertiespage_RefresPageProperties;
+                ApplicationProperties propertiespage = new ApplicationProperties(instance, userIntance.User_Name);
+                propertiespage.RefresPageProperties += Propertiespage_RefresPageProperties;
                 Pages[1] = propertiespage;
                 //if (userIntance.Role != 1)
                 //{
                 //    Log_It.Pages.ControlPage page = (Log_It.Pages.ApplicationProperties)Pages[1];
                 //    page.Enabled = false;
                 //}
-                Log_It.Pages.DBMaintenance dbMaintenance = new Log_It.Pages.DBMaintenance(instance);
-                dbMaintenance.CreatedbBackupManually += dbMaintenance_CreatedbBackupManually;
+                DBMaintenance dbMaintenance = new DBMaintenance(instance);
+                dbMaintenance.CreatedbBackupManually += DbMaintenance_CreatedbBackupManually;
                 Pages[2] = dbMaintenance;
 
-                Pages[3] = new Log_It.Pages.Eventpage(instance);
+                Pages[3] = new Eventpage(instance);
 
-                Log_It.Pages.UserPage userpage = new Log_It.Pages.UserPage(instance);
-                userpage.IDSet +=userpage_IDSet;
+                UserPage userpage = new UserPage(instance);
+                userpage.IDSet +=Userpage_IDSet;
                 Pages[4] = userpage;
 
-                Log_It.Pages.DeptPage deptpage = new Log_It.Pages.DeptPage(instance);
-                deptpage.IDSet += deptpage_IDSet;
+                DeptPage deptpage = new DeptPage(instance);
+                deptpage.IDSet += Deptpage_IDSet;
 
                 Pages[5] = deptpage;
                 
 
 
-                Log_It.Pages.DeviceConfigPage devicepage = new DeviceConfigPage(instance);
-                devicepage.IDSet += devicepage_IDSet;
+                DeviceConfigPage devicepage = new DeviceConfigPage(instance);
+                devicepage.IDSet += Devicepage_IDSet;
                 Pages[6] = devicepage;
 
 
 
-                Log_It.Pages.AcknowledgePage ack_pages = new AcknowledgePage(instance);
+                AcknowledgePage ack_pages = new AcknowledgePage(instance);
                 
                 Pages[7] = ack_pages;
   
@@ -493,97 +494,101 @@ namespace Log_It.Forms
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
 
         }
 
-        void depttask_DeleteDept()
+        private void Depttask_DeleteDept()
         {
             try
             {
-                //if (UserID > -1)
-                //{
-                //    DialogResult r = MessageBox.Show("Are your sure you want to delete select user", "Delete user", MessageBoxButtons.YesNo);
-                //    if (r == System.Windows.Forms.DialogResult.No)
-                //    {
-                //        return;
-                //    }
-                    
-                //    instance.DataLink.SubmitChanges();
+                if (DeptID > -1)
+                {
+                    DialogResult r = MessageBox.Show("Are your sure you want to delete select Department", "Delete department", MessageBoxButtons.YesNo);
+                    if (r == DialogResult.No)
+                    {
+                        return;
+                    }
+                    Department _dept = instance.DataLink.Departments.SingleOrDefault(x => x.Department_Id == DeptID);
+                    string dptname = _dept.Department_Name;
+                    if (instance.DataLink.Device_Configs.SingleOrDefault(x => x.Department_Id == DeptID) == null)
+                    {
+                        MessageBox.Show("Sorry you can not delete this department because it's related to some devices.");
+                        Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modfiy, "Department (" + _dept.Department_Name + ") Failed to Delete by " + instance.UserInstance.Full_Name, instance.UserInstance.Full_Name);
 
-                //    Log_It.Pages.DeptPage deptpage = (Log_It.Pages.DeptPage)Pages[5];
-                //    deptpage.RefreshPage();
-                //    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modfiy, "User  (" + _user.Full_Name + ") Delete by " + instance.UserInstance.Full_Name, instance.UserInstance.Full_Name);
+                    }
+                    if (instance.DataLink.Users.SingleOrDefault(x => x.Department_Id == DeptID) == null)
+                    {
+                        MessageBox.Show("Sorry you can not delete this department because it's related to some Users.");
+                        Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modfiy, "Department (" + _dept.Department_Name + ") Failed to Delete by " + instance.UserInstance.Full_Name, instance.UserInstance.Full_Name);
 
-                //}
+                    }
+
+                    instance.DataLink.Departments.DeleteOnSubmit(_dept);
+                    instance.DataLink.SubmitChanges();
+
+                    MessageBox.Show("Department " + dptname + " has sucessfully deleted.");
+                    DeptPage dp = (DeptPage)Pages[5];
+                    dp.RefreshPage();
+                    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modfiy, "Department (" + _dept.Department_Name + ") Delete by " + instance.UserInstance.Full_Name, instance.UserInstance.Full_Name);
+                }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
         }
 
-        void depttask_ModifiedDept()
+        private void Depttask_ModifiedDept()
         {
             try
             {
-                Log_It.Forms.AddDepartment form = new Forms.AddDepartment(false, instance, DeptID);
+                AddDepartment form = new AddDepartment(false, instance, DeptID);
                 form.ShowDialog();
-                Log_It.Pages.DeptPage deptpage = (Log_It.Pages.DeptPage)Pages[5];
+                DeptPage deptpage = (DeptPage)Pages[5];
                 deptpage.RefreshPage();
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
-           
         }
 
-        void depttask_AddDept()
+        private void Depttask_AddDept()
         {
-            Log_It.Pages.DeptPage deptpage = (Log_It.Pages.DeptPage)Pages[5];
+            DeptPage deptpage = (DeptPage)Pages[5];
             deptpage.RefreshPage();
-
         }
 
-        void deptpage_IDSet(int id)
+        private void Deptpage_IDSet(int id)
         {
             DeptID = id;
         }
 
-        void dbMaintenance_CreatedbBackupManually()
+        private void DbMaintenance_CreatedbBackupManually()
         {
-
             CreateBackup();
             MessageBox.Show("Backup has been done");
-            Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Information, "Backup created. ", instance.UserInstance.Full_Name);
+            Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Information, "Backup created Manually. ", instance.UserInstance.Full_Name);
         }
 
         private void CreateBackup()
         {
             try
             {
-
-
                 string backuplocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Data\";
                 if (!Directory.Exists(backuplocation))
                 {
@@ -602,7 +607,6 @@ namespace Log_It.Forms
                     directoryInfo.SetAccessControl(directorySecurity);
                 }
 
-
                 string DataBase = instance.DataLink.Connection.Database;
                 string userid = BAL.Authentication.GetDec(instance.SystemProperties.idlog);
                 string password = BAL.Authentication.GetDec(instance.SystemProperties.passlog);
@@ -614,8 +618,10 @@ namespace Log_It.Forms
                 try
                 {
                     SqlConnection Conn = new SqlConnection(instance.ConntectionLink);
-                    SqlCommand cmd = new SqlCommand("Create_dbBackup", Conn);//INSERT INTO Eventlog (ID, DateTime,UserName, EventName, MessageLog) VALUES ('" + Guid.NewGuid() + "'," + (DateTime)DateTime.Now + ",'" + username + "','" + log.ToString() + "','" + Message + "')", Conn);
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlCommand cmd = new SqlCommand("Create_dbBackup", Conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };//INSERT INTO Eventlog (ID, DateTime,UserName, EventName, MessageLog) VALUES ('" + Guid.NewGuid() + "'," + (DateTime)DateTime.Now + ",'" + username + "','" + log.ToString() + "','" + Message + "')", Conn);
                     if (Conn.State == ConnectionState.Closed)
                     {
                         Conn.Open();
@@ -623,11 +629,8 @@ namespace Log_It.Forms
                     cmd.Parameters.Add(new SqlParameter("@dbName", DataBase));
                     cmd.Parameters.Add(new SqlParameter("@location", backuplocation + @"\" + DataBase + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Year.ToString() + ".bak"));
 
-
                     cmd.ExecuteNonQuery();
                     Conn.Close();
-
-
 
                 }
                 catch (Exception m)
@@ -635,7 +638,7 @@ namespace Log_It.Forms
                     toolStripStatusLabel1.Text = m.Message;
                 }
                
-                backuplast = System.DateTime.Now;
+                backuplast = DateTime.Now;
                 Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Information, "Backup has been done", "System");
             }
             catch (Exception m)
@@ -644,18 +647,17 @@ namespace Log_It.Forms
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
                 MessageBox.Show(m.InnerException.Message);
-                var currentMethodName = sf.GetMethod();
+                _ = sf.GetMethod();
                 //Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
             }
         }
         
-        void Parameters_outofLimits(uint Index, double values, bool isactive)
+        private void Parameters_outofLimits(uint Index, double values, bool isactive)
         {
             if (bp != null)
             {
-                this.bp[Index].AlaramActive = isactive;
+                bp[Index].AlaramActive = isactive;
             }
-
         }
        
         /// <summary>
@@ -663,7 +665,7 @@ namespace Log_It.Forms
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void cf_FormClosed(object sender, FormClosedEventArgs e)
+        private void Cf_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (CreateLogItObjects())
             {
@@ -671,41 +673,35 @@ namespace Log_It.Forms
             }
             if (panelControl.Controls.Count > 0)
             {
-
                 panelControl.Controls.Clear();
             }
             panelControl.Controls.Add(Pages[5]);
-            Log_It.Pages.ControlPage page = (Log_It.Pages.ControlPage)panelControl.Controls[0];
+            ControlPage page = (ControlPage)panelControl.Controls[0];
             page.RefreshPage();
-           
         }
 
-        void Parameters_Output1(uint Index, double values)
+        private void Parameters_Output1(uint Index, double values)
         {
             if (bp != null)
-                this.bp[Index].Value = (float)values;
+                bp[Index].Value = (float)values;
         }
 
-        void LogIt_Logging(Guid DeviceID, string ChannelId, string Port_No, double _data)
+        private void LogIt_Logging(Guid DeviceID, string ChannelId, string Port_No, double _data)
         {
             try
             {
-                DAL.Log log = new DAL.Log()
+                Log log = new Log()
                 {
-
                     Channel_ID = ChannelId,
                     DeviceID = DeviceID,
                     Port_Id = Port_No,
                     _Data = Convert.ToDouble(_data.ToString("00.00")),
                     date_ = Convert.ToDateTime(DateTime.Now.ToString("yyyy/MM/dd HH:mm:00")),
-
                 };
                 logit_device.InsertRecord(log);
-
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
@@ -713,7 +709,6 @@ namespace Log_It.Forms
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
                 //MessageBox.Show(m.Message);
             }
-
         }
 
         private void CloseAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -733,52 +728,41 @@ namespace Log_It.Forms
                 if (Length > 0)
                 {
                     channel = new LogIt[Length];
-                    tvc = new CustomControls.TVControl[channel.Length];
+                    tvc = new TVControl[channel.Length];
                     int index = 0;
-                    foreach (DAL.Device_Config item in logit_device.GetAllDevices().OrderBy(x => x.Port_No))
+                    foreach (Device_Config item in logit_device.GetAllDevices().OrderBy(x => x.Port_No))
                     {
                         EmailUser = new List<string>();
                         SMSUser = new List<string>();
 
-
-
-                        IQueryable<DAL.User> users = instance.DataLink.Users.Where(x => x.Active == true && x.IsRowEnable == true && x.Role != 0);
+                        IQueryable<User> users = instance.DataLink.Users.Where(x => x.Active == true && x.IsRowEnable == true && x.Role != 0);
                         if (users != null)
                         {
-                            IQueryable<DAL.User> users1 = users.Where(y => y.email_notification == true || y.sms_notification == true);
+                            IQueryable<User> users1 = users.Where(y => y.email_notification == true || y.sms_notification == true);
 
                             foreach (var items in users1)
                             {
-
                                 if (!EmailUser.Contains(items.Email))
                                 {
-
                                     if (items.Email != string.Empty || items.Email != "")
                                     {
                                         EmailUser.Add(items.Email);
                                     }
-
                                 }
                                 if (!SMSUser.Contains(items.Phone))
                                 {
-
                                     if (items.Phone != string.Empty || items.Phone != "")
                                     {
-
                                         SMSUser.Add(items.Phone);
                                         toolStripStatusLabel1.Text = items.Phone;
                                     }
-
                                 }
                             }
                         }
 
-
                         channel[index] = new LogIt(item, (int)instance.SystemProperties.Alert_Interval, EmailUser, SMSUser);
-
                         index++;
                     }
-                   
                     isRun = true;
                     return true;
                 }
@@ -789,7 +773,6 @@ namespace Log_It.Forms
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
@@ -798,7 +781,6 @@ namespace Log_It.Forms
                 return false;
                 //MessageBox.Show(m.Message);
             }
-
         }
 
         private void DestroyLogItObject()
@@ -807,49 +789,46 @@ namespace Log_It.Forms
             {
                 if (channel != null)
                 {
-                 
-                foreach (LogIt logObj in channel)
-                {
-                    logObj.Dispose();
-                }
-                channel = null;
-                LogIt.index = 0;   
+                    foreach (LogIt logObj in channel)
+                    {
+                        logObj.Dispose();
+                    }
+                    channel = null;
+                    LogIt.index = 0;
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
             }
-
         }
         
-        void tk_close()
+        private void Tk_close()
         {
             tk = null;
             //throw new NotImplementedException();
         }
         
-        void propertiespage_RefresPageProperties()
+        private void Propertiespage_RefresPageProperties()
         {
             cancellationTokenSource.Cancel();
-            this.DestroyLogItObject();
+            DestroyLogItObject();
             if (CreateLogItObjects())
             {
                 RunTask();
             }
         }
 
-        void devicepage_IDSet(Guid id)
+        private void Devicepage_IDSet(Guid id)
         {
             _DeviceID = id;
         }
 
-        void devicetask_AddedDevice()
+        private void Devicetask_AddedDevice()
         {
             if (cancellationTokenSource != null)
             {
@@ -863,29 +842,26 @@ namespace Log_It.Forms
             }
             if (panelControl.Controls.Count > 0)
             {
-
                 panelControl.Controls.Clear();
             }
             panelControl.Controls.Add(Pages[6]);
-            Log_It.Pages.ControlPage page = (Log_It.Pages.ControlPage)panelControl.Controls[0];
+            ControlPage page = (ControlPage)panelControl.Controls[0];
 
             page.RefreshPage();          
         }
 
-        void devicetask_DeleteDevice()
+        private void Devicetask_DeleteDevice()
         {
             try
             {
                 if (_DeviceID != null)
                 {
-                    
-
                     if (instance.DataLink.Device_Configs.SingleOrDefault(x => x.ID == _DeviceID && x.Active == true && x.IsRowActive == true) == null)
                     {
                         return;
                     }
                     DialogResult r = MessageBox.Show("Are your sure you want to delete select Device", "Delete device", MessageBoxButtons.YesNo);
-                    if (r == System.Windows.Forms.DialogResult.No)
+                    if (r == DialogResult.No)
                     {
                         return;
                     }
@@ -894,32 +870,29 @@ namespace Log_It.Forms
                         cancellationTokenSource.Cancel();
                     }
                     DestroyLogItObject();
-                    DAL.Device_Config config = instance.DataLink.Device_Configs.SingleOrDefault(x => x.ID == _DeviceID);
+                    Device_Config config = instance.DataLink.Device_Configs.SingleOrDefault(x => x.ID == _DeviceID);
                     config.Active = false;
                     instance.DataLink.SubmitChanges();
-                    Log_It.Pages.DeviceConfigPage userpage = (Log_It.Pages.DeviceConfigPage)Pages[6];
+                    DeviceConfigPage userpage = (DeviceConfigPage)Pages[6];
                     userpage.RefreshPage();
                     Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modfiy, "Device Location : ( "+ config.Location  +" )  Delete by " + instance.UserInstance.Full_Name, instance.UserInstance.Full_Name);
                     if (CreateLogItObjects())
                     {
                         RunTask();
                     }
-
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
         }
 
-        void devicetask_ModifiedDevice()
+        private void Devicetask_ModifiedDevice()
         {
             try
             {
@@ -934,22 +907,20 @@ namespace Log_It.Forms
                     {
                         cancellationTokenSource.Cancel();
                     }
-                    this.DestroyLogItObject();
+                    DestroyLogItObject();
 
                     AcquisitionAddForm form = new AcquisitionAddForm(_DeviceID, instance, false);
-                    if (form.ShowDialog() ==  System.Windows.Forms.DialogResult.OK)
+                    if (form.ShowDialog() ==  DialogResult.OK)
                     {
-                        Log_It.Pages.DeviceConfigPage devicepage = (Log_It.Pages.DeviceConfigPage)Pages[6];
+                        DeviceConfigPage devicepage = (DeviceConfigPage)Pages[6];
                         devicepage.RefreshPage();
-                        
                     }
                     if (panelControl.Controls.Count > 0)
                     {
-
                         panelControl.Controls.Clear();
                     }
                     panelControl.Controls.Add(Pages[6]);
-                    Log_It.Pages.ControlPage page = (Log_It.Pages.ControlPage)panelControl.Controls[0];
+                    ControlPage page = (ControlPage)panelControl.Controls[0];
                     page.RefreshPage();
                     if (CreateLogItObjects())
                     {
@@ -960,142 +931,122 @@ namespace Log_It.Forms
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
         }
 
-        void usertask_AddUser()
+        private void Usertask_AddUser()
         {
             try
             {
-                Log_It.Pages.UserPage userpage = (Log_It.Pages.UserPage)Pages[4];
+                UserPage userpage = (UserPage)Pages[4];
                 userpage.RefreshPage();
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
-
         }
 
-        void usertask_DeleteUser()
+        private void Usertask_DeleteUser()
         {
-
             try
             {
                 if (UserID > -1)
                 {
                     DialogResult r = MessageBox.Show("Are your sure you want to delete select user", "Delete user", MessageBoxButtons.YesNo);
-                    if (r == System.Windows.Forms.DialogResult.No)
+                    if (r == DialogResult.No)
                     {
                         return;
                     }
-                    DAL.User _user = instance.DataLink.Users.SingleOrDefault(x => x.Id == UserID);
+                    User _user = instance.DataLink.Users.SingleOrDefault(x => x.Id == UserID);
                     _user.Active = false;
                     instance.DataLink.SubmitChanges();
-                    Log_It.Pages.UserPage userpage = (Log_It.Pages.UserPage)Pages[4];
+                    UserPage userpage = (UserPage)Pages[4];
                     userpage.RefreshPage();
                     Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modfiy, "User  (" + _user.Full_Name +  ") Delete by " + instance.UserInstance.Full_Name, instance.UserInstance.Full_Name);
-
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
-
         }
 
-        void usertask_ModifiedUser()
+        private void Usertask_ModifiedUser()
         {
-
             try
             {
                 UserForm form = new UserForm(UserID, instance, false);
                 form.ShowDialog();
-                Log_It.Pages.UserPage userpage = (Log_It.Pages.UserPage)Pages[4];
+                UserPage userpage = (UserPage)Pages[4];
                 userpage.RefreshPage();
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
         }
 
-        void userpage_IDSet(int id)
+        private void Userpage_IDSet(int id)
         {
             UserID = id;
         }
 
-        void eventtask_PrintP()
+        private void Eventtask_PrintP()
         {
 
             try
             {
-                Log_It.Pages.Eventpage eventpage = (Log_It.Pages.Eventpage)Pages[3];
+                Eventpage eventpage = (Eventpage)Pages[3];
                // eventpage.PrintDoc();
-                Log_It.Forms.EventFilterForm form = new EventFilterForm(this.instance);
+                EventFilterForm form = new EventFilterForm(instance);
                 form.ShowDialog(); 
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
         }
 
-        void eventtask_RefreshControl()
+        private void Eventtask_RefreshControl()
         {
-
             try
             {
-                Log_It.Pages.Eventpage eventpage = (Log_It.Pages.Eventpage)Pages[3];
+                Eventpage eventpage = (Eventpage)Pages[3];
                 eventpage.Refresh();
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
         }
-
-        void home_PageIndex(int i)
+        private void Home_PageIndex(int i)
         {
-
             try
             {
                 if (panelControl.Controls.Count > 0)
@@ -1106,22 +1057,20 @@ namespace Log_It.Forms
                 paneltask.Controls.Add(taskPanel[i]);
 
                 panelControl.Controls.Add(Pages[i]);
-                Log_It.Pages.ControlPage page = (Log_It.Pages.ControlPage)panelControl.Controls[0];
+                ControlPage page = (ControlPage)panelControl.Controls[0];
                 page.RefreshPage();
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
         }
         
-        private void tvv_Closed(object sender, EventArgs e)
+        private void Tvv_Closed(object sender, EventArgs e)
         {
             tvv = null;
         }
@@ -1145,15 +1094,12 @@ namespace Log_It.Forms
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
-
         }
 
         private void LogitMaincs_FormClosing(object sender, FormClosingEventArgs e)
@@ -1196,18 +1142,13 @@ namespace Log_It.Forms
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
-
-
         }
-
         public void GetData(string ipAddress,int index, int slaveID)
         {
             try
@@ -1221,15 +1162,13 @@ namespace Log_It.Forms
                 {
                     try
                     {
-                      
                         client.Connect(ipAddress, index);    
                     }
-                    catch (Exception m)
+                    catch (Exception)
                     {
                         toolStripStatusComPort.Text = "Network disconnect.";
                         continue;
                     }
-                    
                 }
                 
                 netStream = client.GetStream();
@@ -1250,14 +1189,11 @@ namespace Log_It.Forms
                     //}
                     totalBytesRcvd += bytesRcvd;
                 }
-                this.LastValue = Encoding.ASCII.GetString(byteBuffer, 0, totalBytesRcvd);
-
-              
-            }
+                LastValue = Encoding.ASCII.GetString(byteBuffer, 0, totalBytesRcvd);
+                          }
             catch (Exception m)
             {
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message, "");
-
             }
             finally
             {
@@ -1265,11 +1201,9 @@ namespace Log_It.Forms
                 client.Close();
                 client = null;
             }
-
-          
         }
         
-        public void Close()
+        public new void Close()
         {
             if (client.Connected)
             {
@@ -1278,7 +1212,7 @@ namespace Log_It.Forms
             }
         }
 
-        List<DeviceList> dlist;
+        private List<DeviceList> dlist;
 
         private string Run(object id)
         {
@@ -1305,45 +1239,39 @@ namespace Log_It.Forms
                         d.E_Port = item.E_Port;
                         dlist.Add(d);
                     }
-                }
+                 }
                  int[] ports = new int[2] { Convert.ToInt32(instance.SystemProperties.Port1), Convert.ToInt32(instance.SystemProperties.Port2) };
 
 
                 while (isRun)
                 {
-
                     int index = 0;
-                   
                     
                     for (int k = 0; k < instance.SystemProperties.Number_Devices; k++)
                     {
-                        
-                        this.GetData(instance.SystemProperties.IP_Address,ports[k],0);
+                        GetData(instance.SystemProperties.IP_Address,ports[k],0);
                         if (cancellationToken.IsCancellationRequested)
                         {
-                            Close();
+                            base.Close();
                             break;
                         }
-                       
 
-                        string lastValue = this.LastValue;
-                       
+                        string lastValue = LastValue;
                        
                         if (lastValue == null || lastValue == string.Empty)
                         {
-
                             continue;
                         }
                         if (lastValue != null)
                         {
-                            System.Diagnostics.Debug.Print(lastValue.ToString());
+                           Debug.Print(lastValue.ToString());
                         }
 
                         if (lastValue.StartsWith(">"))
                         {
                             lastValue = lastValue.Remove(0, 1).Trim();
                         }
-                        string str2 = String.Copy(lastValue);
+                        string str2 = string.Copy(lastValue);
 
                         string[] split = str2.Split(new char[] { '+', '-' });
 
@@ -1354,16 +1282,12 @@ namespace Log_It.Forms
                             index = str2.IndexOf('+');
                             if (index != -1)
                             {  
-
                                 if (dlist.Count > 0)
                                 {
-
                                     for (int i = 0; i < dlist.Count; i++)
                                     {
                                         if (Convert.ToDecimal(split[i + 1]) > 4)
                                         {
-
-
                                             DeviceList dl = dlist.SingleOrDefault(b => b.E_Port == ports[k].ToString() && b.Channel == 0 && b.Port == i);
                                             if (dl != null)
                                             {
@@ -1377,31 +1301,26 @@ namespace Log_It.Forms
                                                 //decimal dt = r.Next(10, 20);
                                                 decimal resutl = Convert.ToDecimal(split[i + 1]);
                                                 double ofset = 0.003;
-                                                resutl = resutl - Convert.ToDecimal(ofset);
+                                                resutl -= Convert.ToDecimal(ofset);
                                                 decimal d = resutl - 4;
                                                 decimal pv = (pvt * d) + Pvlow;
                                                 //pv = pv / 100;
-                                                System.Diagnostics.Debug.Print(pv.ToString());
+                                                Debug.Print(pv.ToString());
                                                 list.Add(split[i + 1] + "," + index);
                                                 Send2Channels(dl.ID, Convert.ToDouble(pv), 0.0);
                                             }
                                         }
                                     }
-
                                 }
-
                             }
-                            
                             LastValue = string.Empty;
                         }
-                        catch (Exception)
+                        catch (Exception )
                         {
                             break;
                         }
                         int count = list.Count;
                     }
-
-
                 }
                 return string.Empty;
             }
@@ -1411,21 +1330,19 @@ namespace Log_It.Forms
                 isRun = false;
                 return string.Empty;
             }
-
         }
          
         private void LogIt_RealTime(LogIt logItObject)
         {
             try
             {
-                if (this.tvv != null)
+                if (tvv != null)
                 {
                     tvv.RealTimeData(logItObject);
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
@@ -1434,7 +1351,7 @@ namespace Log_It.Forms
             }
         }
         
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        private void TreeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
             {
@@ -1443,40 +1360,37 @@ namespace Log_It.Forms
                     panelControl.Controls.Clear();
                     paneltask.Controls.Clear();
                 }
-                if (e.Node.Tag == "Option")
+                switch (e.Node.Tag)
                 {
+                    case "Option":
+                        panelControl.Controls.Add(Pages[0]);
+                        paneltask.Controls.Add(taskPanel[0]);
+                        displayMode = PageControlEnum.Home;
+                        break;
+                    default:
+                        {
+                            panelControl.Controls.Add(Pages[e.Node.Index + 1]);
 
-                    panelControl.Controls.Add(Pages[0]);
-                    paneltask.Controls.Add(taskPanel[0]);
-                    displayMode = PageControlEnum.Home;
-                }
-                else
-                {
+                            ControlPage page = (ControlPage)panelControl.Controls[0];
+                            page.RefreshPage();
 
-
-                    panelControl.Controls.Add(Pages[e.Node.Index + 1]);
-
-                    Log_It.Pages.ControlPage page = (Log_It.Pages.ControlPage)panelControl.Controls[0];
-                    page.RefreshPage();
-
-                    paneltask.Controls.Add(taskPanel[e.Node.Index + 1]);
-                    displayMode = (PageControlEnum)e.Node.Index + 1;
+                            paneltask.Controls.Add(taskPanel[e.Node.Index + 1]);
+                            displayMode = (PageControlEnum)e.Node.Index + 1;
+                            break;
+                        }
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
-
         }
 
-        private void sideNavItem3_Click(object sender, EventArgs e)
+        private void SideNavItem3_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1484,15 +1398,13 @@ namespace Log_It.Forms
                 {
                     panelControl.Controls.Clear();
                     panelControl.Controls.Add(Pages[6]);
-                    Log_It.Pages.ControlPage page = (Log_It.Pages.ControlPage)panelControl.Controls[0];
+                    ControlPage page = (ControlPage)panelControl.Controls[0];
                     page.RefreshPage();
                     displayMode = PageControlEnum.DeviceConfigPage;
-
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
@@ -1501,7 +1413,7 @@ namespace Log_It.Forms
             }
         }
 
-        private void sideNavItem2_Click(object sender, EventArgs e)
+        private void SideNavItem2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1519,26 +1431,23 @@ namespace Log_It.Forms
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
-
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             try
             {
-                tk = new Log_It.Pages.TankView();
-                tk.close += tk_close;
+                tk = new TankView();
+                tk.Close += Tk_close;
 
                 tk.Dock = DockStyle.Fill;
-                int count = 0;
+                //int count = 0;
 
                 foreach (var item in logit_device.GetAllDevices())
                 {
@@ -1557,8 +1466,8 @@ namespace Log_It.Forms
                 bp = tk.Tanks;
 
                 int i = 0;
-                IQueryable<DAL.Device_Config> config = logit_device.GetAllDevices();
-                IOrderedQueryable<DAL.Device_Config> orderConfig = config.OrderBy(x => x.Port_No);
+                IQueryable<Device_Config> config = logit_device.GetAllDevices();
+                IOrderedQueryable<Device_Config> orderConfig = config.OrderBy(x => x.Port_No);
                 foreach (var item in orderConfig)
                 {
                     bp[i].Caption = item.Location;
@@ -1593,154 +1502,121 @@ namespace Log_It.Forms
                 if (panelControl.Controls.Count > 0)
                 {
 
-                    if (panelControl.Controls[0] is Log_It.Pages.TankView)
+                    if (panelControl.Controls[0] is TankView)
                     {
-
                     }
                     else
                     {
-                        if (panelControl.Controls[0] is Log_It.Pages.TVView)
+                        if (panelControl.Controls[0] is TVView tvView)
                         {
-                            Log_It.Pages.TVView tvView = (Log_It.Pages.TVView)panelControl.Controls[0];
                             tvView.Dispose();
                         }
 
-                        if (panelControl.Controls.Count > 0 && panelControl.Controls[0] is Log_It.Pages.AcknowledgePage)
+                        if (panelControl.Controls.Count > 0 && panelControl.Controls[0] is AcknowledgePage)
                         {
-                            Log_It.Pages.AcknowledgePage ackpage = (Log_It.Pages.AcknowledgePage)panelControl.Controls[0];
+                            AcknowledgePage ackpage = (AcknowledgePage)panelControl.Controls[0];
                             ackpage.Dispose();
                         }
-
                         panelControl.Controls.Clear();
                     }
                     if (panelControl.Controls.Count > 0)
                     {
-
-
-                        if (panelControl.Controls[0] is Log_It.Pages.TVView)
+                        if (panelControl.Controls[0] is TVView tvView)
                         {
-                            Log_It.Pages.TVView tvView = (Log_It.Pages.TVView)panelControl.Controls[0];
                             tvView.Dispose();
                         }
                     }
                     if (panelControl.Controls.Count > 0)
                     {
-                        if (panelControl.Controls[0] is Log_It.Pages.AcknowledgePage)
+                        if (panelControl.Controls[0] is AcknowledgePage ackpage)
                         {
-                            Log_It.Pages.AcknowledgePage ackpage = (Log_It.Pages.AcknowledgePage)panelControl.Controls[0];
                             ackpage.Dispose();
                         }
                     }
-
-
                     panelDeviceTask.Controls.Clear();
-
                 }
                 displayMode = PageControlEnum.TankView;
                 panelControl.Controls.Add(tk);
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
-
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             try
             {
-                tvv = Log_It.Pages.TVView.Instance(channel, logit_device, instance);
-                tvv.ClientSize = new System.Drawing.Size(this.Size.Width - 50, 1000);
-                tvv.close += tvv_close;
+                tvv = TVView.Instance(channel, logit_device, instance);
+                tvv.ClientSize = new Size(Size.Width - 50, 1000);
+                tvv.Close += Tvv_close;
                 try
                 {
                     tvc = tvv.TVs;
-
-
                     if (panelControl.Controls.Count > 0)
                     {
-                        if (panelControl.Controls[0] is Log_It.Pages.TVView)
+                        if (panelControl.Controls[0] is TVView)
                         {
 
                         }
                         else
                         {
-                            if (panelControl.Controls[0] is Log_It.Pages.TankView)
+                            if (panelControl.Controls[0] is TankView tnView)
                             {
-                                Log_It.Pages.TankView tnView = (Log_It.Pages.TankView)panelControl.Controls[0];
                                 tnView.Dispose();
                             }
                             if (panelControl.Controls.Count > 0)
                             {
-                                if (panelControl.Controls[0] is Log_It.Pages.AcknowledgePage)
+                                if (panelControl.Controls[0] is AcknowledgePage ackpage)
                                 {
-                                    Log_It.Pages.AcknowledgePage ackpage = (Log_It.Pages.AcknowledgePage)panelControl.Controls[0];
                                     ackpage.Dispose();
                                 }
                             }
-
                             panelControl.Controls.Clear();
                         }
                         if (panelControl.Controls.Count > 0)
                         {
-                            if (panelControl.Controls[0] is Log_It.Pages.TankView)
+                            if (panelControl.Controls[0] is TankView tnView)
                             {
-                                Log_It.Pages.TankView tnView = (Log_It.Pages.TankView)panelControl.Controls[0];
                                 tnView.Dispose();
                             }
                         }
                         if (panelControl.Controls.Count > 0)
                         {
-                            if (panelControl.Controls[0] is Log_It.Pages.AcknowledgePage)
+                            if (panelControl.Controls[0] is AcknowledgePage ackpage)
                             {
-                                Log_It.Pages.AcknowledgePage ackpage = (Log_It.Pages.AcknowledgePage)panelControl.Controls[0];
                                 ackpage.Dispose();
                             }
                         }
-
                       panelDeviceTask.Controls.Clear();
-
-
                     }
                     displayMode = PageControlEnum.TVView;
                     panelControl.Controls.Add(tvv);
-
                 }
                 catch (Exception m)
                 {
-
                     MessageBox.Show(m.Message);
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
-            //if (panelControl.Controls.Count >0)
-            //{
-            //    panelControl.Controls.Clear();
-            //}
-
         }
 
-        void tvv_close()
+        private void Tvv_close()
         {
             tvv = null;
         }
-          
         /// <summary>
         /// Acquisition Config Event
         /// </summary>
@@ -1759,27 +1635,27 @@ namespace Log_It.Forms
             //RunTask();
         }
 
-        private void sideNavItem4_Click(object sender, EventArgs e)
+        private void SideNavItem4_Click(object sender, EventArgs e)
         {
-            Log_It.Pages.TaskPanel.ReportTask t = new Pages.TaskPanel.ReportTask(instance);
-            t.EventDevice += t_EventDevice;
-            if (this.panelControl.Controls.Count > 0)
+            ReportTask t = new ReportTask(instance);
+            t.EventDevice += EventDevice;
+            if (panelControl.Controls.Count > 0)
             {
                 panelControl.Controls.Clear();
             }
             t.Dock = DockStyle.Fill;
-            this.panelReport.Controls.Add(t);
+            panelReport.Controls.Add(t);
         }
 
-        void t_EventDevice(DAL.Device_Config Config, DateTime SD, DateTime ED)
+        private void EventDevice(DAL.Device_Config Config, DateTime SD, DateTime ED)
         {
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-                Log_It.Pages.ReportPage Rp = new ReportPage();
+                ReportPage Rp = new ReportPage();
                 Rp.RefreshPage(instance, Config, SD, ED);
                 Rp.Dock = DockStyle.Fill;
-                if (this.panelControl.Controls.Count > 0)
+                if (panelControl.Controls.Count > 0)
                 {
                     panelControl.Controls.Clear();
                 }
@@ -1789,13 +1665,10 @@ namespace Log_It.Forms
             catch (Exception)
             {
                 Cursor.Current = Cursors.Default;
-
             }
-
-
         }
 
-        private void deviceTask_AddDevice()
+        private void DeviceTask_AddDevice()
         {
             throw new NotImplementedException();
         }
@@ -1804,41 +1677,31 @@ namespace Log_It.Forms
         {
             try
             {
-
-
                 try
                 {
                     //tvc = tvv.TVs;
-
-
 
                     AcknowledgePage ackPage = new AcknowledgePage(instance);
                     if (panelControl.Controls.Count > 0)
                     {
                         if (panelControl.Controls.Count > 0)
                         {
-                            if (panelControl.Controls[0] is Log_It.Pages.TankView)
+                            if (panelControl.Controls[0] is TankView tnView)
                             {
-                                Log_It.Pages.TankView tnView = (Log_It.Pages.TankView)panelControl.Controls[0];
                                 tnView.Dispose();
                             }
                         }
                         if (panelControl.Controls.Count > 0)
                         {
-                            if (panelControl.Controls[0] is Log_It.Pages.TVView)
+                            if (panelControl.Controls[0] is TVView ackpage)
                             {
-                                Log_It.Pages.TVView ackpage = (Log_It.Pages.TVView)panelControl.Controls[0];
                                 ackpage.Dispose();
                             }
                         }
                         panelDeviceTask.Controls.Clear();
                         panelControl.Controls.Clear();
-
-
-
                     }
                     //displayMode = PageControlEnum.TVView;
-
                     panelControl.Controls.Add(ackPage);
                     ackPage.Dock = DockStyle.Fill;
                 }
@@ -1860,7 +1723,7 @@ namespace Log_It.Forms
             }
         }
     
-        void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void SerialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             if (e.EventType == SerialData.Chars)
             {
@@ -1876,13 +1739,13 @@ namespace Log_It.Forms
                 //}
                 if (!str.Contains("\r"))
                 {
-                    this._result = this._result + str;
-                    this.LastValue = str;
+                    _result = _result + str;
+                    LastValue = str;
                 }
                 else
                 {
-                    this.LastValue = this._result;
-                    this._result = "";
+                    LastValue = _result;
+                    _result = "";
                 }
                
                 
@@ -1891,9 +1754,9 @@ namespace Log_It.Forms
 
         }
 
-        public object _object { get; set; }
+        public object Object { get; set; }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void Button1_Click_1(object sender, EventArgs e)
         {
             try
             {
@@ -1912,38 +1775,68 @@ namespace Log_It.Forms
                 {
                     panelControl.Controls.Clear();
                     panelControl.Controls.Add(Pages[6]);
-                    Log_It.Pages.ControlPage page = (Log_It.Pages.ControlPage)panelControl.Controls[0];
+                    ControlPage page = (ControlPage)panelControl.Controls[0];
                     page.RefreshPage();
                     displayMode = PageControlEnum.DeviceConfigPage;
 
                 }
 
-                Log_It.Pages.TaskPanel.DeviceTask devicetask = new Log_It.Pages.TaskPanel.DeviceTask(0, instance);
-                devicetask.ModifiedDevice += devicetask_ModifiedDevice;
-                devicetask.DeleteDevice += devicetask_DeleteDevice;                
-                devicetask.AddedDevice += devicetask_AddedDevice;
+                DeviceTask devicetask = new DeviceTask(0, instance);
+                devicetask.ModifiedDevice += Devicetask_ModifiedDevice;
+                devicetask.DeleteDevice += Devicetask_DeleteDevice;                
+                devicetask.AddedDevice += Devicetask_AddedDevice;
                 panelDeviceTask.Controls.Add(devicetask);
-
-
-
 
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
-
             }
         }
 
-        private void changePasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ChangePasswordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ChangePassword cp = new ChangePassword(this.instance, instance.UserInstance);
+            ChangePassword cp = new ChangePassword(instance, instance.UserInstance);
             cp.ShowDialog();
+        }
+
+        public bool PreFilterMessage(ref Message m)
+        {
+            // Monitor message for keyboard and mouse messages
+            bool active = m.Msg == 0x100 || m.Msg == 0x101;  // WM_KEYDOWN/UP
+            active = active || m.Msg == 0xA0 || m.Msg == 0x200;  // WM_(NC)MOUSEMOVE
+            active = active || m.Msg == 0x10;  // WM_CLOSE, in case dialog closes
+            if (active)
+            {
+                if (mTimer.Enabled)
+                    mTimer.Enabled = false;
+                mTimer.Start();
+            }
+            return false;
+        }
+
+        private void LogoutUser(object sender, EventArgs e)
+        {
+            try
+            {
+                // No activity, logout user
+                mTimer.Enabled = false;
+                Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.AutoLogout, "System Auto Logout", userIntance.Full_Name);
+                Application.Exit();
+
+            }
+            catch (Exception m)
+            {
+                var st = new StackTrace();
+                var sf = st.GetFrame(0);
+
+                var currentMethodName = sf.GetMethod();
+                Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName.Name, "System");
+            }
         }
     }
 }
@@ -1961,3 +1854,12 @@ public class DeviceList
 
     public string E_Port { get; set; }
 }
+
+
+
+
+
+
+
+
+

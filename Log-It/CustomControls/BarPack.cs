@@ -13,20 +13,20 @@ namespace Log_It.CustomControls
     /// </summary>
     /// 
     //[DebuggerNonUserCode()]
-    public class BarPack : System.Windows.Forms.UserControl
+    public class BarPack : UserControl
     {
         private float max, min, lLimit, uLimit;
         string unit = " °C";
         private RealTimeBar realTimeBarLLimit;
         private RealTimeBar realTimeBarCurrentData;
-        private System.Windows.Forms.Label lblCaption;
-        public System.Windows.Forms.PictureBox picTimeOut;
+        private Label lblCaption;
+        public PictureBox picTimeOut;
         private Label labelHi;
         private Label labelLow;
         private Timer tmrTimeOut;
         private bool alaramActive;
         public bool isRed;
-        private string tag;
+        private readonly string tag;
         private TimeSpan lastRecord;
         private Timer timer1;
         private RealTimeBar realTimeBarULimit;
@@ -36,7 +36,7 @@ namespace Log_It.CustomControls
         //public  bool isComeNormailCond = false;
         //public  DateTime dtLastScan;
 
-        private System.ComponentModel.IContainer components;
+        private IContainer components;
 
 
         public BarPack()

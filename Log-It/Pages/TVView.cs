@@ -15,88 +15,82 @@ namespace Log_It.Pages
     public partial class TVView : UserControl
     {
         public delegate void FormClose();
-        public event FormClose close;
+        public event FormClose Close;
 
-        Log_It.CustomControls.TVControl tv;
-        Logit_Device config;
+        CustomControls.TVControl tv;
+        private readonly Logit_Device config;
         private static TVView instance = null;
-        private BAL.LogitInstance Dbinstance = null;
-        private Log_It.CustomControls.TVControl[] tvs = null;
+        private readonly LogitInstance Dbinstance = null;
+        private CustomControls.TVControl[] tvs = null;
 
-        public TVView(object o, BAL.Logit_Device config, BAL.LogitInstance Dbinstance)
+        public TVView(object o, Logit_Device config, LogitInstance Dbinstance)
         {
             InitializeComponent();
             this.config = config;
             this.Dbinstance = Dbinstance;
             this.CreateTVObjects(o);
         }
-        public static TVView Instance(object o, BAL.Logit_Device config, BAL.LogitInstance Dbinstance)
+        public static TVView Instance(object o, Logit_Device config, LogitInstance Dbinstance)
         {
             if (instance == null)
                 instance = new TVView(o, config, Dbinstance);
             return instance;
         }
 
-        public Log_It.CustomControls.TVControl CreateTV(string caption)
+        public CustomControls.TVControl CreateTV(string caption)
         {
             try
             {
-
-                tv = new Log_It.CustomControls.TVControl(Dbinstance);
-                System.Windows.Forms.TabPage page = new TabPage(caption);
+                tv = new CustomControls.TVControl(Dbinstance);
+                TabPage page = new TabPage(caption);
                 page.Controls.Add(tv);
                 tab.TabPages.Add(page);
                 page.BringToFront();
                 tab.BringToFront();
-               
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
             }
             return tv;
         }
-        public Log_It.CustomControls.TVControl[] TVs
+        public CustomControls.TVControl[] TVs
         {
             get
             {
                 return this.tvs;
             }
-
         }
         private void CreateTVObjects(object o)
         {
             try
             {
-
                 LogIt[] channel = (LogIt[])o;
                 if (channel != null)
                 {
-                    tvs = new Log_It.CustomControls.TVControl[channel.Length];
+                    tvs = new CustomControls.TVControl[channel.Length];
                     for (int i = 0; i < channel.Length; i++)
                     {
                         tvs[i] = CreateTV(channel[i].Location);
                         tvs[i].logitObj = channel[i];
-                        tvs[i].Chart.Parameters = (Log_It.CustomControls.Chart.NumberSquence)Enum.Parse(typeof(Log_It.CustomControls.Chart.NumberSquence), channel[i].DeviceType);
+                        tvs[i].Chart.Parameters = (CustomControls.Chart.NumberSquence)Enum.Parse(typeof(CustomControls.Chart.NumberSquence), channel[i].DeviceType);
                         switch ( tvs[i].Chart.Parameters)
                         {
-                            case Log_It.CustomControls.Chart.NumberSquence.Temperature:
+                            case CustomControls.Chart.NumberSquence.Temperature:
                                 tvs[i].TypeChart = CustomControls.Chart.NumberSquence.Temperature;
 
                                 
                                 tvs[i].TankT.Unit = "°C";
                                 break;
-                            case Log_It.CustomControls.Chart.NumberSquence.Humidity:
+                            case CustomControls.Chart.NumberSquence.Humidity:
                                 tvs[i].TankT.Unit = "%";
                                 tvs[i].TypeChart = CustomControls.Chart.NumberSquence.Humidity;
                                 break;
-                            case Log_It.CustomControls.Chart.NumberSquence.Pressure:
+                            case CustomControls.Chart.NumberSquence.Pressure:
                                 tvs[i].TankT.Unit = "Pa";
                                 tvs[i].TypeChart = CustomControls.Chart.NumberSquence.Pressure;
                                 break;                         
@@ -111,36 +105,31 @@ namespace Log_It.Pages
                         tvs[i].TempUpperRange = (float)channel[i].Parameter[0].UpperRange;
                         tvs[i].TankT.Caption = channel[i].Location;
                         tvs[i].TankT.Tag = channel[i].Port_No.ToString();
-                     
                     }
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
             }
         }
 
-        private System.Windows.Forms.TabControl.TabPageCollection TabPages
+        private TabControl.TabPageCollection TabPages
         {
             get
             {
-                return this.tab.TabPages;
+                return tab.TabPages;
             }
-
         }
 
         public void RealTimeData(LogIt logItObject)
         {
             try
             {
-
                 for (int i = 0; i < tvs.Length; i++)
                 {
                     if (logItObject.Port_No == tvs[i].logitObj.Port_No)
@@ -148,18 +137,15 @@ namespace Log_It.Pages
                         tvs[i].RealTimeData(logItObject);
                         Console.WriteLine(i);
                     }
-
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
             }
         }
 
@@ -172,29 +158,18 @@ namespace Log_It.Pages
         {
             try
             {
-
                 instance = null;
                 tv = null;
-
-                if (close != null)
-                {
-
-                    close();
-
-                }
+                Close?.Invoke();
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
             }
         }
-
-
     }
 }

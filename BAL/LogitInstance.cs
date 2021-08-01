@@ -27,8 +27,8 @@ namespace BAL
         {
 
             DataLink = new PlotterDataContext();
-            string s = DataLink.Connection.ConnectionString;
-            
+            _ = DataLink.Connection.ConnectionString;
+
         }
 
         public LogitInstance(string connectionstringDb)
@@ -37,7 +37,7 @@ namespace BAL
             //string str = "Data Source=IT-PC\\SQLEXPRESS;Initial Catalog=Plotter;Persist Security Info=True;User ID=sa;Password=reloaded";
             string str = connectionstringDb;
             DataLink.Connection.ConnectionString = str;
-            string s = DataLink.Connection.ConnectionString;
+            _ = DataLink.Connection.ConnectionString;
             this.ConntectionLink = str;
         }
 

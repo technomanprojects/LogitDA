@@ -33,6 +33,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBoxNetwork = new System.Windows.Forms.ComboBox();
+            this.deptComboBox1 = new Log_It.CustomControls.DeptComboBox(this.components);
             this.comboBoxPort = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBoxDeviceUL = new System.Windows.Forms.TextBox();
@@ -59,12 +61,10 @@
             this.textBoxLocation = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.textBoxChannelID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.deptComboBox1 = new Log_It.CustomControls.DeptComboBox(this.components);
-            this.comboBoxNetwork = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBoxTemp.SuspendLayout();
@@ -79,7 +79,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Cancel";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // button2
             // 
@@ -89,7 +89,7 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "Ok";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // groupBox1
             // 
@@ -119,6 +119,25 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Detail";
+            // 
+            // comboBoxNetwork
+            // 
+            this.comboBoxNetwork.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxNetwork.FormattingEnabled = true;
+            this.comboBoxNetwork.Location = new System.Drawing.Point(99, 16);
+            this.comboBoxNetwork.Name = "comboBoxNetwork";
+            this.comboBoxNetwork.Size = new System.Drawing.Size(324, 21);
+            this.comboBoxNetwork.TabIndex = 34;
+            // 
+            // deptComboBox1
+            // 
+            this.deptComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.deptComboBox1.FormattingEnabled = true;
+            this.deptComboBox1.Location = new System.Drawing.Point(99, 42);
+            this.deptComboBox1.Name = "deptComboBox1";
+            this.deptComboBox1.SelectedEntity = null;
+            this.deptComboBox1.Size = new System.Drawing.Size(324, 21);
+            this.deptComboBox1.TabIndex = 33;
             // 
             // comboBoxPort
             // 
@@ -249,7 +268,7 @@
             this.textBoxTUR.Size = new System.Drawing.Size(56, 20);
             this.textBoxTUR.TabIndex = 3;
             this.textBoxTUR.Text = "100";
-            this.textBoxTUR.TextChanged += new System.EventHandler(this.textBoxTLL_TextChanged);
+            this.textBoxTUR.TextChanged += new System.EventHandler(this.TextBoxTLL_TextChanged);
             // 
             // label10
             // 
@@ -267,7 +286,7 @@
             this.textBoxTLR.Size = new System.Drawing.Size(56, 20);
             this.textBoxTLR.TabIndex = 1;
             this.textBoxTLR.Text = "0";
-            this.textBoxTLR.TextChanged += new System.EventHandler(this.textBoxTLL_TextChanged);
+            this.textBoxTLR.TextChanged += new System.EventHandler(this.TextBoxTLL_TextChanged);
             // 
             // label9
             // 
@@ -285,7 +304,7 @@
             this.textBoxTUL.Size = new System.Drawing.Size(56, 20);
             this.textBoxTUL.TabIndex = 2;
             this.textBoxTUL.Text = "100";
-            this.textBoxTUL.TextChanged += new System.EventHandler(this.textBoxTLL_TextChanged);
+            this.textBoxTUL.TextChanged += new System.EventHandler(this.TextBoxTLL_TextChanged);
             // 
             // label8
             // 
@@ -303,7 +322,7 @@
             this.textBoxTLL.Size = new System.Drawing.Size(56, 20);
             this.textBoxTLL.TabIndex = 0;
             this.textBoxTLL.Text = "0";
-            this.textBoxTLL.TextChanged += new System.EventHandler(this.textBoxTLL_TextChanged);
+            this.textBoxTLL.TextChanged += new System.EventHandler(this.TextBoxTLL_TextChanged);
             // 
             // label7
             // 
@@ -385,6 +404,15 @@
             this.label2.TabIndex = 22;
             this.label2.Text = "Port ID:";
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(12, 45);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(65, 13);
+            this.label13.TabIndex = 20;
+            this.label13.Text = "Department:";
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -401,7 +429,7 @@
             this.textBoxChannelID.Size = new System.Drawing.Size(324, 20);
             this.textBoxChannelID.TabIndex = 0;
             this.textBoxChannelID.Text = "1";
-            this.textBoxChannelID.TextChanged += new System.EventHandler(this.textBoxTLL_TextChanged);
+            this.textBoxChannelID.TextChanged += new System.EventHandler(this.TextBoxTLL_TextChanged);
             // 
             // label1
             // 
@@ -411,34 +439,6 @@
             this.label1.Size = new System.Drawing.Size(63, 13);
             this.label1.TabIndex = 20;
             this.label1.Text = "Channel ID:";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(11, 42);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(65, 13);
-            this.label13.TabIndex = 20;
-            this.label13.Text = "Department:";
-            // 
-            // deptComboBox1
-            // 
-            this.deptComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.deptComboBox1.FormattingEnabled = true;
-            this.deptComboBox1.Location = new System.Drawing.Point(99, 42);
-            this.deptComboBox1.Name = "deptComboBox1";
-            this.deptComboBox1.SelectedEntity = null;
-            this.deptComboBox1.Size = new System.Drawing.Size(324, 21);
-            this.deptComboBox1.TabIndex = 33;
-            // 
-            // comboBoxNetwork
-            // 
-            this.comboBoxNetwork.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxNetwork.FormattingEnabled = true;
-            this.comboBoxNetwork.Location = new System.Drawing.Point(99, 16);
-            this.comboBoxNetwork.Name = "comboBoxNetwork";
-            this.comboBoxNetwork.Size = new System.Drawing.Size(324, 21);
-            this.comboBoxNetwork.TabIndex = 34;
             // 
             // AcquisitionAddForm
             // 

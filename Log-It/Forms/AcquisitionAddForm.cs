@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BAL;
+using DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,13 +15,14 @@ namespace Log_It.Forms
 {
     public partial class AcquisitionAddForm : Form
     {
-        public delegate void FormClose();
-        public event FormClose close;
-        BAL.LogitInstance Instance;
-        bool isNew;
-        Guid Id;
+       // public delegate void FormClose();
+        //public event FormClose Close;
 
-        public AcquisitionAddForm(Guid Id, BAL.LogitInstance Instance, bool isNew)
+        private readonly LogitInstance Instance;
+        private readonly bool isNew;
+        private Guid Id;
+
+        public AcquisitionAddForm(Guid Id, LogitInstance Instance, bool isNew)
         {
             this.Instance = Instance;
             this.isNew = isNew;
@@ -30,8 +33,8 @@ namespace Log_It.Forms
             comboBoxNetwork.Items.Clear();
             comboBoxNetwork.Items.Add(Instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1).Port1);
             comboBoxNetwork.Items.Add(Instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1).Port2);
-            DAL.Device_Config config = Instance.Device_Configes.SingleOrDefault(x => x.ID == Id && x.Active == true && x.IsRowActive == true);
-            List<DAL.Department> dlist = Instance.DataLink.Departments.ToList();
+            Device_Config config = Instance.Device_Configes.SingleOrDefault(x => x.ID == Id && x.Active == true && x.IsRowActive == true);
+            List<Department> dlist = Instance.DataLink.Departments.ToList();
 
             foreach (var item in dlist)
             {
@@ -42,8 +45,10 @@ namespace Log_It.Forms
                 //checkBoxAlaram.Checked = (bool)config.Alaram;
 
                 comboBoxNetwork.Text = config.E_Port;
-                comboBoxPort.Text = config.Channel_id;
+                comboBoxPort.Text = config.Port_No.ToString();
+                comboBoxPort.Enabled = false;
                 textBoxChannelID.Text = config.Channel_id.ToString();
+                textBoxChannelID.ReadOnly = true;
                 textBoxInstrument.Text = config.Instrument;
                 numericInterval.Value = Convert.ToDecimal(config.Interval);
                 config.IsRowActive = true;
@@ -93,11 +98,11 @@ namespace Log_It.Forms
                     MessageBox.Show("Please select correct type");
                     return false;
                 }
-                if (Instance.DataLink.Device_Configs.FirstOrDefault(x => x.Active == true && x.Channel_id == textBoxChannelID.Text && x.Port_No == Convert.ToInt32( comboBoxPort.Text)) != null)
-                {
-                    MessageBox.Show("Channel and Port already configured.");
-                    return false;
-                }
+                //if (Instance.DataLink.Device_Configs.FirstOrDefault(x => x.Active == true && x.Channel_id == textBoxChannelID.Text && x.Port_No == Convert.ToInt32(comboBoxPort.Text)) != null)
+                //{
+                //    MessageBox.Show("Channel and Port already configured.");
+                //    return false;
+                //}
 
             }
             catch (Exception m)
@@ -114,7 +119,7 @@ namespace Log_It.Forms
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             try
             {
@@ -125,7 +130,7 @@ namespace Log_It.Forms
                 if (isNew)
                 {
 
-                    DAL.Device_Config config = new DAL.Device_Config();
+                    Device_Config config = new Device_Config();
                     config.ID = Guid.NewGuid();
                     config.Active = true;
                     config.E_Port = comboBoxNetwork.Text;
@@ -156,22 +161,32 @@ namespace Log_It.Forms
 
                     Instance.DataLink.SubmitChanges();
                     Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modfiy, "Add new Device by" + Instance.UserInstance.Full_Name, Instance.UserInstance.Full_Name);
-                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                    this.DialogResult = DialogResult.OK;
 
                     MessageBox.Show("Device has been saved");
                     this.Close();
                 }
                 else
                 {
-                    DAL.Device_Config config = Instance.Device_Configes.SingleOrDefault(x => x.ID == Id);
+                    Device_Config config = Instance.Device_Configes.SingleOrDefault(x => x.ID == Id);
                     config.Active = true;
-                    
-                    config.Channel_id = comboBoxPort.Text;
+
+                    //if (config.Port_No != Convert.ToInt32(comboBoxPort.Text))
+                    //{
+                    //    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties of Signature: from " + config.Port_No + " to " + Convert.ToInt32(comboBoxPort.Text), Instance.UserInstance.Full_Name);
+                    //    config.Port_No = Convert.ToInt32(comboBoxPort.Text);
+                    //}
+
+
                     config.E_Port = comboBoxNetwork.Text;
                     config.CreateDateTime = DateTime.Now;
                     config.CreatedBy = Instance.UserInstance.Full_Name;
-                    config.Channel_id = textBoxChannelID.Text;
-                    config.Instrument = textBoxInstrument.Text;
+                    //config.Channel_id = textBoxChannelID.Text;
+                    if(config.Instrument != textBoxInstrument.Text)
+                    {
+                        Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties of Signature: from " + config.Port_No + " to " + textBoxInstrument.Text, Instance.UserInstance.Full_Name);
+                        config.Instrument = textBoxInstrument.Text;
+                    }
                     config.Interval = Convert.ToInt32(numericInterval.Value);
                     config.IsRowActive = true;
                     config.Location = textBoxLocation.Text;
@@ -188,25 +203,22 @@ namespace Log_It.Forms
                     config.Alarm = checkBoxAlaram.Checked;
                     Instance.DataLink.SubmitChanges();
                     Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modfiy, "Modifed Device by " + Instance.UserInstance.Full_Name, Instance.UserInstance.Full_Name);
-                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                    this.DialogResult = DialogResult.OK;
                     MessageBox.Show("Device has been saved");
                     this.Close();
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
             }
-            
         }
 
-        private void textBoxTLL_TextChanged(object sender, EventArgs e)
+        private void TextBoxTLL_TextChanged(object sender, EventArgs e)
         {
             TextBox t = (TextBox)sender;
             if (System.Text.RegularExpressions.Regex.IsMatch(t.Text, "[^0-9]"))
@@ -216,14 +228,11 @@ namespace Log_It.Forms
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
-            if (close != null)
-            {
-                close();
-            }
+            //Close?.Invoke();
         }       
     }
 }

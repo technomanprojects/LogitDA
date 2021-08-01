@@ -1,27 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using BAL;
+using System.Data.SqlClient;
 
 namespace Log_It.Pages
 {
     public partial class DBMaintenance : ControlPage
     {
-
         public delegate void PowerStatusChanged();
         public event PowerStatusChanged CreatedbBackupManually;
-        BAL.LogitInstance instance;
+        private readonly LogitInstance instance;
 
-        public DBMaintenance(BAL.LogitInstance instance)
+        public DBMaintenance(LogitInstance instance)
         {
             InitializeComponent();
             this.instance = instance;
@@ -41,7 +35,6 @@ namespace Log_It.Pages
                     {
                         labelDBName.Text = reader["database_name"].ToString();
                         labelFileSize.Text = reader["database_size"].ToString();
-
                     }
                 }
                 Conn.Close();
@@ -53,31 +46,26 @@ namespace Log_It.Pages
                     while (r.Read())
                     {
                         labelServerType.Text = r["Server Name"].ToString();
-
-
                     }
                 }
                 Conn.Close();
             }
             catch (Exception m)
             {
-
                 MessageBox.Show(m.Message);
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
-            if (CreatedbBackupManually != null)
-            {
-                CreatedbBackupManually();
-            }
+            CreatedbBackupManually?.Invoke();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             try
             {
+                string mess = string.Empty;
                 FolderBrowserDialog fb = new FolderBrowserDialog();
                 if (fb.ShowDialog() == DialogResult.OK)
                 {
@@ -95,18 +83,51 @@ namespace Log_It.Pages
 
                     directorySecurity.AddAccessRule(fileSystemRule);
                     directoryInfo.SetAccessControl(directorySecurity);
+                    if (instance.SystemProperties.backuplocation != files + @"\")
+                    {
+                        mess = instance.SystemProperties.backuplocation + " to " + files + @"\";
+                    }
                     instance.SystemProperties.backuplocation = files + @"\";
                     label7.Text = instance.SystemProperties.backuplocation;
                     instance.DataLink.SubmitChanges();
+                    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Databaase Location " + mess.ToString() + " has updated successfully.", instance.UserInstance.Full_Name);
+
                 }
             }
             catch (Exception m)
             {
-
                 MessageBox.Show(m.Message);
             }
+        }
 
-
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OpenFileDialog fb = new OpenFileDialog())
+                {
+                    fb.Title = "Select Database File";
+                    fb.Filter = "Bak files (*.bak)|*.bak|All files (*.*)|*.*";
+                    fb.DefaultExt = "bak";
+                    if (fb.ShowDialog() == DialogResult.OK)
+                    {
+                        string filepath = fb.FileName;
+                        string filename = Path.GetFileNameWithoutExtension(filepath);
+                        string query = "IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'" + filename + "') DROP DATABASE " + filename + " RESTORE DATABASE " + filename + " FROM DISK = '" + fb.FileName + "'";
+                        SqlConnection Conn = new SqlConnection(instance.DataLink.Connection.ConnectionString);
+                        SqlCommand testCMD = new SqlCommand(query, Conn);
+                        Conn.Open();
+                        testCMD.ExecuteNonQuery();
+                        Conn.Close();
+                        MessageBox.Show("Databaase restore successfully.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Databaase restore successfully.", instance.UserInstance.Full_Name);
+                    }
+                }
+            }
+            catch (Exception m)
+            {
+                MessageBox.Show(m.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -69,7 +69,7 @@
             this.acknowladgeToolStripMenuItem.Name = "acknowladgeToolStripMenuItem";
             this.acknowladgeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.acknowladgeToolStripMenuItem.Text = "Acknowladge";
-            this.acknowladgeToolStripMenuItem.Click += new System.EventHandler(this.acknowladgeToolStripMenuItem_Click);
+            this.acknowladgeToolStripMenuItem.Click += new System.EventHandler(this.AcknowladgeToolStripMenuItem_Click);
             // 
             // panel2
             // 

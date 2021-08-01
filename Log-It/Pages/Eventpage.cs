@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BAL;
 
 namespace Log_It.Pages
 {
     public partial class Eventpage : ControlPage
     {
-        BAL.LogitInstance instance;
-        public Eventpage(BAL.LogitInstance instance )
+        private readonly LogitInstance instance;
+        public Eventpage(LogitInstance instance )
         {
             InitializeComponent();
             this.instance = instance;
@@ -39,22 +40,18 @@ namespace Log_It.Pages
                 dataGridView1.Refresh();
 
                 this.dataGridView1.Sort(this.dataGridView1.Columns[1], ListSortDirection.Descending);
-
             }
         }
       
 
-        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             Bitmap bm = new Bitmap(this.dataGridView1.Width, this.dataGridView1.Height);
             dataGridView1.DrawToBitmap(bm, new Rectangle(0, 0, this.dataGridView1.Width, this.dataGridView1.Height));
             e.Graphics.DrawImage(bm, 0, 0);
         }
 
-        public void PrintDoc()
-        {
-            printDocument1.Print();
-        }
+        public void PrintDoc() => printDocument1.Print();
 
         private void button1_Click(object sender, EventArgs e)
         {

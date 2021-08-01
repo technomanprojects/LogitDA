@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using BAL;
 
 namespace Log_It.Pages
 {
@@ -15,10 +16,10 @@ namespace Log_It.Pages
     {
         public delegate void SetID(int id);
         public event SetID IDSet;
-        int width;
-        BAL.LogitInstance instance;
 
-        public DeptPage(BAL.LogitInstance instance)
+        private readonly LogitInstance instance;
+
+        public DeptPage(LogitInstance instance)
         {
             InitializeComponent();
             this.instance = instance;
@@ -35,32 +36,24 @@ namespace Log_It.Pages
                 dataGridView1.DataSource = bindingSource1;
                 dataGridView1.Columns[0].Visible = false;
                 dataGridView1.Refresh();
-
-                this.dataGridView1.Sort(this.dataGridView1.Columns[1], ListSortDirection.Descending);
-
+                dataGridView1.Sort(this.dataGridView1.Columns[1], ListSortDirection.Descending);
             }
         }
 
-        private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                if (IDSet != null)
-                {
-                    IDSet((int)dataGridView1.Rows[e.RowIndex].Cells[0].Value);
-                }
+                IDSet?.Invoke((int)dataGridView1.Rows[e.RowIndex].Cells[0].Value);
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
-            }
-           
+            }         
         }
     }
 }

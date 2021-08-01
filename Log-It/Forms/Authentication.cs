@@ -15,11 +15,10 @@ namespace Log_It.Forms
 {
     public partial class Authentication : BaseForm
     {
-
-        BAL.LogitInstance Instance;
-        BAL.Authentication aut;
-        public DAL.User UserInstance { get; set; }
-        public Authentication(BAL.LogitInstance instance )
+        private readonly LogitInstance Instance;
+        private readonly BAL.Authentication aut;
+        public User UserInstance { get; set; }
+        public Authentication(LogitInstance instance )
         {
             this.Instance = instance;
             InitializeComponent();
@@ -41,7 +40,7 @@ namespace Log_It.Forms
             return true;
         }
 
-        private void buttonlogin_Click(object sender, EventArgs e)
+        private void Buttonlogin_Click(object sender, EventArgs e)
         {
             if (!FormValidation())
             {
@@ -50,7 +49,7 @@ namespace Log_It.Forms
             if ( aut.IsUserValid(textBoxUsername.Text.ToLower(),textBoxpassword.Text))
             {
                 UserInstance = aut.GetUser;
-                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else
@@ -60,10 +59,15 @@ namespace Log_It.Forms
             }
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void Authentication_Load(object sender, EventArgs e)
+        {
+            textBoxUsername.Focus();
         }
     }
 }

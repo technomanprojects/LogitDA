@@ -1528,7 +1528,7 @@ namespace Log_It.CustomControls
                     this.hsChart.Value = 0;
                 }
             }
-            catch (Exception m)
+            catch (Exception)
             {
                 
                 throw;

@@ -15,13 +15,13 @@ namespace Log_It.Pages
     {
         public delegate void SetID(int id);
         public event SetID IDSet;
-        int width;
-        BAL.LogitInstance instance;
+        readonly int width;
+        readonly BAL.LogitInstance instance;
         public UserPage(BAL.LogitInstance instance)
         {
             InitializeComponent();
-             width = dataGridView2.Width / 4;
-          this.instance = instance;
+            width = dataGridView2.Width / 4;
+            this.instance = instance;
             Refresh();
         }
 
@@ -36,8 +36,6 @@ namespace Log_It.Pages
                     bindingSource1.DataSource = instance.DataLink.Users.Where(x => x.Active == true && x.IsRowEnable == true && x.Role != 0);
                     bindingSource1.Sort = "Id ASC";
                     dataGridView2.DataSource = bindingSource1;
-
-
 
                     dataGridView2.Columns[1].Width = width;
                     dataGridView2.Columns[10].Width = width;
@@ -63,53 +61,38 @@ namespace Log_It.Pages
 
                 }
             }
-            catch (Exception)
+            catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
-                //Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
+                Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
             }
-
         }
    
-       
-
         public class Use
         {
             public string Full_Name;
             public string Description;
             public string UserID;
             public string Authority;
-
-
-
         }
 
-        private void dataGridView2_RowEnter(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView2_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                if (IDSet != null)
-                {
-                    IDSet((int)dataGridView2.Rows[e.RowIndex].Cells[0].Value);
-                }
+                IDSet?.Invoke((int)dataGridView2.Rows[e.RowIndex].Cells[0].Value);
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
-            }
-           
-            
+            }                
         }
     }
 }

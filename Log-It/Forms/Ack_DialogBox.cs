@@ -12,7 +12,7 @@ namespace Log_It.Forms
 {
     public partial class Ack_DialogBox : Form
     {
-        public string comments { get; set; }
+        public string Comments { get; set; }
         public Guid ID { get; set; }
         public Ack_DialogBox(Guid id, string type, DateTime dt, string description, string location, string instrument)
         {
@@ -24,7 +24,7 @@ namespace Log_It.Forms
             labelDescription.Text = description;
             ID = id;
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             if (textBoxcomments.Text == string.Empty || textBoxcomments.Text == "")
             {
@@ -32,8 +32,8 @@ namespace Log_It.Forms
             }
             else
             {
-                comments = textBoxcomments.Text;
-                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                Comments = textBoxcomments.Text;
+                this.DialogResult = DialogResult.OK;
             }
 
         }

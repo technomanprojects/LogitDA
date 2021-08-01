@@ -15,14 +15,12 @@ namespace Log_It.Pages
     {
         public delegate void IndexPage(int i);
         public event IndexPage PageIndex;
-
-
         public HomePage()
         {
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             try
             {
@@ -34,15 +32,12 @@ namespace Log_It.Pages
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
             }
-            
         }
     }
 }

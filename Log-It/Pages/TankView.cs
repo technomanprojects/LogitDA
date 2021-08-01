@@ -13,10 +13,8 @@ namespace Log_It.Pages
 {
     public partial class TankView : UserControl
     {
-
-
         public delegate void FormClose();
-        public event FormClose close;
+        public event FormClose Close;
 
         private bool tanksCreated = false;
         private CustomControls.BarPack[] tanks = null;
@@ -48,15 +46,19 @@ namespace Log_It.Pages
                 CustomControls.BarPack tank;
                 for (int i = 0; i < noOfLines; i++)
                 {
-                    p = new Panel();
-                    p.Height = 250;
-                    p.Dock = DockStyle.Top;
+                    p = new Panel
+                    {
+                        Height = 250,
+                        Dock = DockStyle.Top
+                    };
                     panels[i] = p;
                     for (int j = 0; j < PerLineControls; j++)
                     {
-                        tank = new CustomControls.BarPack();
-                        tank.Dock = DockStyle.Left;
-                        p.Controls.Add(tank);
+                        tank = new CustomControls.BarPack
+                        {
+                            Dock = DockStyle.Left
+                        };
+                        Controls.Add(tank);
                         tanks[index] = tank;
                         index++;
                         if (index >= n) break;
@@ -64,24 +66,22 @@ namespace Log_It.Pages
                     }
                 }
                 for (int i = noOfLines - 1; i >= 0; i--)
-                    this.panelDisplay.Controls.Add(panels[i]);
+                    Controls.Add(panels[i]);
                 this.tanksCreated = true;
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
             }
         }
 
         public void ApplyFont(Font f)
         {
-            foreach (System.Windows.Forms.Control c in this.tanks)
+            foreach (Control c in this.tanks)
                 c.Font = f;
 
         }
@@ -92,7 +92,6 @@ namespace Log_It.Pages
             {
                 return this.tanks;
             }
-
         }
 
         private void TankView_Load(object sender, EventArgs e)
@@ -102,12 +101,8 @@ namespace Log_It.Pages
 
         private void TankView_VisibleChanged(object sender, EventArgs e)
         {
-            if (close != null)
-            {
 
-                close();
-
-            }
+            Close?.Invoke();
         }
     }
 }

@@ -56,8 +56,8 @@
             this.checkBoxActive = new System.Windows.Forms.CheckBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
-            this.deptComboBox1 = new Log_It.CustomControls.DeptComboBox(this.components);
             this.roleComboBox1 = new Log_It.CustomControls.RoleComboBox(this.components);
+            this.deptComboBox1 = new Log_It.CustomControls.DeptComboBox(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -89,6 +89,7 @@
             this.checkBoxSMS.TabIndex = 2;
             this.checkBoxSMS.Text = "SMS Notification";
             this.checkBoxSMS.UseVisualStyleBackColor = true;
+            this.checkBoxSMS.CheckedChanged += new System.EventHandler(this.checkBoxSMS_CheckedChanged);
             // 
             // checkBoxEmail
             // 
@@ -100,14 +101,17 @@
             this.checkBoxEmail.TabIndex = 0;
             this.checkBoxEmail.Text = "Email Notification";
             this.checkBoxEmail.UseVisualStyleBackColor = true;
+            this.checkBoxEmail.CheckedChanged += new System.EventHandler(this.checkBoxEmail_CheckedChanged);
             // 
             // txtPhone
             // 
             this.txtPhone.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.txtPhone.Location = new System.Drawing.Point(131, 103);
+            this.txtPhone.MaxLength = 11;
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(228, 20);
             this.txtPhone.TabIndex = 3;
+            this.txtPhone.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPhone_KeyPress);
             // 
             // textBoxEmail
             // 
@@ -116,6 +120,7 @@
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.Size = new System.Drawing.Size(228, 20);
             this.textBoxEmail.TabIndex = 1;
+            this.textBoxEmail.Validated += new System.EventHandler(this.textBoxEmail_Validated);
             // 
             // label7
             // 
@@ -156,7 +161,7 @@
             this.groupBox1.Controls.Add(this.textBoxSignature);
             this.groupBox1.Controls.Add(this.textBoxexpires);
             this.groupBox1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 0);
+            this.groupBox1.Location = new System.Drawing.Point(12, 11);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(376, 233);
             this.groupBox1.TabIndex = 21;
@@ -206,7 +211,7 @@
             // textBoxUserName
             // 
             this.textBoxUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxUserName.Location = new System.Drawing.Point(131, 95);
+            this.textBoxUserName.Location = new System.Drawing.Point(131, 101);
             this.textBoxUserName.Name = "textBoxUserName";
             this.textBoxUserName.Size = new System.Drawing.Size(228, 20);
             this.textBoxUserName.TabIndex = 3;
@@ -226,6 +231,7 @@
             this.textBoxFullName.Name = "textBoxFullName";
             this.textBoxFullName.Size = new System.Drawing.Size(228, 20);
             this.textBoxFullName.TabIndex = 0;
+            this.textBoxFullName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxFullName_KeyPress);
             // 
             // label9
             // 
@@ -270,7 +276,7 @@
             // textBoxPassword
             // 
             this.textBoxPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxPassword.Location = new System.Drawing.Point(131, 122);
+            this.textBoxPassword.Location = new System.Drawing.Point(131, 125);
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.PasswordChar = '*';
             this.textBoxPassword.Size = new System.Drawing.Size(228, 20);
@@ -279,7 +285,7 @@
             // textBoxSignature
             // 
             this.textBoxSignature.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxSignature.Location = new System.Drawing.Point(131, 148);
+            this.textBoxSignature.Location = new System.Drawing.Point(131, 149);
             this.textBoxSignature.Name = "textBoxSignature";
             this.textBoxSignature.Size = new System.Drawing.Size(228, 20);
             this.textBoxSignature.TabIndex = 5;
@@ -287,10 +293,11 @@
             // textBoxexpires
             // 
             this.textBoxexpires.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.textBoxexpires.Location = new System.Drawing.Point(131, 202);
+            this.textBoxexpires.Location = new System.Drawing.Point(131, 201);
             this.textBoxexpires.Name = "textBoxexpires";
             this.textBoxexpires.Size = new System.Drawing.Size(228, 20);
             this.textBoxexpires.TabIndex = 7;
+            this.textBoxexpires.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxexpires_KeyPress);
             // 
             // checkBoxActive
             // 
@@ -313,7 +320,7 @@
             this.buttonCancel.TabIndex = 24;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            this.buttonCancel.Click += new System.EventHandler(this.ButtonCancel_Click);
             // 
             // buttonOk
             // 
@@ -325,31 +332,33 @@
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
-            // deptComboBox1
-            // 
-            this.deptComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.deptComboBox1.FormattingEnabled = true;
-            this.deptComboBox1.Location = new System.Drawing.Point(131, 70);
-            this.deptComboBox1.Name = "deptComboBox1";
-            this.deptComboBox1.SelectedEntity = null;
-            this.deptComboBox1.Size = new System.Drawing.Size(228, 24);
-            this.deptComboBox1.TabIndex = 19;
-            // 
             // roleComboBox1
             // 
             this.roleComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.roleComboBox1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.roleComboBox1.FormattingEnabled = true;
-            this.roleComboBox1.Location = new System.Drawing.Point(131, 174);
+            this.roleComboBox1.Location = new System.Drawing.Point(131, 173);
             this.roleComboBox1.Name = "roleComboBox1";
             this.roleComboBox1.SelectedEntity = null;
             this.roleComboBox1.Size = new System.Drawing.Size(228, 24);
             this.roleComboBox1.TabIndex = 20;
             // 
+            // deptComboBox1
+            // 
+            this.deptComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.deptComboBox1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.deptComboBox1.FormattingEnabled = true;
+            this.deptComboBox1.Location = new System.Drawing.Point(131, 73);
+            this.deptComboBox1.Name = "deptComboBox1";
+            this.deptComboBox1.SelectedEntity = null;
+            this.deptComboBox1.Size = new System.Drawing.Size(228, 24);
+            this.deptComboBox1.TabIndex = 19;
+            // 
             // UserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(406, 458);
+            this.ClientSize = new System.Drawing.Size(406, 437);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.checkBoxActive);
@@ -362,6 +371,7 @@
             this.Name = "UserForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "User Setup";
+            this.Load += new System.EventHandler(this.UserForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();

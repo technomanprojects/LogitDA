@@ -717,7 +717,7 @@
             this.chart1.Size = new System.Drawing.Size(801, 513);
             this.chart1.TabIndex = 1;
             this.chart1.Text = "chart1";
-            this.chart1.GetToolTipText += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ToolTipEventArgs>(this.chart1_GetToolTipText);
+            this.chart1.GetToolTipText += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ToolTipEventArgs>(this.Chart1_GetToolTipText);
             // 
             // panel1
             // 
@@ -737,7 +737,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Print";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // tabPage3
             // 
@@ -760,7 +760,7 @@
             this.button2.TabIndex = 3;
             this.button2.Text = "Export";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_2);
+            this.button2.Click += new System.EventHandler(this.Button2_Click_2);
             // 
             // reportViewer1
             // 
@@ -849,7 +849,7 @@
             // pDoc
             // 
             this.pDoc.DocumentName = "ChartReport";
-            this.pDoc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.pDoc_PrintPage);
+            this.pDoc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.PDoc_PrintPage);
             // 
             // ReportPage
             // 

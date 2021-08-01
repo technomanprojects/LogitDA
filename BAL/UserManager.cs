@@ -10,7 +10,7 @@ namespace BAL
 
     public class UserManager
     {
-        LogitInstance _instance;
+        private LogitInstance _instance;
         public UserManager(LogitInstance instance)
         {
 

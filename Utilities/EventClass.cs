@@ -23,7 +23,8 @@ namespace Technoman.Utilities
         Alarm,
         System,
         Modify,
-        Information
+        Information,
+        AutoLogout
     }
 
     public static  class EventClass
@@ -35,8 +36,10 @@ namespace Technoman.Utilities
         {
             SqlConnection Conn = new SqlConnection(connectionstring);
             Message = Message.Replace("'", "!");
-            SqlCommand cmd = new SqlCommand("INSERT INTO Eventlog (ID, DateTime,UserName, EventName, MessageLog) VALUES ('" + Guid.NewGuid() + "','" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "','" + username + "','" + log.ToString() + "','" + Message + "')", Conn);
-            cmd.CommandType = CommandType.Text;
+            SqlCommand cmd = new SqlCommand("INSERT INTO Eventlog (ID, DateTime,UserName, EventName, MessageLog) VALUES ('" + Guid.NewGuid() + "','" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "','" + username + "','" + log.ToString() + "','" + Message + "')", Conn)
+            {
+                CommandType = CommandType.Text
+            };
             Conn.Open();
             cmd.ExecuteNonQuery();
             Conn.Close();

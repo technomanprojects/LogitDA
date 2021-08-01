@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BAL;
+using DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,10 +16,10 @@ namespace Log_It.Forms
 {
     public partial class ChangePassword : Form
     {
-        BAL.LogitInstance instance;
-        DAL.User user;
+        private readonly LogitInstance instance;
+        private readonly User user;
 
-        public ChangePassword(BAL.LogitInstance instance, DAL.User user)
+        public ChangePassword(LogitInstance instance, User user)
         {
             InitializeComponent();
             this.instance = instance;
@@ -33,13 +35,13 @@ namespace Log_It.Forms
             else return false;
         }
 
-        private void buttoncancel_Click(object sender, EventArgs e)
+        private void Buttoncancel_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 
-        private void buttonOk_Click(object sender, EventArgs e)
+        private void ButtonOk_Click(object sender, EventArgs e)
         {
             try
             {
@@ -75,15 +77,14 @@ namespace Log_It.Forms
                 int i = instance.RefresUsers;
                 Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Change Properties ", instance.UserInstance.Full_Name);
                 MessageBox.Show("Your password has been changed");
-                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception)
             {
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
-
-                var currentMethodName = sf.GetMethod();
+                _ = sf.GetMethod();
                 //Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
             }
         }

@@ -24,9 +24,9 @@ namespace Log_It.Pages.TaskPanel
 
         public delegate void DeviceDelete();
         public event DeviceDelete DeleteDevice;
-        int user;
-        BAL.LogitInstance instance;
-        bool isNew;
+
+        private readonly int user;
+        private readonly BAL.LogitInstance instance;
 
         public DeviceTask(int id, BAL.LogitInstance instance)
         {
@@ -35,42 +35,23 @@ namespace Log_It.Pages.TaskPanel
             InitializeComponent();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
-            if (ModifiedDevice != null)
-            {
-                ModifiedDevice();
-            }
+            ModifiedDevice?.Invoke();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
-            if (DeleteDevice != null)
-            {
-                DeleteDevice();
-            }
+            DeleteDevice?.Invoke();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
-           
-            Log_It.Forms.AcquisitionAddForm form = new Forms.AcquisitionAddForm(Guid.NewGuid(), instance, true);
+            Forms.AcquisitionAddForm form = new Forms.AcquisitionAddForm(Guid.NewGuid(), instance, true);
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-
-                if (AddedDevice != null)
-                {
-                    AddedDevice();
-                }
-            }
-        }
-
-        void form_close()
-        {
-            if (AddedDevice != null)
-            {
-                AddedDevice();
+                AddedDevice?.Invoke();
             }
         }
     }

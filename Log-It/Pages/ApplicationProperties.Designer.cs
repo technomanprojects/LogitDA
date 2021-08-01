@@ -226,6 +226,7 @@
             // 
             // comboBoxUnit
             // 
+            this.comboBoxUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxUnit.FormattingEnabled = true;
             this.comboBoxUnit.Items.AddRange(new object[] {
             "Celsius",
@@ -235,7 +236,6 @@
             this.comboBoxUnit.Name = "comboBoxUnit";
             this.comboBoxUnit.Size = new System.Drawing.Size(91, 21);
             this.comboBoxUnit.TabIndex = 2;
-            this.comboBoxUnit.Text = "Celsius ";
             // 
             // label4
             // 
@@ -297,6 +297,7 @@
             this.panelHome.Name = "panelHome";
             this.panelHome.Size = new System.Drawing.Size(801, 594);
             this.panelHome.TabIndex = 18;
+            this.panelHome.Paint += new System.Windows.Forms.PaintEventHandler(this.panelHome_Paint);
             // 
             // panel16
             // 
@@ -335,6 +336,7 @@
             this.textBoxAlarmInterval.Size = new System.Drawing.Size(106, 20);
             this.textBoxAlarmInterval.TabIndex = 0;
             this.textBoxAlarmInterval.Text = "0";
+            this.textBoxAlarmInterval.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxAlarmInterval_KeyPress);
             // 
             // label30
             // 
@@ -368,7 +370,7 @@
             this.checkBoxWifiAlarm.TabIndex = 0;
             this.checkBoxWifiAlarm.Text = "Enable:";
             this.checkBoxWifiAlarm.UseVisualStyleBackColor = true;
-            this.checkBoxWifiAlarm.CheckedChanged += new System.EventHandler(this.checkBoxWifiAlarm_CheckedChanged);
+            this.checkBoxWifiAlarm.CheckedChanged += new System.EventHandler(this.CheckBoxWifiAlarm_CheckedChanged);
             // 
             // textBoxAlarmPort
             // 
@@ -377,6 +379,7 @@
             this.textBoxAlarmPort.Name = "textBoxAlarmPort";
             this.textBoxAlarmPort.Size = new System.Drawing.Size(106, 20);
             this.textBoxAlarmPort.TabIndex = 2;
+            this.textBoxAlarmPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxAlarmPort_KeyPress);
             // 
             // label32
             // 
@@ -413,6 +416,7 @@
             this.textBoxAlarmIP.Name = "textBoxAlarmIP";
             this.textBoxAlarmIP.Size = new System.Drawing.Size(106, 20);
             this.textBoxAlarmIP.TabIndex = 1;
+            this.textBoxAlarmIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxAlarmIP_KeyPress);
             // 
             // label34
             // 
@@ -499,9 +503,11 @@
             // textBoxSMSTest
             // 
             this.textBoxSMSTest.Location = new System.Drawing.Point(85, 142);
+            this.textBoxSMSTest.MaxLength = 11;
             this.textBoxSMSTest.Name = "textBoxSMSTest";
             this.textBoxSMSTest.Size = new System.Drawing.Size(164, 20);
             this.textBoxSMSTest.TabIndex = 10;
+            this.textBoxSMSTest.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSMSTest_KeyPress);
             // 
             // textBoxSMSToken
             // 
@@ -568,7 +574,7 @@
             this.button2.TabIndex = 7;
             this.button2.Text = "Test";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // label24
             // 
@@ -615,6 +621,7 @@
             this.textBoxtestaddress.Name = "textBoxtestaddress";
             this.textBoxtestaddress.Size = new System.Drawing.Size(164, 20);
             this.textBoxtestaddress.TabIndex = 4;
+            this.textBoxtestaddress.Validated += new System.EventHandler(this.textBoxtestaddress_Validated);
             // 
             // textBoxEmailPort
             // 
@@ -647,7 +654,7 @@
             this.buttontest.TabIndex = 5;
             this.buttontest.Text = "Test";
             this.buttontest.UseVisualStyleBackColor = true;
-            this.buttontest.Click += new System.EventHandler(this.buttontest_Click);
+            this.buttontest.Click += new System.EventHandler(this.Buttontest_Click);
             // 
             // label21
             // 
@@ -710,7 +717,7 @@
             this.chbSMS.TabIndex = 2;
             this.chbSMS.Text = "SMS:";
             this.chbSMS.UseVisualStyleBackColor = true;
-            this.chbSMS.CheckedChanged += new System.EventHandler(this.chbSMS_CheckedChanged);
+            this.chbSMS.CheckedChanged += new System.EventHandler(this.ChbSMS_CheckedChanged);
             // 
             // chbEmail
             // 
@@ -721,7 +728,7 @@
             this.chbEmail.TabIndex = 0;
             this.chbEmail.Text = "Email:";
             this.chbEmail.UseVisualStyleBackColor = true;
-            this.chbEmail.CheckedChanged += new System.EventHandler(this.chbEmail_CheckedChanged);
+            this.chbEmail.CheckedChanged += new System.EventHandler(this.ChbEmail_CheckedChanged);
             // 
             // panel13
             // 
@@ -825,6 +832,7 @@
             0,
             0,
             0});
+            this.numericUpDown2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.numericUpDown2_KeyPress);
             // 
             // groupBox1
             // 
@@ -937,7 +945,7 @@
             this.button1.TabIndex = 7;
             this.button1.Text = "Update";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // panel3
             // 
@@ -980,6 +988,7 @@
             this.textBoxDataBit.Size = new System.Drawing.Size(76, 20);
             this.textBoxDataBit.TabIndex = 7;
             this.textBoxDataBit.Text = "8";
+            this.textBoxDataBit.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxDataBit_KeyPress);
             // 
             // textBoxBaudRate
             // 
@@ -988,7 +997,8 @@
             this.textBoxBaudRate.Size = new System.Drawing.Size(76, 20);
             this.textBoxBaudRate.TabIndex = 6;
             this.textBoxBaudRate.Text = "9600";
-            this.textBoxBaudRate.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBoxBaudRate.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
+            this.textBoxBaudRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxBaudRate_KeyPress);
             // 
             // textBoxIPAddress
             // 
@@ -997,6 +1007,7 @@
             this.textBoxIPAddress.Size = new System.Drawing.Size(76, 20);
             this.textBoxIPAddress.TabIndex = 5;
             this.textBoxIPAddress.Text = "1";
+            this.textBoxIPAddress.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxIPAddress_KeyPress);
             // 
             // label8
             // 

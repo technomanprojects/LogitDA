@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BAL;
+using DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,27 +16,27 @@ namespace Log_It.Forms
 {
     public partial class UserForm : Form
     {
-        bool isNew;
-        int userid;
-        DAL.User user;
-        BAL.LogitInstance instace;
-        DAL.User tempuser = null;
+        private readonly bool isNew;
+        private readonly int userid;
+        private readonly User user;
+        private readonly LogitInstance instace;
+        private readonly User tempuser = null;
 
-        public UserForm(int id, BAL.LogitInstance instace, bool isNew)
+        public UserForm(int id, LogitInstance instace, bool isNew)
         {
             this.isNew = isNew;
             this.instace = instace;
             InitializeComponent();
             try
             {
-                List<DAL.Department> dlist = instace.DataLink.Departments.ToList();
+                List<Department> dlist = instace.DataLink.Departments.ToList();
 
                 foreach (var item in dlist)
                 {
                     deptComboBox1.Items.Add(item);
                 }
 
-                List<DAL.Role> rlist = instace.DataLink.Roles.Skip(1).ToList();
+                List<Role> rlist = instace.DataLink.Roles.Skip(1).ToList();
                 foreach (var item in rlist)
                 {
                     roleComboBox1.Items.Add(item);
@@ -47,7 +49,7 @@ namespace Log_It.Forms
                 }
                 if (user != null)
                 {
-
+                    checkBoxActive.Visible = true;
                     this.Clone(user, out tempuser);
                     textBoxUserName.Text = user.User_Name.ToLower();
                     textBoxUserName.Enabled = false;
@@ -98,9 +100,9 @@ namespace Log_It.Forms
             }
         }
 
-        private void Clone(DAL.User user, out DAL.User tempuser)
+        private void Clone(User user, out User tempuser)
         {
-            tempuser = new DAL.User();
+            tempuser = new User();
             tempuser.Active = user.Active;
             tempuser.Authority = user.Authority;
             tempuser.CreateDateTime = user.CreateDateTime;
@@ -205,7 +207,7 @@ namespace Log_It.Forms
                 {
                     if (Validation(true))
                     {
-                        DAL.User user = new DAL.User();
+                        User user = new User();
                         user.Active = true;
                         user.Authority = roleComboBox1.SelectedEntity.RoleName;
                         user.CreateDateTime = DateTime.Now;
@@ -224,7 +226,7 @@ namespace Log_It.Forms
                         instace.DataLink.Insert_User( textBoxUserName.Text.ToLower(), BAL.Authentication.GetEc(textBoxPassword.Text), user.Role, instace.UserInstance.Full_Name, textBoxFullName.Text, user.Authority, textBoxEmail.Text,
                             txtPhone.Text,deptComboBox1.SelectedEntity.Department_Id, textBoxSignature.Text, dt, Convert.ToInt16(textBoxexpires.Text), checkBoxSMS.Checked, checkBoxEmail.Checked, textBoxTitle.Text);
                         int a = instace.RefresUsers;
-                        this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                        this.DialogResult = DialogResult.OK;
                         Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "Add new user ", instace.UserInstance.Full_Name);
                     }
                 }
@@ -238,6 +240,7 @@ namespace Log_It.Forms
                             ischange = true;
                             Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, user.Full_Name + "has disabled", instace.UserInstance.Full_Name);
                             user.Active = (bool)checkBoxActive.Checked;
+                        
                         }
                         if (user.Full_Name != textBoxFullName.Text)
                         {
@@ -329,27 +332,73 @@ namespace Log_It.Forms
                             int a = instace.RefresUsers;
 
                             //Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "User Modified ", instace.UserInstance.Full_Name);
-                            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                            this.DialogResult = DialogResult.OK;
                         }
                     }
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
             }
-           
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object sender, EventArgs e) => this.DialogResult = DialogResult.Cancel;
+
+        private void checkBoxEmail_CheckedChanged(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            textBoxEmail.Enabled = checkBoxEmail.Checked;
+            textBoxEmail.Clear();
+        }
+
+        private void checkBoxSMS_CheckedChanged(object sender, EventArgs e)
+        {
+            txtPhone.Enabled = checkBoxSMS.Checked;
+            txtPhone.Clear();
+        }
+
+        private void txtPhone_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxEmail_Validated(object sender, EventArgs e)
+        {
+            string email = textBoxEmail.Text;
+            var regex = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
+            bool isValid = Regex.IsMatch(email, regex, RegexOptions.IgnoreCase);
+            if (!isValid)
+            {
+                MessageBox.Show("Enter correct email address");
+            }
+        }
+
+        private void textBoxFullName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) && !char.IsWhiteSpace(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxexpires_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void UserForm_Load(object sender, EventArgs e)
+        {
+            checkBoxActive.Visible = false;
         }
     }
 }

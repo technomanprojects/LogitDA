@@ -79,7 +79,7 @@
             this.buttonCancel.TabIndex = 3;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            this.buttonCancel.Click += new System.EventHandler(this.ButtonCancel_Click);
             // 
             // buttonlogin
             // 
@@ -89,7 +89,7 @@
             this.buttonlogin.TabIndex = 2;
             this.buttonlogin.Text = "Login";
             this.buttonlogin.UseVisualStyleBackColor = true;
-            this.buttonlogin.Click += new System.EventHandler(this.buttonlogin_Click);
+            this.buttonlogin.Click += new System.EventHandler(this.Buttonlogin_Click);
             // 
             // Authentication
             // 
@@ -109,6 +109,7 @@
             this.Name = "Authentication";
             this.Text = "Authentication";
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.Authentication_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

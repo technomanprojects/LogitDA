@@ -15,48 +15,39 @@ namespace Log_It.Pages.TaskPanel
         public delegate void UserAdd();
         public event UserAdd AddUser;
 
-             public delegate void UserModfied();
+        public delegate void UserModfied();
         public event UserModfied ModifiedUser;
 
         public delegate void UserDelete();
         public event UserDelete DeleteUser;
-        int user;
-        BAL.LogitInstance instance;
-        bool isNew;
+
+        private readonly int user;
+        private readonly BAL.LogitInstance instance;
 
         public UserTask(int id, BAL.LogitInstance instance)
         {
-            this.user = id;
+            user = id;
             this.instance = instance;
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
-            Log_It.Forms.UserForm form = new Forms.UserForm(0,instance,true);
+            Forms.UserForm form = new Forms.UserForm(0,instance,true);
             if (form.ShowDialog() == DialogResult.OK)
             {
-                if (AddUser != null)
-                {
-                    AddUser();
-                }
+                AddUser?.Invoke();
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
-            if (ModifiedUser != null)
-            {
-                ModifiedUser();
-            }
+            ModifiedUser?.Invoke();
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {   
-            if (DeleteUser != null)
-            {
-                DeleteUser();
-            }
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            DeleteUser?.Invoke();
         }
     }
 }

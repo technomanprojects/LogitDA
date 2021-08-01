@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BAL;
+using DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,22 +10,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Technoman.Utilities;
+using EventLog = Technoman.Utilities.EventLog;
 
 namespace Log_It.Forms
 {
     public partial class ApprovalForm : BaseForm
     {
-        BAL.LogitInstance Instance;
-        BAL.Authentication aut;
-        public DAL.User ApprovalUser { get; set; }
-        public DAL.User ReviewedUser { get; set; }
-        public ApprovalForm(BAL.LogitInstance Instance,string caption)
+        private readonly LogitInstance Instance;
+        private readonly BAL.Authentication aut;
+        public User ApprovalUser { get; set; }
+        public User ReviewedUser { get; set; }
+        public ApprovalForm(LogitInstance Instance,string caption)
         {
             this.Instance = Instance;
             InitializeComponent();
             this.Text = caption;
             aut = new BAL.Authentication(Instance);
-            List<DAL.User> users = Instance.DataLink.Users.Where(x => x.Active == true && x.IsRowEnable == true).ToList();
+            List<User> users = Instance.DataLink.Users.Where(x => x.Active == true && x.IsRowEnable == true).ToList();
             foreach (var item in users)
             {
                 userList1.Items.Add(item);
@@ -44,7 +47,7 @@ namespace Log_It.Forms
             }
             return true;
         }
-        private void buttonlogin_Click(object sender, EventArgs e)
+        private void Buttonlogin_Click(object sender, EventArgs e)
         {
             if (!FormValidation())
             {
@@ -53,13 +56,13 @@ namespace Log_It.Forms
             if (aut.IsUserValid(userList1.SelectedItem.ToString().ToLower(), textBoxpassword.Text))
             {
                 ApprovalUser = aut.GetUser;
-                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else
             {
                 MessageBox.Show("Invalid User name and Password");
-                EventClass.WriteLog(Technoman.Utilities.EventLog.Warning, "User try to login failed", userList1.SelectedEntity.User_Name.ToLower());
+                EventClass.WriteLog(EventLog.Warning, "User try to login failed", userList1.SelectedEntity.User_Name.ToLower());
             }
         }
     }

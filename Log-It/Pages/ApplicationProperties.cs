@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BAL;
 using DAL;
-using Microsoft.Win32;
-using System.Diagnostics;
-using System.Threading;
 using System.Net.Mail;
+using System.Diagnostics;
 using System.Net;
+using Log_It.CustomControls;
+using System.Text.RegularExpressions;
 
 namespace Log_It.Pages
 {
@@ -25,19 +20,20 @@ namespace Log_It.Pages
 
     public partial class ApplicationProperties : ControlPage
     {
-        public BAL.LogitInstance instance { get; set; }
+        public LogitInstance Instance { get; set; }
         public bool systemset = false;
-        string username;
+        private readonly string username;
         public D_Type d_Type =  D_Type.Acquisition;
 
-               public delegate void RefreshProperties();
+        public delegate void RefreshProperties();
         public event RefreshProperties RefresPageProperties;
-        public ApplicationProperties(BAL.LogitInstance instance,string username )
+        public ApplicationProperties(LogitInstance instance,string username )
         {
             InitializeComponent( );
             d_Type = D_Type.Acquisition;
-            this.instance = instance;
+            this.Instance = instance;
             this.username = username;
+
             this.RefreshPage();
         }
 
@@ -46,9 +42,9 @@ namespace Log_It.Pages
             try
             {
                 base.RefreshPage();
-                if (instance.DataLink.SYSProperties.Count() > 0)
+                if (Instance.DataLink.SYSProperties.Count() > 0)
                 {
-                    SYSProperty Sysproperties = instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1);
+                    SYSProperty Sysproperties = Instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1);
                     textBoxIPAddress.Text = Sysproperties.IP_Address.ToString();
                     comboBoxUnit.Text = Sysproperties.Unit;
                     checkBoxSignLine.Checked = (bool)Sysproperties.Signature;
@@ -100,48 +96,39 @@ namespace Log_It.Pages
                         }
                     }
 
-                    DAL.Company company = instance.DataLink.Companies.SingleOrDefault();
+                    Company company = Instance.DataLink.Companies.SingleOrDefault();
                     if (company != null)
                     {
-                     
                         textBoxCompany.Text = company.Company_Name;
-
-
                     }
-
-
                     systemset = true;
-
-
                 }
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.ErrorLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
-            }
-            
+            }        
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             TextBox t = (TextBox)sender;
-            if (System.Text.RegularExpressions.Regex.IsMatch(t.Text, "[^0-9]"))
+            if (Regex.IsMatch(t.Text, "[^0-9]"))
             {
                 MessageBox.Show("Please enter only numbers.");
                 t.Text = t.Text.Remove(t.Text.Length - 1);
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             try
             {
+                String mess = string.Empty;
                 if (!systemset)
                 {
                     SYSProperty Systproperties = new SYSProperty();
@@ -192,15 +179,17 @@ namespace Log_It.Pages
                         Systproperties.SMSToken = textBoxSMSToken.Text;
 
                     }
-                    instance.DataLink.SYSProperties.InsertOnSubmit(Systproperties);
+                    Instance.DataLink.SYSProperties.InsertOnSubmit(Systproperties);
 
-                    DAL.Company company = new Company();
-                    company.Id = Guid.NewGuid();
-                    company.Company_Name = textBoxCompany.Text;
-                  
-                    instance.DataLink.Companies.InsertOnSubmit(company);
+                    Company company = new Company
+                    {
+                        Id = Guid.NewGuid(),
+                        Company_Name = textBoxCompany.Text
+                    };
 
-                    instance.DataLink.SubmitChanges();
+                    Instance.DataLink.Companies.InsertOnSubmit(company);
+
+                    Instance.DataLink.SubmitChanges();
 
                     //RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\TLSSetting");
                     //if (key == null)
@@ -210,13 +199,48 @@ namespace Log_It.Pages
                     //}
 
 
-                    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, " System properties has updated", instance.UserInstance.Full_Name);
+                    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, " System properties has updated", Instance.UserInstance.Full_Name);
                     MessageBox.Show("Data has been saved!");
                 }
                 else
                 {
-                    SYSProperty Systproperties = instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1);
-
+                    SYSProperty Systproperties = Instance.DataLink.SYSProperties.SingleOrDefault(x => x.ID == 1);
+                    if (Systproperties.Unit != comboBoxUnit.Text)
+                    {
+                        mess += ", Unit " + Systproperties.Unit + " to " + comboBoxUnit.Text;
+                    }
+                    if (Systproperties.Signature != (bool)checkBoxSignLine.Checked)
+                    {
+                        mess += ", Signature " + Systproperties.Signature + " to " + checkBoxSignLine.Checked;
+                    }
+                    if (Systproperties.Automatic_Sign != (bool)checkBoxSignLogged.Checked)
+                    {
+                        mess += ", Automatic Signature " + Systproperties.Automatic_Sign + " to " + checkBoxSignLogged.Checked;
+                    }
+                    if (Systproperties.IP_Address != textBoxIPAddress.Text)
+                    {
+                        mess += ", IP Address " + Systproperties.IP_Address + " to " + textBoxIPAddress.Text;
+                    }
+                    if (Systproperties.Port1 != textBoxBaudRate.Text)
+                    {
+                        mess += ", Port 1 " + Systproperties.Port1 + " to " + textBoxBaudRate.Text;
+                    }
+                    if (Systproperties.Port2 != textBoxDataBit.Text)
+                    {
+                        mess += ", Port 2 " + Systproperties.Port2 + " to " + textBoxDataBit.Text;
+                    }
+                    if (Systproperties.Alert_Interval != Convert.ToInt32(textBoxAlarmInterval.Text))
+                    {
+                        mess += ", Alarm Interval " + Systproperties.Alert_Interval + " to " + textBoxAlarmInterval.Text;
+                    }
+                    if (Systproperties.AlarmEnable != (bool)checkBoxWifiAlarm.Checked)
+                    {
+                        mess += ", Alarm Enable " + Systproperties.AlarmEnable + " to " + checkBoxWifiAlarm.Checked;
+                    }
+                    if (Systproperties.Acknowledged != (bool)checkBoxAlert.Checked)
+                    {
+                        mess += ", Acknowledge " + Systproperties.Acknowledged + " to " + checkBoxAlert.Checked;
+                    }
 
                     Systproperties.Unit = comboBoxUnit.Text;
                     Systproperties.Signature = checkBoxSignLine.Checked;
@@ -231,7 +255,14 @@ namespace Log_It.Pages
                     Systproperties.AlarmEnable = checkBoxWifiAlarm.Checked;
                     if (checkBoxWifiAlarm.Checked)
                     {
-
+                        if (Systproperties.Alarm_IP != textBoxAlarmIP.Text)
+                        {
+                            mess += ", Alarm IP " + Systproperties.Alarm_IP + " to " + textBoxAlarmIP.Text;
+                        }
+                        if (Systproperties.Alarm_Port != textBoxAlarmPort.Text)
+                        {
+                            mess += ", Alarm Port " + Systproperties.Alarm_Port + " to " + textBoxAlarmPort.Text;
+                        }
                         Systproperties.Alarm_IP = textBoxAlarmIP.Text;
                         Systproperties.Alarm_Port = textBoxAlarmPort.Text;
                         
@@ -240,6 +271,14 @@ namespace Log_It.Pages
                     {
                         Systproperties.Alarm_Port = string.Empty;                        
                         Systproperties.Alarm_IP = string.Empty;
+                    }
+                    if (Systproperties.Number_Devices != (int)numericUpDown2.Value)
+                    {
+                        mess += ", Number Device " + Systproperties.Number_Devices + " to " + (int)numericUpDown2.Value;
+                    }
+                    if (Systproperties.Email != (bool)chbEmail.Checked)
+                    {
+                        mess += ", Email Enable " + Systproperties.Email + " to " + chbEmail.Checked;
                     }
                     Systproperties.Number_Devices = (int)numericUpDown2.Value;
                     Systproperties.Email = chbEmail.Checked;
@@ -269,10 +308,22 @@ namespace Log_It.Pages
                             MessageBox.Show("Please provide SMTP Port.");
                             return;
                         }
-
-
-
-
+                        if (Systproperties.EmailID != textBoxEmailID.Text)
+                        {
+                            mess += ", Email ID " + Systproperties.EmailID + " to " + textBoxEmailID.Text;
+                        }
+                        if (Systproperties.EmailPassword != textBoxEmailPassword.Text)
+                        {
+                            mess += ", Email Password " + Systproperties.EmailPassword + " to " + textBoxEmailPassword.Text;
+                        }
+                        if (Systproperties.EmailPort != textBoxEmailPort.Text)
+                        {
+                            mess += ", Email Port " + Systproperties.EmailPort + " to " + textBoxEmailPort.Text;
+                        }
+                        if (Systproperties.EmailSMTP != textBoxEmailSMTP.Text)
+                        {
+                            mess += ", Email SMTP " + Systproperties.EmailSMTP + " to " + textBoxEmailSMTP.Text;
+                        }
                         Systproperties.EmailID = textBoxEmailID.Text;
                         Systproperties.EmailPassword = textBoxEmailPassword.Text;
                         Systproperties.EmailPort = textBoxEmailPort.Text;
@@ -285,11 +336,13 @@ namespace Log_It.Pages
                         Systproperties.EmailPort = string.Empty;
                         Systproperties.EmailSMTP = string.Empty;
                     }
+                    if (Systproperties.SMS != (bool)chbSMS.Checked)
+                    {
+                        mess += ", SMS " + Systproperties.SMS + " to " + chbSMS.Checked;
+                    }
                     Systproperties.SMS = chbSMS.Checked;
                     if (chbSMS.Checked)
                     {
-
-
 
                         if (textBoxSMSID.Text == string.Empty)
                         {
@@ -315,23 +368,27 @@ namespace Log_It.Pages
                             MessageBox.Show("Please provide SMS API Token.");
                             return;
                         }
-
+                        if (Systproperties.SMSID != textBoxSMSID.Text)
+                        {
+                            mess += ", SMS ID " + Systproperties.SMSID + " to " + textBoxSMSID.Text;
+                        }
+                        if (Systproperties.SMSPassword != textBoxSMSPassword.Text)
+                        {
+                            mess += ", SMS Password " + Systproperties.SMSPassword + " to " + textBoxSMSPassword.Text;
+                        }
+                        if (Systproperties.SMSSecret != textBoxSMSSecret.Text)
+                        {
+                            mess += ", SMS Secret " + Systproperties.SMSSecret + " to " + textBoxSMSSecret.Text;
+                        }
+                        if (Systproperties.SMSToken != textBoxSMSToken.Text)
+                        {
+                            mess += ", SMS Token " + Systproperties.SMSToken + " to " + textBoxSMSToken.Text;
+                        }
                         Systproperties.SMSID = textBoxSMSID.Text;
                         Systproperties.SMSPassword = textBoxSMSPassword.Text;
                         Systproperties.SMSSecret = textBoxSMSSecret.Text;
                         Systproperties.SMSToken = textBoxSMSToken.Text;
-                        Systproperties.GSM = false;
-
-
-
-
-
-
-
-                      
-
-
-                       
+                        Systproperties.GSM = false;                      
                     }
                     else
                     {
@@ -342,15 +399,17 @@ namespace Log_It.Pages
                         Systproperties.GSM = false;
                         Systproperties.WebLink = false;
                     }
-                    DAL.Company company = instance.DataLink.Companies.SingleOrDefault();
+                    Company company = Instance.DataLink.Companies.SingleOrDefault();
                     if (company != null)
                     {
+                        if (company.Company_Name != textBoxCompany.Text)
+                        {
+                            mess += ", Company Name " + company.Company_Name + " to " + textBoxCompany.Text;
+                        }
                         company.Company_Name = textBoxCompany.Text;
                     }
-
-
-                    instance.DataLink.SubmitChanges();
-                    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "System properties has updated", instance.UserInstance.Full_Name);
+                    Instance.DataLink.SubmitChanges();
+                    Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Modify, "System properties" + mess.Remove(0, 1) + " has updated", Instance.UserInstance.Full_Name);
                     MessageBox.Show("Data has been saved!");
                     RefresPageProperties();
                 }
@@ -358,34 +417,25 @@ namespace Log_It.Pages
 
             catch (Exception)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 //Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
             }
-        
-
-        
         }
-
-
      
-
-        private void chbSMS_CheckedChanged(object sender, EventArgs e)
+        private void ChbSMS_CheckedChanged(object sender, EventArgs e)
         {
-              groupBoxSMS.Enabled = chbSMS.Checked;
-                       
+              groupBoxSMS.Enabled = chbSMS.Checked;                      
         }
 
-        private void chbEmail_CheckedChanged(object sender, EventArgs e)
+        private void ChbEmail_CheckedChanged(object sender, EventArgs e)
         {
             groupBoxEmail.Enabled = chbEmail.Checked;
         }
 
-        async void buttontest_Click(object sender, EventArgs e)
+        private async void Buttontest_Click(object sender, EventArgs e)
         {
             if (chbEmail.Checked && textBoxEmailID.Text == string.Empty)
             {
@@ -413,7 +463,7 @@ namespace Log_It.Pages
                 textBoxtestaddress.Focus();
                 return;
             }
-            bool b = await SendMail();
+            _ = await SendMail();
         }
         async Task<bool> SendMail()
         {
@@ -434,9 +484,6 @@ namespace Log_It.Pages
                     {
                         mail.From = new MailAddress(emailFromAddress);
                         mail.To.Add(textBoxtestaddress.Text);
-
-
-
                         mail.Subject = subject;
                         mail.Body = body;
                         mail.IsBodyHtml = true;
@@ -445,7 +492,6 @@ namespace Log_It.Pages
                         {
                             try
                             {
-
                                 smtp.EnableSsl = enableSSL;
                                 smtp.UseDefaultCredentials = false;
                                 smtp.Credentials = new NetworkCredential(emailFromAddress, password);
@@ -458,7 +504,6 @@ namespace Log_It.Pages
                             }
                             catch (Exception m)
                             {
-
                                 MessageBox.Show("Delivery failed." + " Message : " + m.Message);
                                 //Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
                             }
@@ -473,12 +518,10 @@ namespace Log_It.Pages
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             if (chbSMS.Checked)
             {
-               
-             
                     if (textBoxSMSID.Text == string.Empty)
                     {
 
@@ -508,23 +551,101 @@ namespace Log_It.Pages
                         MessageBox.Show("Please provide SMS number.");
                         return;
                     }
-                    CustomControls.SMSComponent sms = new CustomControls.SMSComponent(textBoxSMSToken.Text, textBoxSMSSecret.Text);
+                    SMSComponent sms = new SMSComponent(textBoxSMSToken.Text, textBoxSMSSecret.Text);
                     sms.send(textBoxSMSTest.Text, "This is Test SMS from Logit WiFi");
                     sms.Dispose();
                     //CustomControls.SMSComponent sms = new CustomControls.SMSComponent(textBoxSMSToken.Text, );
-                    //sms.send(textBoxSMSTest.Text,)
-
-                
+                    //sms.send(textBoxSMSTest.Text,)                
 
             }
         }
         
         public object _object { get; set; }
 
-        private void checkBoxWifiAlarm_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxWifiAlarm_CheckedChanged(object sender, EventArgs e)
         {
             textBoxAlarmIP.Enabled = checkBoxWifiAlarm.Checked;
             textBoxAlarmPort.Enabled = checkBoxWifiAlarm.Checked;           
+        }
+
+        private void textBoxtestaddress_Validated(object sender, EventArgs e)
+        {
+            string email = textBoxtestaddress.Text;
+            var regex = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
+            bool isValid = Regex.IsMatch(email, regex, RegexOptions.IgnoreCase);
+            if (!isValid)
+            {
+                MessageBox.Show("Enter correct email address");
+            }
+        }
+
+        private void textBoxSMSTest_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxIPAddress_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxBaudRate_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxDataBit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxAlarmIP_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxAlarmPort_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxAlarmInterval_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void numericUpDown2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void panelHome_Paint(object sender, PaintEventArgs e)
+        {
+            //comboBoxUnit.SelectedIndex = 0;
         }
     }
 }

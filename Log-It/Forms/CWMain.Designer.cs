@@ -48,7 +48,7 @@
             this.buttonNext.TabIndex = 0;
             this.buttonNext.Text = "Next >>";
             this.buttonNext.UseVisualStyleBackColor = true;
-            this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
+            this.buttonNext.Click += new System.EventHandler(this.ButtonNext_Click);
             // 
             // buttoncancel
             // 
@@ -58,7 +58,7 @@
             this.buttoncancel.TabIndex = 1;
             this.buttoncancel.Text = "Cancel";
             this.buttoncancel.UseVisualStyleBackColor = true;
-            this.buttoncancel.Click += new System.EventHandler(this.buttoncancel_Click);
+            this.buttoncancel.Click += new System.EventHandler(this.Buttoncancel_Click);
             // 
             // listBoxDevice
             // 
@@ -127,7 +127,7 @@
             this.radioButton1.Tag = "option";
             this.radioButton1.Text = "Add Device";
             this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.RadioButton1_CheckedChanged);
             // 
             // description
             // 

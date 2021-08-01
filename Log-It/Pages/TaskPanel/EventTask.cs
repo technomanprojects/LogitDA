@@ -23,20 +23,14 @@ namespace Log_It.Pages.TaskPanel
             InitializeComponent();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void Button4_Click(object sender, EventArgs e)
         {
-            if (RefreshControl != null)
-            {
-                RefreshControl();
-            }
+            RefreshControl?.Invoke();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
-            if (PrintP != null)
-            {
-                PrintP();
-            }
+            PrintP?.Invoke();
         }
     }
 }

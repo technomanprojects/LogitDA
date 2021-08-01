@@ -12,13 +12,15 @@ using System.Xml;
 using System.Security.AccessControl;
 using System.IO;
 using System.Text;
+using BAL;
+using Authentication = Log_It.Forms.Authentication;
 
 namespace Log_It
 {
     static class Program
     {
         static bool isOk;
-        static System.IO.Ports.SerialPort spt;
+        private static System.IO.Ports.SerialPort spt;
         public static string fileName = Application.StartupPath + "\\Log.txt";
         /// <summary>
         /// The main entry point for the application.
@@ -29,15 +31,15 @@ namespace Log_It
             try
             {
 
-                Thread t = new Thread(new ThreadStart(splashscreen));
+                Thread t = new Thread(new ThreadStart(Splashscreen));
                 t.Start();
                 t.Name = "T1";
                 Thread.Sleep(1000);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                DAL.P_Databases dt = new P_Databases(Application.StartupPath);
-                DAL.P_Databases.Log d = new P_Databases.Log()
+                P_Databases dt = new P_Databases(Application.StartupPath);
+                P_Databases.Log d = new P_Databases.Log()
                 {
                     DeviceID = Guid.NewGuid().ToString(),
                     Channel_ID = "Hello",
@@ -48,7 +50,7 @@ namespace Log_It
                 dt.InsertRecords(d);
 
 
-                if (!System.IO.File.Exists(Application.StartupPath + "\\LogitSetting.xml"))
+                if (!File.Exists(Application.StartupPath + "\\LogitSetting.xml"))
                 {
                     SystemSetting ss = new SystemSetting();
                     if (ss.ShowDialog() == DialogResult.OK)
@@ -79,7 +81,7 @@ namespace Log_It
 
                 }
 
-                if (isOk && System.IO.File.Exists(Application.StartupPath + "\\LogitSetting.xml"))
+                if (isOk && File.Exists(Application.StartupPath + "\\LogitSetting.xml"))
                 {
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.Load(Application.StartupPath + "\\LogitSetting.xml");
@@ -102,7 +104,7 @@ namespace Log_It
 
 
                     //dt.InsertRecords()
-                    BAL.LogitInstance instance = new BAL.LogitInstance(BAL.Authentication.GetDec(connection));
+                    LogitInstance instance = new BAL.LogitInstance(BAL.Authentication.GetDec(connection));
                     Technoman.Utilities.EventClass.connectionstring = instance.DataLink.Connection.ConnectionString;
                     Authentication authe = new Authentication(instance);
                     if (authe.ShowDialog() == DialogResult.OK)
@@ -111,7 +113,7 @@ namespace Log_It
                         instance.SystemProperties = SetCOMPort(instance);
                         Technoman.Utilities.EventClass.connectionstring = instance.DataLink.Connection.ConnectionString;
                         Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Login, "User Login ", authe.UserInstance.Full_Name);
-                        DAL.RoleEnum roleEnum = (DAL.RoleEnum)Enum.Parse(typeof(DAL.RoleEnum), instance.UserInstance.Role.ToString());
+                        RoleEnum roleEnum = (RoleEnum)Enum.Parse(typeof(RoleEnum), instance.UserInstance.Role.ToString());
                         
                         switch (roleEnum)
                         {
@@ -153,11 +155,10 @@ namespace Log_It
                MessageBox.Show(m.Message);
             }
 
-
             //Application.Run(new Form1());
         }
 
-        private static DAL.SYSProperty SetCOMPort(BAL.LogitInstance xml)
+        private static SYSProperty SetCOMPort(LogitInstance xml)
         {
             try
             {
@@ -169,17 +170,13 @@ namespace Log_It
 
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
-
-                var currentMethodName = sf.GetMethod();
+                _ = sf.GetMethod();
                 //Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
                 return null;
             }
-
-
-
         }
 
-        public static void splashscreen()
+        public static void Splashscreen()
         {
            // Application.Run(new Splash());
             Splash sp = new Splash();

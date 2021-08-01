@@ -45,7 +45,7 @@
             this.buttonlogin.TabIndex = 8;
             this.buttonlogin.Text = "OK";
             this.buttonlogin.UseVisualStyleBackColor = true;
-            this.buttonlogin.Click += new System.EventHandler(this.buttonlogin_Click);
+            this.buttonlogin.Click += new System.EventHandler(this.Buttonlogin_Click);
             // 
             // buttonCancel
             // 

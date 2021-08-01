@@ -35,15 +35,12 @@ namespace Log_It.Forms
                     {
                         this.cmbServers.Items.Add(table.Rows[i][0].ToString() + @"\" + table.Rows[i][1].ToString());
                     }
-
                 }
             }
-            catch (Exception m)
+            catch (Exception)
             {
-                
                 throw;
             }
-            
         }
 
         private void applicationProperties1_Load(object sender, EventArgs e)
@@ -51,7 +48,7 @@ namespace Log_It.Forms
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             try
             {
@@ -85,10 +82,12 @@ namespace Log_It.Forms
 
         private void SystemSetting_Load(object sender, EventArgs e)
         {
-
+            comboBoxParity.SelectedIndex = 0;
+            comboBoxStopBit.SelectedIndex = 0;
+            comboBoxUnit.SelectedIndex = 0;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             
             if (!DBverified)
@@ -393,7 +392,7 @@ namespace Log_It.Forms
                 Conn.Close();
 
                 testCMD = new SqlCommand("INSERT INTO [User] ([User_Name],[Password],[Role],[CreatedBy],[CreateDateTime],[Active],[ModefiedBy],[ModifiedDateTime],[IsRowEnable],[Full_Name],[Authority],[Description],[Email]) VALUES ('" +
-                    textBoxuserName.Text + "','" + BAL.Authentication.GetEc(textBoxloginpassword.Text) + "','" + 0 + "','System Admin',GETDATE(),1,'NULL',NULL," + 1 + ",'System Administrator','Owner','NULL','NULL')", Conn);
+                    textBoxuserName.Text.ToLower() + "','" + BAL.Authentication.GetEc(textBoxloginpassword.Text) + "','" + 0 + "','System Admin',GETDATE(),1,'NULL',NULL," + 1 + ",'System Administrator','Owner','NULL','NULL')", Conn);
                 testCMD.CommandType = CommandType.Text;
                 Conn.Open();
                 i = testCMD.ExecuteNonQuery();
@@ -407,25 +406,54 @@ namespace Log_It.Forms
                 //}
 
                 MessageBox.Show("Configuration has been saved");
-                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                this.DialogResult = DialogResult.OK;
                 this.Close();
 
             }
             catch (Exception m)
             {
-
                 labelstatus.Text = m.Message;
                 MessageBox.Show(m.Message);
-                this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+                this.DialogResult = DialogResult.Cancel;
             }
-
-
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void textBoxCom_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxBaudRate_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxDataBit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void numericUpDown1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

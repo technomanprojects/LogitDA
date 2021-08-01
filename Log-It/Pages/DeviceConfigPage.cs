@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using BAL;
 
 namespace Log_It.Pages
 {
@@ -16,8 +17,8 @@ namespace Log_It.Pages
         public delegate void SetID(Guid id);
         public event SetID IDSet;
 
-        BAL.LogitInstance instance;
-        public DeviceConfigPage(BAL.LogitInstance instance)
+        private readonly LogitInstance instance;
+        public DeviceConfigPage(LogitInstance instance)
         {
             this.instance = instance;
             InitializeComponent();
@@ -49,7 +50,9 @@ namespace Log_It.Pages
                     dataGridView1.Columns[22].Visible = false;
                     dataGridView1.Columns[23].Visible = false;
                     dataGridView1.Columns[24].Visible = false;
-                    
+                    dataGridView1.Columns[26].Visible = false;
+                    dataGridView1.Columns[27].Visible = false;
+
                     dataGridView1.Columns[1].HeaderText = "Channel ID";
                     dataGridView1.Columns[2].HeaderText = "Port ID";
                     dataGridView1.Refresh();
@@ -68,24 +71,19 @@ namespace Log_It.Pages
            
         }
 
-        private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                if (IDSet != null)
-                {
-                    IDSet((Guid)dataGridView1.Rows[e.RowIndex].Cells[0].Value);
-                }
+                IDSet?.Invoke((Guid)dataGridView1.Rows[e.RowIndex].Cells[0].Value);
             }
             catch (Exception m)
             {
-
                 var st = new StackTrace();
                 var sf = st.GetFrame(0);
 
                 var currentMethodName = sf.GetMethod();
                 Technoman.Utilities.EventClass.WriteLog(Technoman.Utilities.EventLog.Error, m.Message + " Method Name: " + currentMethodName, "System");
-
             }
         }
     }

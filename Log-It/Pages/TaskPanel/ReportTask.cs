@@ -16,7 +16,8 @@ namespace Log_It.Pages.TaskPanel
 
         public delegate void DeviceEvent(DAL.Device_Config Config,DateTime SD,DateTime ED);
         public event DeviceEvent EventDevice;
-        BAL.LogitInstance Instance;
+
+        private readonly BAL.LogitInstance Instance;
         public ReportTask(BAL.LogitInstance Instance)
         {
             InitializeComponent();
@@ -40,7 +41,7 @@ namespace Log_It.Pages.TaskPanel
         {
             if (Instance.SystemProperties.Automatic_Sign != true)
             {
-                Log_It.Forms.Authentication auth = new Forms.Authentication(Instance);
+                Forms.Authentication auth = new Forms.Authentication(Instance);
                 if (auth.ShowDialog() == DialogResult.OK)
                 {
                     Instance.UserReport = auth.UserInstance;
@@ -78,16 +79,16 @@ namespace Log_It.Pages.TaskPanel
 
                 if (sysFormat == "MM/dd/yyyy")
                 {
-                    System.Globalization.CultureInfo us = new System.Globalization.CultureInfo("en-US");
-                    string shortUsDateFormatString = us.DateTimeFormat.ShortDatePattern;
+                    CultureInfo us = new CultureInfo("en-US");
+                    _ = us.DateTimeFormat.ShortDatePattern;
                     str = dateTimeInputfrom.Value.ToString("MM/dd/yyyy h:mm:ss tt");
                     etr = dateTimeInputto.Value.ToString("MM/dd/yyyy h:mm:ss tt");
                 }
 
                 if (sysFormat == "dd/MM/yyyy")
                 {
-                    System.Globalization.CultureInfo us = new System.Globalization.CultureInfo("en-GB");
-                    string shortUsDateFormatString = us.DateTimeFormat.ShortDatePattern;
+                    CultureInfo us = new CultureInfo("en-GB");
+                    _ = us.DateTimeFormat.ShortDatePattern;
                     str = dateTimeInputfrom.Value.ToString("dd/MM/yyyy h:mm:ss tt");
                     etr = dateTimeInputto.Value.ToString("dd/MM/yyyy h:mm:ss tt");
                 }

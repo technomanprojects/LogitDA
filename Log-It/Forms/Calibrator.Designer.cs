@@ -152,7 +152,7 @@
             this.button2.TabIndex = 14;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // lblDatetime
             // 
@@ -179,7 +179,7 @@
             this.buttonsave.TabIndex = 3;
             this.buttonsave.Text = "Save";
             this.buttonsave.UseVisualStyleBackColor = true;
-            this.buttonsave.Click += new System.EventHandler(this.buttonsave_Click);
+            this.buttonsave.Click += new System.EventHandler(this.Buttonsave_Click);
             // 
             // deviceEntityComboBox1
             // 
@@ -188,7 +188,7 @@
             this.deviceEntityComboBox1.Name = "deviceEntityComboBox1";
             this.deviceEntityComboBox1.Size = new System.Drawing.Size(173, 21);
             this.deviceEntityComboBox1.TabIndex = 17;
-            this.deviceEntityComboBox1.SelectedIndexChanged += new System.EventHandler(this.deviceEntityComboBox1_SelectedIndexChanged);
+            this.deviceEntityComboBox1.SelectedIndexChanged += new System.EventHandler(this.DeviceEntityComboBox1_SelectedIndexChanged);
             // 
             // lblChannelID
             // 

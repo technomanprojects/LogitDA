@@ -48,7 +48,7 @@
             this.buttonOk.TabIndex = 12;
             this.buttonOk.Text = "Ok";
             this.buttonOk.UseVisualStyleBackColor = true;
-            this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
+            this.buttonOk.Click += new System.EventHandler(this.ButtonOk_Click);
             // 
             // buttoncancel
             // 
@@ -58,7 +58,7 @@
             this.buttoncancel.TabIndex = 14;
             this.buttoncancel.Text = "Cancel";
             this.buttoncancel.UseVisualStyleBackColor = true;
-            this.buttoncancel.Click += new System.EventHandler(this.buttoncancel_Click);
+            this.buttoncancel.Click += new System.EventHandler(this.Buttoncancel_Click);
             // 
             // textBoxconfirmpassword
             // 

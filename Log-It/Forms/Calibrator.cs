@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using BAL;
+using DAL;
+using System.Collections.Generic;
 
 namespace Log_It.Forms
 {
     public partial class Calibrator : Form
     {
-        BAL.LogitInstance instance;
-        List<DAL.Device_Config> devicelist;
-        DAL.Device_Config config;
+        private readonly LogitInstance instance;
+        private readonly List<Device_Config> devicelist;
+        private readonly Device_Config config;
 
-        public Calibrator(BAL.LogitInstance instance)
+        public Calibrator(LogitInstance instance)
         {
             InitializeComponent();
             this.instance = instance;
@@ -24,7 +21,6 @@ namespace Log_It.Forms
             foreach (var item in instance.DataLink.Device_Configs.Where(x => x.Active == true && x.IsRowActive == true))
             {
                 deviceEntityComboBox1.Items.Add(item);
-
             }
             devicelist = instance.DataLink.Device_Configs.Where(x => x.Active == true && x.IsRowActive == true).ToList();
         }
@@ -84,45 +80,39 @@ namespace Log_It.Forms
             //}
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        private void Button2_Click(object sender, EventArgs e) => this.Close();
 
-        private void buttonsave_Click(object sender, EventArgs e)
+        private void Buttonsave_Click(object sender, EventArgs e)
         {
-            try 
-	{	        
-		   if (deviceEntityComboBox1.SelectedEntity != null)
+            try
             {
-                if (textBoxoffset.Text != deviceEntityComboBox1.SelectedEntity.Offset.ToString())
+                if (deviceEntityComboBox1.SelectedEntity != null)
                 {
-                    instance.Device_Configes.SingleOrDefault(x => x.ID == deviceEntityComboBox1.SelectedEntity.ID).Offset= Convert.ToDouble(textBoxoffset.Text);
-                
-                    instance.DataLink.SubmitChanges();
-                    
-                     lblLocation.Text = string.Empty;
-                lblChannelID.Text =string.Empty;
-                lblPortNo.Text = string.Empty;
-                lblDeviceType.Text =string.Empty;
-                textBoxoffset.Text = string.Empty;
-                lblUpperLimit.Text = string.Empty;
-                lbllower.Text = string.Empty;
-                lblDatetime.Text = string.Empty;           
-                    MessageBox.Show("Date has been saved");
+                    if (textBoxoffset.Text != deviceEntityComboBox1.SelectedEntity.Offset.ToString())
+                    {
+                        instance.Device_Configes.SingleOrDefault(x => x.ID == deviceEntityComboBox1.SelectedEntity.ID).Offset = Convert.ToDouble(textBoxoffset.Text);
+
+                        instance.DataLink.SubmitChanges();
+
+                        lblLocation.Text = string.Empty;
+                        lblChannelID.Text = string.Empty;
+                        lblPortNo.Text = string.Empty;
+                        lblDeviceType.Text = string.Empty;
+                        textBoxoffset.Text = string.Empty;
+                        lblUpperLimit.Text = string.Empty;
+                        lbllower.Text = string.Empty;
+                        lblDatetime.Text = string.Empty;
+                        MessageBox.Show("Date has been saved");
+                    }
                 }
             }
-	}
-	catch (Exception m)
-	{
-		
-		MessageBox.Show(m.Message);
-	}
-         
-           
+            catch (Exception m)
+            {
+                MessageBox.Show(m.Message);
+            }
         }
 
-        private void deviceEntityComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void DeviceEntityComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (deviceEntityComboBox1.SelectedEntity != null)
             {

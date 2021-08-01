@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DAL;
 
 namespace Log_It.CustomControls
 {
@@ -62,7 +63,7 @@ namespace Log_It.CustomControls
             base.OnSelectedValueChanged(e);
         }
 
-        public UserList(System.ComponentModel.IContainer container)
+        public UserList(IContainer container)
         {
             container.Add(this);
 
@@ -84,14 +85,14 @@ namespace Log_It.CustomControls
 
         public class EntityObjCollection
         {
-            Dictionary<string, DAL.User> entityDictionary = new Dictionary<string, DAL.User>();
-            ComboBox listBox;
+            private readonly Dictionary<string, User> entityDictionary = new Dictionary<string, User>();
+            private readonly ComboBox listBox;
             public EntityObjCollection(ComboBox listBox)
             {
                 this.listBox = listBox;
             }
 
-            public int Add(DAL.User masterBaseEntity)
+            public int Add(User masterBaseEntity)
             {
                 int result = -1;
                 try
@@ -110,7 +111,7 @@ namespace Log_It.CustomControls
                 return result;
             }
 
-            public void Remove(DAL.User masterBaseEntity)
+            public void Remove(User masterBaseEntity)
             {
                 try
                 {
@@ -128,11 +129,11 @@ namespace Log_It.CustomControls
 
 
 
-            public DAL.User this[string name]
+            public User this[string name]
             {
                 get
                 {
-                    DAL.User masterBaseEntity = null;
+                    User masterBaseEntity = null;
                     try
                     {
                         masterBaseEntity = entityDictionary[name];
@@ -150,11 +151,7 @@ namespace Log_It.CustomControls
                 listBox.Items.Clear();
             }
 
-            public int Count
-            {
-                get { return listBox.Items.Count; }
-
-            }
+            public int Count => listBox.Items.Count;
 
             public EntityObjCollection GetSelectedAccount()
             {
@@ -166,10 +163,7 @@ namespace Log_It.CustomControls
                 return null; // accountCollection;
             }
 
-            public bool Contains(DAL.User masterBaseEntity)
-            {
-                return entityDictionary.ContainsKey(masterBaseEntity.User_Name);
-            }
+            public bool Contains(User masterBaseEntity) => entityDictionary.ContainsKey(masterBaseEntity.User_Name);
         }
     }
 }

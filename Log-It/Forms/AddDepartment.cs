@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BAL;
+using DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,10 +14,10 @@ namespace Log_It.Forms
 {
     public partial class AddDepartment : BaseForm
     {
-        BAL.LogitInstance instance;
-        bool isnew;
-        int deptid;
-        public AddDepartment(bool isnew, BAL.LogitInstance instance,int id)
+        private readonly LogitInstance instance;
+        private readonly bool isnew;
+        private readonly int deptid;
+        public AddDepartment(bool isnew, LogitInstance instance,int id)
         {
           
             this.instance = instance;
@@ -25,26 +27,22 @@ namespace Log_It.Forms
             if (!isnew)
             {
                 this.Text = "Edit Department";
-                DAL.Department editdept = instance.DataLink.Departments.SingleOrDefault(x => x.Department_Id == id);
+                   Department editdept = instance.DataLink.Departments.SingleOrDefault(x => x.Department_Id == id);
                    if (editdept != null)
                    {
-
                        textBoxDepartment.Text = editdept.Department_Name;
                        textBox1.Text = editdept.Department_Description;
                    }
-
-                  
-
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
 
             switch (isnew)
             {
                 case true:
-                    DAL.Department dept = new DAL.Department()
+                    Department dept = new Department()
                     {
                         Department_Name = textBoxDepartment.Text,
                         Department_Description = textBox1.Text
@@ -53,14 +51,14 @@ namespace Log_It.Forms
 
                     instance.DataLink.SubmitChanges();
 
-                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                    this.DialogResult = DialogResult.OK;
                     this.Close();
                     break;
 
                 case false:
 
 
-                    DAL.Department editdept = instance.DataLink.Departments.SingleOrDefault(x => x.Department_Id == deptid);
+                    Department editdept = instance.DataLink.Departments.SingleOrDefault(x => x.Department_Id == deptid);
 
                     editdept.Department_Name = textBoxDepartment.Text;
                     editdept.Department_Description = textBox1.Text;
@@ -69,7 +67,7 @@ namespace Log_It.Forms
 
                     instance.DataLink.SubmitChanges();
 
-                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                    this.DialogResult = DialogResult.OK;
                     this.Close();
                     break;
 
@@ -77,11 +75,18 @@ namespace Log_It.Forms
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
-        
+
+        private void textBoxDepartment_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsControl(e.KeyChar) || char.IsLetter(e.KeyChar) || char.IsWhiteSpace(e.KeyChar)))
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

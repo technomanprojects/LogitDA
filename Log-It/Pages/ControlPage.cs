@@ -23,8 +23,6 @@ namespace Log_It.Pages
     }
     public partial class ControlPage : UserControl
     {
-
-
         public PageControlEnum Page_Controls
         {
             get;

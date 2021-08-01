@@ -115,7 +115,7 @@
             this.radioButtonFilterEvents.TabIndex = 2;
             this.radioButtonFilterEvents.Text = "Filter";
             this.radioButtonFilterEvents.UseVisualStyleBackColor = true;
-            this.radioButtonFilterEvents.CheckedChanged += new System.EventHandler(this.radioButtonFilterEvents_CheckedChanged);
+            this.radioButtonFilterEvents.CheckedChanged += new System.EventHandler(this.RadioButtonFilterEvents_CheckedChanged);
             // 
             // radioButtonAllEvents
             // 
@@ -128,7 +128,7 @@
             this.radioButtonAllEvents.TabStop = true;
             this.radioButtonAllEvents.Text = "All";
             this.radioButtonAllEvents.UseVisualStyleBackColor = true;
-            this.radioButtonAllEvents.CheckedChanged += new System.EventHandler(this.radioButtonAllEvents_CheckedChanged);
+            this.radioButtonAllEvents.CheckedChanged += new System.EventHandler(this.RadioButtonAllEvents_CheckedChanged);
             // 
             // groupBox5
             // 
@@ -170,7 +170,7 @@
             this.radioButtonFilterUser.TabIndex = 2;
             this.radioButtonFilterUser.Text = "Filter";
             this.radioButtonFilterUser.UseVisualStyleBackColor = true;
-            this.radioButtonFilterUser.CheckedChanged += new System.EventHandler(this.radioButtonFilterUser_CheckedChanged);
+            this.radioButtonFilterUser.CheckedChanged += new System.EventHandler(this.RadioButtonFilterUser_CheckedChanged);
             // 
             // radioButtonAlluser
             // 
@@ -183,7 +183,7 @@
             this.radioButtonAlluser.TabStop = true;
             this.radioButtonAlluser.Text = "All";
             this.radioButtonAlluser.UseVisualStyleBackColor = true;
-            this.radioButtonAlluser.CheckedChanged += new System.EventHandler(this.radioButtonAlluser_CheckedChanged);
+            this.radioButtonAlluser.CheckedChanged += new System.EventHandler(this.RadioButtonAlluser_CheckedChanged);
             // 
             // groupBox3
             // 
@@ -218,7 +218,7 @@
             this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
             this.dateTimePickerEndDate.Size = new System.Drawing.Size(200, 20);
             this.dateTimePickerEndDate.TabIndex = 2;
-            this.dateTimePickerEndDate.Leave += new System.EventHandler(this.dateTimePickerEndDate_Leave);
+            this.dateTimePickerEndDate.Leave += new System.EventHandler(this.DateTimePickerEndDate_Leave);
             // 
             // dateTimePickerStartDate
             // 
@@ -255,7 +255,7 @@
             this.radioButtonFilterDate.TabIndex = 2;
             this.radioButtonFilterDate.Text = "Filter";
             this.radioButtonFilterDate.UseVisualStyleBackColor = true;
-            this.radioButtonFilterDate.CheckedChanged += new System.EventHandler(this.radioButtonFilterDate_CheckedChanged);
+            this.radioButtonFilterDate.CheckedChanged += new System.EventHandler(this.RadioButtonFilterDate_CheckedChanged);
             // 
             // radioButtonAllDate
             // 
@@ -268,7 +268,7 @@
             this.radioButtonAllDate.TabStop = true;
             this.radioButtonAllDate.Text = "All";
             this.radioButtonAllDate.UseVisualStyleBackColor = true;
-            this.radioButtonAllDate.CheckedChanged += new System.EventHandler(this.radioButtonAllDate_CheckedChanged);
+            this.radioButtonAllDate.CheckedChanged += new System.EventHandler(this.RadioButtonAllDate_CheckedChanged);
             // 
             // radioButtonAllLogs
             // 
@@ -281,7 +281,7 @@
             this.radioButtonAllLogs.TabStop = true;
             this.radioButtonAllLogs.Text = "All Logs";
             this.radioButtonAllLogs.UseVisualStyleBackColor = true;
-            this.radioButtonAllLogs.CheckedChanged += new System.EventHandler(this.radioButtonAllLogs_CheckedChanged);
+            this.radioButtonAllLogs.CheckedChanged += new System.EventHandler(this.RadioButtonAllLogs_CheckedChanged);
             // 
             // radioButtonFilterLogs
             // 
@@ -293,7 +293,7 @@
             this.radioButtonFilterLogs.Tag = " ";
             this.radioButtonFilterLogs.Text = "Filter Logs";
             this.radioButtonFilterLogs.UseVisualStyleBackColor = true;
-            this.radioButtonFilterLogs.CheckedChanged += new System.EventHandler(this.radioButtonFilterLogs_CheckedChanged);
+            this.radioButtonFilterLogs.CheckedChanged += new System.EventHandler(this.RadioButtonFilterLogs_CheckedChanged);
             // 
             // groupBox2
             // 
@@ -314,7 +314,7 @@
             this.button1.TabIndex = 4;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // EventFilterForm
             // 

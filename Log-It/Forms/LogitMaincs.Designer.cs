@@ -109,7 +109,7 @@
             this.changePasswordToolStripMenuItem.Name = "changePasswordToolStripMenuItem";
             this.changePasswordToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.changePasswordToolStripMenuItem.Text = "Change Password";
-            this.changePasswordToolStripMenuItem.Click += new System.EventHandler(this.changePasswordToolStripMenuItem_Click);
+            this.changePasswordToolStripMenuItem.Click += new System.EventHandler(this.ChangePasswordToolStripMenuItem_Click);
             // 
             // toolStripStatusLabel1
             // 
@@ -221,7 +221,7 @@
             treeNode6});
             this.treeView1.Size = new System.Drawing.Size(195, 199);
             this.treeView1.TabIndex = 0;
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView1_AfterSelect);
             // 
             // sideNavPanel2
             // 
@@ -296,7 +296,7 @@
             this.button1.Text = "Add/Modifie";
             this.button1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.button1.Click += new System.EventHandler(this.Button1_Click_1);
             // 
             // button4
             // 
@@ -324,7 +324,7 @@
             this.button3.Text = "Chart";
             this.button3.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // button2
             // 
@@ -338,7 +338,7 @@
             this.button2.Text = "Display";
             this.button2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // sideNavPanel3
             // 
@@ -386,7 +386,7 @@
             this.sideNavItem2.SymbolColor = System.Drawing.Color.Black;
             this.sideNavItem2.Text = "Home";
             this.sideNavItem2.Title = "Home";
-            this.sideNavItem2.Click += new System.EventHandler(this.sideNavItem2_Click);
+            this.sideNavItem2.Click += new System.EventHandler(this.SideNavItem2_Click);
             // 
             // sideNavItem3
             // 
@@ -397,7 +397,7 @@
             this.sideNavItem3.SymbolSet = DevComponents.DotNetBar.eSymbolSet.Material;
             this.sideNavItem3.Text = "Devices";
             this.sideNavItem3.Title = "Devices";
-            this.sideNavItem3.Click += new System.EventHandler(this.sideNavItem3_Click);
+            this.sideNavItem3.Click += new System.EventHandler(this.SideNavItem3_Click);
             // 
             // sideNavItem4
             // 
@@ -407,7 +407,7 @@
             this.sideNavItem4.SymbolColor = System.Drawing.Color.Black;
             this.sideNavItem4.Text = "Report";
             this.sideNavItem4.Title = "Report";
-            this.sideNavItem4.Click += new System.EventHandler(this.sideNavItem4_Click);
+            this.sideNavItem4.Click += new System.EventHandler(this.SideNavItem4_Click);
             // 
             // panelControl
             // 

@@ -15,8 +15,8 @@ namespace Log_It.Forms
 {
     public partial class LogitReport : Form
     {
-        private DSLogit dt;
-        public LogitReport(Reports.DSLogit dt)
+        private readonly DSLogit dt;
+        public LogitReport(DSLogit dt)
         {
             InitializeComponent();
             this.dt = dt;

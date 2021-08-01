@@ -11,9 +11,8 @@ namespace DAL
     public class P_Databases
     {
         private OleDbConnection conn = new OleDbConnection();
-        string location;
-        string Path;
-        string fileName;
+        private readonly string location;
+        private readonly string Path;
 
         public P_Databases(string path)
         {
@@ -47,7 +46,7 @@ namespace DAL
             DateTime dtCurrent = DateTime.Now;
             DateTime dtOld = Directory.GetCreationTime(filepath);
             string dirpath = Path + "\\Backups\\" + dtCurrent.ToString("MMMM yyyy");
-            DateTime tempy = new DateTime(2006, 01, 01);
+            _ = new DateTime(2006, 01, 01);
 
             if (CheckDatabaseDate() && (!Directory.Exists(dirpath)))
             {

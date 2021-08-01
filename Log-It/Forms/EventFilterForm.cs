@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,8 +14,8 @@ namespace Log_It.Forms
 {
     public partial class EventFilterForm : Form
     {
-        BAL.LogitInstance instance;
-        public EventFilterForm(BAL.LogitInstance instance)
+        private readonly LogitInstance instance;
+        public EventFilterForm(LogitInstance instance)
         {
             InitializeComponent();
             this.instance = instance;
@@ -39,27 +40,15 @@ namespace Log_It.Forms
 
         }
 
-        private void radioButtonFilterLogs_CheckedChanged(object sender, EventArgs e)
-        {
-            groupBoxFilter.Enabled = true;
-        }
+        private void RadioButtonFilterLogs_CheckedChanged(object sender, EventArgs e) => groupBoxFilter.Enabled = true;
 
-        private void radioButtonAllLogs_CheckedChanged(object sender, EventArgs e)
-        {
-            groupBoxFilter.Enabled = false;
-        }
+        private void RadioButtonAllLogs_CheckedChanged(object sender, EventArgs e) => groupBoxFilter.Enabled = false;
 
-        private void radioButtonAllDate_CheckedChanged(object sender, EventArgs e)
-        {
-            groupBoxDateTime.Enabled = false;
-        }
+        private void RadioButtonAllDate_CheckedChanged(object sender, EventArgs e) => groupBoxDateTime.Enabled = false;
 
-        private void radioButtonFilterDate_CheckedChanged(object sender, EventArgs e)
-        {
-            groupBoxDateTime.Enabled = true;
-        }
+        private void RadioButtonFilterDate_CheckedChanged(object sender, EventArgs e) => groupBoxDateTime.Enabled = true;
 
-        private void dateTimePickerEndDate_Leave(object sender, EventArgs e)
+        private void DateTimePickerEndDate_Leave(object sender, EventArgs e)
         {
             TimeSpan sp = dateTimePickerEndDate.Value.Subtract(dateTimePickerStartDate.Value);
             if (sp.Days < 0)
@@ -70,25 +59,13 @@ namespace Log_It.Forms
 
         }
 
-        private void radioButtonAlluser_CheckedChanged(object sender, EventArgs e)
-        {
-            groupBoxUser.Enabled = false;
-        }
+        private void RadioButtonAlluser_CheckedChanged(object sender, EventArgs e) => groupBoxUser.Enabled = false;
 
-        private void radioButtonFilterUser_CheckedChanged(object sender, EventArgs e)
-        {
-            groupBoxUser.Enabled = true;
-        }
+        private void RadioButtonFilterUser_CheckedChanged(object sender, EventArgs e) => groupBoxUser.Enabled = true;
 
-        private void radioButtonAllEvents_CheckedChanged(object sender, EventArgs e)
-        {
-            groupBoxEvents.Enabled = false;
-        }
+        private void RadioButtonAllEvents_CheckedChanged(object sender, EventArgs e) => groupBoxEvents.Enabled = false;
 
-        private void radioButtonFilterEvents_CheckedChanged(object sender, EventArgs e)
-        {
-            groupBoxEvents.Enabled = true;
-        }
+        private void RadioButtonFilterEvents_CheckedChanged(object sender, EventArgs e) => groupBoxEvents.Enabled = true;
 
         private void dateTimePickerEndTime_Leave(object sender, EventArgs e)
         {
@@ -100,7 +77,7 @@ namespace Log_It.Forms
             //}
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
 
             string datestr = string.Empty;
@@ -118,7 +95,7 @@ namespace Log_It.Forms
                     return;
 
                 }
-                Log_It.Reports.DSLogit dt = new Reports.DSLogit();
+                Reports.DSLogit dt = new Reports.DSLogit();
 
                 if (radioButtonAllLogs.Checked)
                 {
@@ -171,16 +148,14 @@ namespace Log_It.Forms
                                     strUser = strUser + "UserName Like '" + userlist[i] + "' OR ";
                                 }
                                 strUser = strUser.Remove(strUser.Length - 3, 3);
-                                strUser = strUser + ")";
+                                strUser += ")";
                                 userstr = strUser;
                             }
                             else
                             {
                                 userstr = "( UserName Like '" + userlist[0] + "')";
                             }
-
                         }
-
                     }
                     if (radioButtonAllEvents.Checked)
                     {
@@ -188,7 +163,6 @@ namespace Log_It.Forms
                     }
                     if (radioButtonFilterEvents.Checked)
                     {
-
                         if (checkedListBoxEvents.Items.Count > 0)
                         {
                             List<string> userEvent = new List<string>();
@@ -207,14 +181,13 @@ namespace Log_It.Forms
                                     strEvent = strEvent + "EventName Like '" + userEvent[i] + "' OR ";
                                 }
                                 strEvent = strEvent.Remove(strEvent.Length - 3, 3);
-                                strEvent = strEvent + ")";
+                                strEvent += ")";
                                 eventstr = strEvent;
                             }
                             else
                             {
                                 eventstr = "( EventName Like '" + userEvent[0] + "')";
                             }
-
                         }
                     }
 
@@ -224,15 +197,15 @@ namespace Log_It.Forms
                         commnd = "select * from eventlog";
                         if (instance.UserInstance.Authority != "Owner")
                         {
-                            commnd = commnd + " Where UserName NOT like 'System'";
+                            commnd += " Where UserName NOT like 'System'";
                         }
                     }
                     if (datestr != string.Empty && userstr == string.Empty && eventstr == string.Empty)
                     {
-                        commnd = commnd + datestr;
+                        commnd += datestr;
                         if (instance.UserInstance.Authority != "Owner")
                         {
-                            commnd = commnd + "AND (UserName NOT like 'System' )";
+                            commnd += "AND (UserName NOT like 'System' )";
                         }
                     }
                     //1 1 0
@@ -241,7 +214,7 @@ namespace Log_It.Forms
                         commnd = commnd + datestr + " AND " + userstr;
                         if (instance.UserInstance.Authority != "Owner")
                         {
-                            commnd = commnd + "AND (UserName NOT like 'System' )";
+                            commnd += "AND (UserName NOT like 'System' )";
                         }
                     }
                     //1 1 1
@@ -250,7 +223,7 @@ namespace Log_It.Forms
                         commnd = commnd + datestr + " AND " + userstr + " AND " + eventstr;
                         if (instance.UserInstance.Authority != "Owner")
                         {
-                            commnd = commnd + "AND (UserName NOT like 'System' )";
+                            commnd += "AND (UserName NOT like 'System' )";
                         }
                     }
                     //1 0 1
@@ -259,7 +232,7 @@ namespace Log_It.Forms
                         commnd = commnd + datestr + " AND " + eventstr;
                         if (instance.UserInstance.Authority != "Owner")
                         {
-                            commnd = commnd + "AND (UserName NOT like 'System' )";
+                            commnd += "AND (UserName NOT like 'System' )";
                         }
                     }
                     //0 1 1
@@ -268,35 +241,35 @@ namespace Log_It.Forms
                         commnd = commnd + userstr + " AND " + eventstr;
                         if (instance.UserInstance.Authority != "Owner")
                         {
-                            commnd = commnd + "AND (UserName NOT like 'System' )";
+                            commnd += "AND (UserName NOT like 'System' )";
                         }
                     }
                     //0 0 1
                     if (datestr == string.Empty && userstr == string.Empty && eventstr != string.Empty)
                     {
-                        commnd = commnd + eventstr;
+                        commnd += eventstr;
                         if (instance.UserInstance.Authority != "Owner")
                         {
-                            commnd = commnd + "AND (UserName NOT like 'System' )";
+                            commnd += "AND (UserName NOT like 'System' )";
                         }
                     }
                     //0 1 0
                     if (datestr == string.Empty && userstr != string.Empty && eventstr == string.Empty)
                     {
-                        commnd = commnd + userstr;
+                        commnd += userstr;
                         if (instance.UserInstance.Authority != "Owner")
                         {
-                            commnd = commnd + "AND (UserName NOT like 'System' )";
+                            commnd += "AND (UserName NOT like 'System' )";
                         }
-
                     }
 
-
-                    commnd = commnd + " Order by  [DateTime] DESC ";
+                    commnd += " Order by  [DateTime] DESC ";
                     SqlConnection Conn = new SqlConnection(instance.DataLink.Connection.ConnectionString);
 
-                    SqlCommand cmd = new SqlCommand(commnd, Conn);
-                    cmd.CommandType = CommandType.Text;
+                    SqlCommand cmd = new SqlCommand(commnd, Conn)
+                    {
+                        CommandType = CommandType.Text
+                    };
                     Conn.Open();
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
@@ -329,7 +302,7 @@ namespace Log_It.Forms
                 ////Report.CrystalReport1 rp1 = new Report.CrystalReport1();
                 ////rp1.SetParameterValue("Image url",@"C:\Users\Public\Pictures\Sample Pictures\Penguins.jpg");
                 //report.SetDataSource(dt);
-                Log_It.Forms.LogitReport rp = new LogitReport(dt);
+                LogitReport rp = new LogitReport(dt);
                 rp.ShowDialog();
                 this.Close();
             }
